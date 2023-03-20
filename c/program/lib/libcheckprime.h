@@ -1,1 +1,1 @@
-int checkeod (int);
+int checkprime (int);

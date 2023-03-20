@@ -6,7 +6,7 @@ void main()
   while (1)
   {
     int n;
-    printf("\ninput integer => ")
+    printf("\ninput integer => ");
     scanf("%d", &n);
     if (n == 0) break;
     if (checkprime(n) == n)

@@ -1,1 +1,1 @@
-int checheod (int);
+int checkeod (int);

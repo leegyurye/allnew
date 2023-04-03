@@ -1,0 +1,2 @@
+use text
+db.things.findOne()

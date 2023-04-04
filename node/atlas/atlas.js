@@ -16,7 +16,7 @@ var config = {
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Request-Headers': '*',
-        'api-key': 'G924xuCz0tfFp4EFYJ0gkdJ6wABveoQVd3KK5Tgl9VtH0Um4plqxJ7AQtkZ0RcGD',
+        'api-key': 'xxx',
     },
     data: data
 };

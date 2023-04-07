@@ -1,4 +1,7 @@
 var axios = require('axios');
+
+const env = require('dotenv').config({ path: "../../.env" });
+
 var data = JSON.stringify({
     "collection": "testdb",
     "database": "test",
@@ -12,11 +15,11 @@ var data = JSON.stringify({
 
 var config = {
     method: 'post',
-    url: 'https://us-west-2.aws.data.mongodb-api.com/app/data-lmrgh/endpoint/data/v1/action/findOne',
+    url: 'https://us-west-2.aws.data.mongodb-api.com/app/data-kryuf/endpoint/data/v1/action/findOne',
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Request-Headers': '*',
-        'api-key': 'xxx',
+        'api-key': process.env.ATLAS_API
     },
     data: data
 };

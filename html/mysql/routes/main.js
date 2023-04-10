@@ -27,7 +27,6 @@ app.get("/Hello", (req, res) => {
 app.get("/select", (req, res) => {
     const result = connection.query("SELECT * FROM st_info");
     console.log(result);
-    res.writeHead(200);
     res.send(result)
 })
 

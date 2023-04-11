@@ -48,4 +48,25 @@ app.post('/selectQuery', (req, res) => {
     res.send(result);
 })
 
+app.post('/insert', (req, res) => {
+    const { id, pw } = req.body;
+    const result = connection.query("insert into user values (?, ?)", [id, pw]);
+    console.log(result);
+    res.redirect('/selectQuery?userid=' + req.body.id);
+})
+
+app.post('/update', (req, res) => {
+    const { id, pw } = req.body;
+    const result = connection.query("update user set passwd=? where userid=?", [pw, id]);
+    console.log(result);
+    res.redirect('/selectQuery?userid=' + req.body.id);
+})
+
+app.post('/delete', (req, res) => {
+    const id = req.body.id;
+    const result = connection.query("delete from user where userid=?", [id]);
+    console.log(result);
+    res.redirect('/select');
+})
+
 module.exports = app;

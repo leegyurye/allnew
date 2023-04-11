@@ -45,7 +45,7 @@ app.post('/update', (req, res) => {
     const { id, pw, name, addr, num } = req.body;
     const result = connection.query("update UserTBL set Password=? where UserId=?", [pw, id]);
     console.log(result);
-    res.send(result);
+    res.redirect('/selectQuery?UserId=' + req.body.id);
 })
 
 app.post('/delete', (req, res) => {

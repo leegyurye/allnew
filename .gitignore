@@ -41,5 +41,3 @@ oracle/node/node_modules
 oracle/node/package-lock.json
 
 #html
-html/mysql/node_modules
-html/mysql/package-lock.json

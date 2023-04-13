@@ -51,6 +51,18 @@ div.box {
     padding: 100px;
 }
 
+div.box2 {
+    width: 90%;
+    height: 700px;
+    border-style: solid;
+    border-radius: 30px;
+    border-color: rgb(94, 60, 27);
+    text-align: center;
+    margin: 10px;
+    border-width: 30px;
+    padding: 0px;
+}
+
 div.box-inner {
     background: rgb(224, 231, 124);
     border-radius: 50px;

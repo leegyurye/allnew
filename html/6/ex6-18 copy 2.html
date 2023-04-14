@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Random 가위바위보</title>
+</head>
+
+<body>
+	<h3>Random 가위바위보</h3>
+	<hr>
+	<script>
+		let n = prompt("숫자를 입력하세요(1: 가위, 2: 바위, 3: 보)", 3);
+		n = parseInt(n); //문자열을 숫자로 바꿈
+		let x = Math.floor(Math.random() * 3 + 1);
+		var rsp = [];
+		rsp[1] = "가위";
+		rsp[2] = "바위";
+		rsp[3] = "보";
+
+
+		if (n == 1 || n == 2 || n == 3) {
+			if (n == x) {
+				document.write("유저: " + rsp[n] + ", 컴퓨터: " + rsp[x] + "<br> 비겼습니다.");
+			} else if (n - x == -2) {
+				document.write("유저: " + rsp[n] + ", 컴퓨터: " + rsp[x] + "<br> 이겼습니다.");
+			} else if (n - x == -1) {
+				document.write("유저: " + rsp[n] + ", 컴퓨터: " + rsp[x] + "<br> 졌습니다.");
+			} else if (n - x == 1) {
+				document.write("유저: " + rsp[n] + ", 컴퓨터: " + rsp[x] + "<br> 이겼습니다.");
+			} else if (n - x == 2) {
+				document.write("유저: " + rsp[n] + ", 컴퓨터: " + rsp[x] + "<br> 졌습니다.");
+			}
+			if (n != 1 && n != 2 && n != 3)
+				alert("숫자를 다시 입력하십시오.");
+		}
+
+
+	</script>
+</body>
+
+</html>

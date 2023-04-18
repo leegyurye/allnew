@@ -2,26 +2,59 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <title>User Authentication</title>
+    <meta charset="UTF-8">
+    <title>리스트로 메뉴 만들기</title>
+    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <style>
+        #menubar {
+            background: rgb(94, 60, 27);
+        }
+
+        #menubar ul {
+            /* 여백과 패딩 모두 0 */
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            /* 모든 아이템(<li>)을 한 줄에 품을 수 있는 폭 */
+        }
+
+        #menubar ul li {
+            display: inline-block;
+            /* 새 줄로 넘어가지 않게 */
+            list-style-type: none;
+            /* 마커 삭제 */
+            padding: 10px 50px;
+            /* top=bottom=0, left=right=15px */
+        }
+
+        #menubar ul li a {
+            color: white;
+            text-decoration: none;
+            /* 링크 보이지 않게 */
+        }
+
+        #menubar ul li a:hover {
+            color: burlywood;
+            /* 마우스 올라 갈 때 색 */
+        }
+    </style>
 </head>
 
 <body>
-    <h3>User Authentication</h3>
-    <hr>
-    <form action="/insert" target="targetURL" name="userForm" method="post">
-        <p>Userid : <input type="text" size="15" name="id" /></p>
-        <p>Password : <input type="password" size="15" name="pw" /></p>
-        <input type="button" value="get select" onclick='document.targetURL.location.href="/select"' />&nbsp;&nbsp;
-        <input type="button" value="get selectQuery" onclick='document.targetURL.location.href="/selectQuery?userid="
-      +document.userForm.id.value' />&nbsp;&nbsp;
-
-        <input type="submit" value="post insert">&nbsp;&nbsp;
-        <button type="submit" formaction="/update">post update</button>&nbsp;&nbsp;
-        <button type="submit" formaction="/delete">post delete</button>&nbsp;&nbsp;
-    </form>
+    <h3>Main Page</h3>
     <hr />
-    <iframe name="targetURL" width="70%" height="500" style="border: none;" src="/hello"></iframe>
+    <nav id="menubar">
+        <ul>
+            <li><a href="/main.html">Home</a></li>
+            <li><a href="/about.html" target="aboutme">AboutMe</a></li>
+            <li style="float : right;"><a href="/index.html">Logout</a></li>
+        </ul>
+    </nav>
+    <br>
+    <div class="box2">
+        <iframe name="aboutme" width="100%" height="100%" style="border: none;"
+            src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403"></iframe>
+    </div>
 </body>
 
 </html>

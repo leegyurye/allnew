@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>리터럴 표기법으로 객체 만들기</title>
+	<script>
+		//사용자 객체 만들기
+		let book = {
+			// 프로퍼티 생성 및 초기화
+			title: "혼자 공부하는 데이터분석", // 책 제목
+			author: "박해선", // 저자
+			totalpage: 496, // 페이지 수
+			category: "자습서",
+			price: 26000,
+			rentalState: 1,
+			rentalUser: "",
+			rentalDay: 0,
+
+			// 메소드 작성
+			reading: function (page) {
+				this.totalpage -= page;
+				return this.totalpage;
+			},
+			rental: function (user, day) {
+				this.rentalUser = user;
+				this.rentalDay = day;
+				this.rentalState = 0;
+				return this.rentalState;
+			}
+		};
+	</script>
+</head>
+
+<body>
+	<h3>리터럴 표기법으로 사용자 객체 만들기</h3>
+	<hr>
+	<script>
+		document.write("book : ");
+		document.write(book.title + ", ");
+		document.write(book.author + ", ");
+		document.write(book.totalpage + ", ");
+		document.write(book.category + ", ");
+		document.write(book.price + "<br><hr />");
+
+		book.reading(33); // 33page 읽음
+		document.write(
+			"현재 전체 페이지 " +
+			book.totalpage +
+			" 중 잔여 페이지가 " +
+			book.reading(50) +
+			"페이지 남으셨습니다. <br><hr />"
+		);
+		book.rental("이규례", 10);
+		let state = { 0: "대여중", 1: "대여가능" };
+		document.write(
+			"현재 " +
+			book.title +
+			" 책은 " +
+			book.rentalUser +
+			"님에게 " +
+			book.rentalDay +
+			"일 동안 " +
+			state[book.rentalState] +
+			"입니다.<hr />"
+		);
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<title>프로토타입으로 Snack 객체 만들기</title>
+	<script>
+		function Snack(name, brand, type, calorie, price) {
+			this.name = name;
+			this.brand = brand;
+			this.type = type;
+			this.calorie = calorie;
+			this.price = price;
+
+
+			this.info = function () {
+				document.write(`
+            name : ${this.name}<br>
+            brand : ${this.brand}<br>
+            type : ${this.type}<br>
+            calorie : ${this.calorie}kcal<br>
+            price : ${this.price}원<br><hr>`);
+			};
+
+			this.eating = function (amount) {
+				this.calorie *= amount;
+				document.write(
+					`${amount}개 섭취하여 총 칼로리는 ${this.calorie}입니다. <br><hr />`
+				);
+				if (this.calorie > 1000)
+					document.write(`총 ${this.calorie} 칼로리를 섭취했습니다. 중단이 필요합니다.<br><hr />`);
+
+			};
+
+			this.totalprice = function (amount) {
+				this.price *= amount;
+				document.write(
+					`${amount}개 구매하여 총 가격은 ${this.price}입니다. <br><hr />`
+				);
+			};
+		}
+	</script>
+</head>
+
+<body>
+	<h3>프로토타입으로 Snack 객체 만들기</h3>
+	<hr />
+	<script>
+		let snack = new Snack("후렌치파이", "해태", "쿠키", 350, 2700);
+		snack.info();
+		snack.eating(1);
+		snack.eating(10);
+		snack.totalprice(5);
+
+		snack = new Snack("참쌀선과", "크라운", "크래커", 25, 1200);
+		snack.info();
+		snack.eating(3);
+		snack.eating(15);
+		snack.totalprice(23);
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Palindrome</title>
+	<script>
+		function Palindrome(string) {
+			let result = true;
+			string = string.toUpperCase();
+
+			for (let i = 0; i < Math.floor(string.length / 2); index++) {
+				if (string[i] !== string[string.length - i - 1]) {
+					return false;
+				}
+			}
+			return result;
+		}
+	</script>
+</head>
+
+<body>
+	<h3>Palindrome</h3>
+	<hr>
+	<p>
+		<input type="text">
+		<input type="button" value="Check Palindrome" id="button">
+		<br><br>
+		<input type="radio" name="palindrome" value="Number" checked />숫자
+		<input type="radio" name="palindrome" value="Text" />문자
+		<br><br>
+		3자리 문자 또는 숫자를 입력하세요
+	</p>
+</body>
+
+</html>

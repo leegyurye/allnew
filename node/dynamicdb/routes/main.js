@@ -42,6 +42,7 @@ function template_result(result, res) {
     <head>
         <title>Result</title>
         <meta charset="utf-8">
+        <link type="text/css" rel="stylesheet" href="mystyle.css" />
     </head>
     <body>
     <table border="1" style="margin:auto;">
@@ -128,7 +129,7 @@ app.get('/select', (req, res) => {
     console.log(result);
     // res.send(result);
     if (result.length == 0) {
-        template_nodata(res)
+        template_nodata(res);
     } else {
         template_result(result, res);
     }
@@ -140,7 +141,7 @@ app.post('/select', (req, res) => {
     console.log(result);
     // res.send(result);
     if (result.length == 0) {
-        template_nodata(res)
+        template_nodata(res);
     } else {
         template_result(result, res);
     }
@@ -150,13 +151,14 @@ app.post('/select', (req, res) => {
 app.get('/selectQuery', (req, res) => {
     const id = req.query.id;
     if (id == "") {
-        res.send('User-id를 입력하세요.')
+        // res.send('User-id를 입력하세요.')
+        res.write("<script>alert('User-id를 입력하세요.')</script>");
     } else {
         const result = connection.query("select * from user where userid=?", [id]);
         console.log(result);
         // res.send(result);
         if (result.length == 0) {
-            template_nodata(res)
+            template_nodata(res);
         } else {
             template_result(result, res);
         }
@@ -173,7 +175,7 @@ app.post('/selectQuery', (req, res) => {
         console.log(result);
         // res.send(result);
         if (result.length == 0) {
-            template_nodata(res)
+            template_nodata(res);
         } else {
             template_result(result, res);
         }
@@ -184,7 +186,8 @@ app.post('/selectQuery', (req, res) => {
 app.post('/insert', (req, res) => {
     const { id, pw } = req.body;
     if (id == "" || pw == "") {
-        res.send('User-id와 Password를 입력하세요.')
+        // res.send('User-id와 Password를 입력하세요.')
+        res.write("<script>alert('User-id와 Password를 입력하세요.')</script>");
     } else {
         let result = connection.query("select * from user where userid=?", [id]);
         if (result.length > 0) {
@@ -217,13 +220,14 @@ app.post('/insert', (req, res) => {
 app.post('/update', (req, res) => {
     const { id, pw } = req.body;
     if (id == "" || pw == "") {
-        res.send('User-id와 Password를 입력하세요.')
+        // res.send('User-id와 Password를 입력하세요.')
+        res.write("<script>alert('User-id와 Password를 입력하세요.')</script>");
     } else {
         const result = connection.query("select * from user where userid=?", [id]);
         console.log(result);
         // res.send(result);
         if (result.length == 0) {
-            template_nodata(res)
+            template_nodata(res);
         } else {
             const result = connection.query("update user set passwd=? where userid=?", [pw, id]);
             console.log(result);
@@ -237,13 +241,14 @@ app.post('/update', (req, res) => {
 app.post('/delete', (req, res) => {
     const id = req.body.id;
     if (id == "") {
-        res.send('User-id를 입력하세요.')
+        // res.send('User-id를 입력하세요.')
+        res.write("<script>alert('User-id와 Password를 입력하세요.')</script>");
     } else {
         const result = connection.query("select * from user where userid=?", [id]);
         console.log(result);
         // res.send(result);
         if (result.length == 0) {
-            template_nodata(res)
+            template_nodata(res);
         } else {
             const result = connection.query("delete from user where userid=?", [id]);
             console.log(result);

@@ -5,11 +5,41 @@
     <meta charset="utf-8" />
     <title>User Authentication</title>
     <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <script>
+        function getParameter(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null
+                ? ""
+                : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        function sessionStore() {
+            let id = getParameter("id");
+            let now = new Date();
+            if (!window.sessionStorage) {
+                alert("세션 스토리지를 지원하지 않습니다.");
+                return;
+            }
+            sessionStorage.setItem(id, now);
+            alert(`사용자 ${id} 세션 스토리지 생성`);
+        }
+        window.addEventListener("beforeunload", (event) => {
+            event.preventDefault();
+            event.returnValue = "";
+        });
+
+    </script>
 </head>
 
-<body>
+<body onload="sessionStore()">
     <h3>User Authentication</h3>
     <hr />
+    <nav id="menubar">
+        <ul>
+            <li style="float : right;"><a href="/index.html">Logout</a></li>
+        </ul>
+    </nav>
     <form action="/insert" target="targetURL" name="userForm" method="post">
         <div class="box">
             <div>
@@ -22,7 +52,6 @@
                 <input type="button" value="get selectQuery"
                     onclick='document.targetURL.location.href="/selectQuery?id="+document.userForm.id.value' />&nbsp;&nbsp;
                 <input type="submit" value="post insert" />&nbsp;&nbsp;
-                <br>
                 <br>
                 <button type="submit" formaction="/update">post update</button>&nbsp;&nbsp;
                 <button type="submit" formaction="/delete">post delete</button>

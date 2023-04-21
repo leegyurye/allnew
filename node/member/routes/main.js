@@ -85,7 +85,7 @@ app.post('/login', (req, res) => {
         res.redirect('member.html?id=' + id)
     } else {
         console.log(id + " => User Logined")
-        res.redirect('main.html')
+        res.redirect('main.html?id=' + id)
     }
 })
 

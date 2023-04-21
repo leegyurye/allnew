@@ -20,27 +20,22 @@
         function login() {
             id = getParameter("id");
             now = new Date();
-        }
 
-        function sessionStore() {
             if (!window.sessionStorage) {
                 alert("세션 스토리지를 지원하지 않습니다.");
                 return;
-            } else {
-                if (id == "") {
-                    location.href = "index.html";
-                    sessionStorage.removeItem("");
-                    alert("잘못된 접근 방식입니다!!");
-                } else {
-                    for (var i = 0; i < sessionStorage.key.length; i++) {
-                        if (id == sessionStorage.key(i)) {
-                            sessionStorage.setItem(id, now);
-                            return;
-                        }
-                        sessionStorage.setItem(id, now);
-                        alert(`사용자 ${id} 세션 스토리지 생성`);
-                    }
-                }
+            }
+
+            sessionStorage.setItem(id, now);
+            let username_v = document.getElementById("username");
+            username_v.innerHTML = `사용자 ${id} 세션 스토리지 생성`;
+        }
+
+        function sessionStore() {
+            if (!id) {
+                alert("잘못된 접근 방식입니다!!");
+                sessionStorage.removeItem("");
+                location.href = "index.html";
             }
         }
 

@@ -31,6 +31,14 @@
             username_v.innerHTML = `사용자 ${id} 세션 스토리지 생성`;
         }
 
+        function sessionStore() {
+            if (!id) {
+                alert("잘못된 접근 방식입니다!!");
+                sessionStorage.removeItem("");
+                location.href = "index.html";
+            }
+        }
+
         window.addEventListener("beforeunload", (event) => {
             event.preventDefault();
             event.returnValue = "";

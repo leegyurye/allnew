@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>check prime number</title>
+</head>
+
+<body>
+    <h3>check prime number</h3>
+    <hr>
+    <input type="text" id="input" placeholder="숫자를 입력하세요" />
+    <button type="button" id="check" onclick="send()">check</button><br>
+    <input type="text" id="result">
+    <script>
+        let addWorker = new Worker("prime.js");
+
+        function send() {
+            let parameter = {
+                input: document.getElementById("input").value
+            };
+            addWorker.postMessage(parameter);
+        }
+
+        addWorker.onmessage = function (e) {
+            document.getElementById("result").value = e.data;
+        }
+
+    </script>
+</body>
+
+</html>

@@ -10,8 +10,8 @@ onmessage = function (e) {
     }
     for (i < number; i++;) {
         if (number % i == 0) {
-            break;
             result = "false";
+            break;
         } else {
             result = "true";
         }

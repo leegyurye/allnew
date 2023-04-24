@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const CircularJSON = require('circular-json')
-const request = require('request')
+// const CircularJSON = require('circular-json')
+// const request = require('request')
 const mysql = require("sync-mysql")
 const env = require("dotenv").config({ path: "../../.env" });
 
@@ -70,12 +70,12 @@ app.get("/insert", (req, res) => {
         NAME,
         DEPT
     ]);
-
-    urls = "http://192.168.1.101:8000/select/"
-    request(urls, { json: true }, (err, result, body) => {
-        if (err) { return console.log(err) }
-        res.send(CircularJSON.stringify(body))
-    })
+    res.redirect('/select')
+    // urls = "http://192.168.1.101:8000/select/"
+    // request(urls, { json: true }, (err, result, body) => {
+    //     if (err) { return console.log(err) }
+    //     res.send(CircularJSON.stringify(body))
+    // })
 })
 
 // update row from st_info table
@@ -87,11 +87,12 @@ app.get("/update", (req, res) => {
         ST_ID
     ]);
 
-    urls = "http://192.168.1.101:8000/select/"
-    request(urls, { json: true }, (err, result, body) => {
-        if (err) { return console.log(err) }
-        res.send(CircularJSON.stringify(body))
-    })
+    res.redirect('/select')
+    // urls = "http://192.168.1.101:8000/select/"
+    // request(urls, { json: true }, (err, result, body) => {
+    //     if (err) { return console.log(err) }
+    //     res.send(CircularJSON.stringify(body))
+    // })
 })
 
 // delete row from st_info table
@@ -101,11 +102,12 @@ app.get("/delete", (req, res) => {
         ST_ID
     ]);
 
-    urls = "http://192.168.1.101:8000/select/"
-    request(urls, { json: true }, (err, result, body) => {
-        if (err) { return console.log(err) }
-        res.send(CircularJSON.stringify(body))
-    })
+    res.redirect('/select')
+    // urls = "http://192.168.1.101:8000/select/"
+    // request(urls, { json: true }, (err, result, body) => {
+    //     if (err) { return console.log(err) }
+    //     res.send(CircularJSON.stringify(body))
+    // })
 })
 
 module.exports = app;

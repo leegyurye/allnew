@@ -1,7 +1,7 @@
 {
-  "name": "mysql",
+  "name": "mysql2",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "mysql.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,9 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "mysql": "^2.18.1",
-    "sync-mysql": "^3.0.1"
+    "mysql2": "^3.2.3"
   },
   "description": ""
 }

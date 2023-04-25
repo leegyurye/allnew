@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('sync-mysql');
+const mongoose = require("mongoose");
 const env = require('dotenv').config({ path: "../../.env" });
 
 var connection = new mysql({
@@ -59,6 +60,44 @@ function template_result2(result, res) {
         <td>${result[i]['shopName']}</td>
         <td>${result[i]['shopArea']}</td>
         <td>${result[i]['shopAddr']}</td>
+    </tr>
+    `;
+    }
+    template += `
+    </tbody>
+    </table>
+    </body>
+    </html>
+    `;
+    res.end(template);
+}
+
+function template_result3(result, res) {
+    res.writeHead(200);
+    var template = `
+    <!doctype html>
+    <html>
+    <head>
+        <title>Result</title>
+        <meta charset="utf-8">
+        <link type="text/css" rel="stylesheet" href="mystyle.css" />
+    </head>
+    <body>
+    <table border="1" style="margin:auto;">
+    <thead>
+        <tr><th>resNumber</th><th>userId</th><th>shopName</th><th>resDate</th><th>shopService</th><th>shopArea</th></tr>
+    </thead>
+    <tbody>
+    `;
+    for (var i = 0; i < result.length; i++) {
+        template += `
+    <tr>
+        <td>${result[i]['resNumber']}</td>
+        <td>${result[i]['userId']}</td>
+        <td>${result[i]['shopName']}</td>
+        <td>${result[i]['resDate']}</td>
+        <td>${result[i]['shopService']}</td>
+        <td>${result[i]['shopArea']}</td>
     </tr>
     `;
     }
@@ -135,6 +174,7 @@ app.get('/selectDong', (req, res) => {
     } else {
         const result = connection.query("SELECT * FROM shoptbl where shopArea=?", [shopArea]);
         console.log(result);
+        res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
         // res.send(result);
         if (result.length == 0) {
             template_nodata(res);
@@ -148,6 +188,7 @@ app.get('/selectDong', (req, res) => {
 app.get('/select', (req, res) => {
     const result = connection.query('SELECT * FROM shoptbl');
     console.log(result);
+    res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
     // res.send(result);
     if (result.length == 0) {
         template_nodata(res);
@@ -189,6 +230,54 @@ app.post('/insert', (req, res) => {
             res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
         }
     }
+})
+
+// request O, query X
+app.get('/select2', (req, res) => {
+    const result = connection.query('SELECT * FROM restbl');
+    console.log(result);
+    res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
+    // res.send(result);
+    if (result.length == 0) {
+        template_nodata(res);
+    } else {
+        template_result3(result, res);
+    }
+})
+
+// define schema
+var userSchema = mongoose.Schema({
+    userid: String,
+    name: String,
+    city: String,
+    sex: String,
+    age: Number
+})
+
+// create model with mongodb collection and schema
+var User = mongoose.model('users', userSchema);
+
+for (var i = 0; i < result.length; i++) {
+    template = result[i]['userid']
+}
+
+// insert
+app.post('/insert2', function (req, res, next) {
+    var userid = req.body.userid;
+    var name = req.body.name;
+    var city = req.body.city;
+    var sex = req.body.sex;
+    var age = req.body.age;
+    var user = new User({ 'userid': userid, 'name': name, 'city': city, 'sex': sex, 'age': age })
+
+    user.save(function (err, silence) {
+        if (err) {
+            console.log('err')
+            res.status(500).send('insert error')
+            return;
+        }
+        res.status(200).send("Inserted")
+    })
 })
 
 module.exports = app;

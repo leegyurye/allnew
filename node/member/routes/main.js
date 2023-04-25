@@ -75,7 +75,7 @@ app.get('/hello', (req, res) => {
 // login
 app.post('/login', (req, res) => {
     const { id, pw } = req.body;
-    const result = connection.query("select * from user where userid=? and passwd=?", [id, pw]);
+    const result = connection.query("select * from usertbl where userid=? and passwd=?", [id, pw]);
     // console.log(result);
     if (result.length == 0) {
         res.redirect('error.html')

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <script>
+        let id = "";
+        let now = "";
+        function getParameter(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null
+                ? ""
+                : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        function login() {
+            id = getParameter("id");
+            now = new Date();
+
+            if (!window.sessionStorage) {
+                alert("세션 스토리지를 지원하지 않습니다.");
+                return;
+            }
+
+            sessionStorage.setItem(id, now);
+            let username_v = document.getElementById("username");
+            username_v.innerHTML = `사용자 ${id} 세션 스토리지 생성`;
+        }
+
+        function sessionStore() {
+            if (!id) {
+                alert("잘못된 접근 방식입니다!!");
+                sessionStorage.removeItem("");
+                location.href = "index.html";
+            }
+        }
+
+        window.addEventListener("beforeunload", (event) => {
+            event.preventDefault();
+            event.returnValue = "";
+        });
+
+        function logout() {
+            sessionStorage.removeItem(id);
+        }
+    </script>
+</head>
+
+<body onload="login()" onunload="logout()">
+    <h3>Main Page</h3>
+    <hr />
+    <nav id="menubar">
+        <ul>
+            <li><a href="/main.html">Home</a></li>
+            <li><a href="/about.html" target="aboutme">AboutMe</a></li>
+            <li style="float : right;"><a href="/index.html">Logout</a></li>
+        </ul>
+    </nav>
+    <br>
+    <div class="box2">
+        <iframe name="aboutme" width="100%" height="100%" style="border: none;"
+            src="https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&quality=85&auto=format&fit=max&s=a52bbe202f57ac0f5ff7f47166906403"></iframe>
+    </div>
+</body>
+
+</html>

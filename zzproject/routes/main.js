@@ -54,7 +54,7 @@ function template_result(result, res) {
     for (var i = 0; i < result.length; i++) {
         template += `
     <tr>
-        <td>${result[i]['userid']}</td>
+        <td>${result[i]['userId']}</td>
         <td>${result[i]['passwd']}</td>
     </tr>
     `;
@@ -91,11 +91,11 @@ app.post('/login', (req, res) => {
 
 // register
 app.post('/register', (req, res) => {
-    const { id, pw } = req.body;
+    const { id, pw, name, addr, num } = req.body;
     if (id == "") {
         res.redirect('register.html')
     } else {
-        let result = connection.query("select * from user where userid=?", [id]);
+        let result = connection.query("select * from usertbl where userid=? and passwd=? and userName=? and userAddr=? and userNumber=?", [id, pw, name, addr, num]);
         if (result.length > 0) {
             res.writeHead(200);
             var template = `
@@ -116,7 +116,7 @@ app.post('/register', (req, res) => {
         `;
             res.end(template);
         } else {
-            result = connection.query("insert into user values (?, ?)", [id, pw]);
+            result = connection.query("insert into usertbl values (?, ?, ?, ?, ?)", [id, pw, name, addr, num]);
             console.log(result);
             res.redirect('/');
         }

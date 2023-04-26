@@ -14,7 +14,7 @@ var connection = new mysql({
 
 // Moongo schema
 var restbl = mongoose.Schema({
-    resNumber: { type: Number, unique: true },
+    resNumber: Number,
     userId: String,
     shopName: String,
     resDate: String,
@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//MY SQL > MONGO Insert 위한 Select Function
+//MY SQL > MONGO Insert 위한 Select
 function resselect_result(req) {
     const result = connection.query('SELECT * FROM restbl');
     return result;
@@ -263,32 +263,36 @@ app.get('/select2', (req, res) => {
     }
 })
 
-//MongoDb Collection
-var Reservation = mongoose.model('restbl', restbl);
-
-// MySQL ResTBL 받아오는 API
-app.post('/insert2', function (req, res) {
-    let result = resselect_result(req)
-    console.log(result);
-    //res.send(result)
-    // res.redirect('/mongoinsert' + result)
+// define schema
+var restblSchema = mongoose.Schema({
+    resNumber: Number,
+    userId: String,
+    shopName: String,
+    resDate: String,
+    shopService: String,
+    shopArea: String
 })
 
-//My SQL > MongoDB insert
-app.post('/mongoinsert', function (req, res, next) {
+// create model with mongodb collection and schema
+var Restbls = mongoose.model('restbls', restblSchema);
+
+
+// mongo insert
+app.post('/mongoinsert', function (req, res) {
     let result = resselect_result(req)
     let flag = 0
-    var reservation = new Reservation()
 
     for (var i = 0; i < result.length; i++) {
-        reservation.resNumber = result[i]['resNumber']
-        reservation.userId = result[i]['userId']
-        reservation.shopName = result[i]['shopName']
-        reservation.resDate = result[i]['resDate']
-        reservation.shopService = result[i]['shopService']
-        reservation.shopArea = result[i]['shopArea']
+        var resNumber = result[i].resNumber;
+        var userId = result[i].userId;
+        var shopName = result[i].shopName;
+        var resDate = result[i].resDate;
+        var shopService = result[i].shopService;
+        var shopArea = result[i].shopArea;
 
-        reservation.save(function (err, silence) {
+        var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopName': shopName, 'resDate': resDate, 'shopService': shopService, 'shopArea': shopArea })
+
+        restbls.save(function (err, silence) {
             if (err) {
                 flag = 1;
                 return;
@@ -304,6 +308,5 @@ app.post('/mongoinsert', function (req, res, next) {
     }
 
 })
-
 
 module.exports = app;

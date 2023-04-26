@@ -39,6 +39,7 @@ app.get('/get', function (req, res, next) {
 // insert
 app.post('/insert', function (req, res, next) {
     var userid = req.body.userid;
+
     var name = req.body.name;
     var city = req.body.city;
     var sex = req.body.sex;
@@ -53,6 +54,7 @@ app.post('/insert', function (req, res, next) {
         }
         res.status(200).send("Inserted")
     })
+
 })
 
 // update

@@ -309,4 +309,59 @@ app.post('/mongoinsert', function (req, res) {
 
 })
 
+// list
+app.get('/mongolist', function (req, res, next) {
+    Restbls.find({}, function (err, docs) {
+        if (err) console.log('err')
+        res.send(docs)
+    })
+})
+
+// update
+app.post('/mongoupdate', function (req, res, next) {
+    var resNumber = req.body.resNumber;
+    var userId = req.body.userId;
+    var shopName = req.body.shopName;
+    var resDate = req.body.resDate;
+    var shopService = req.body.shopService;
+    var shopArea = req.body.shopArea;
+
+    Restbls.findOne({ 'resNumber': resNumber }, function (err, restbl) {
+        if (err) {
+            console.log('err')
+            res.status(500).send('update error')
+            return;
+        }
+        restbl.userId = userId;
+        restbl.shopName = shopName;
+        restbl.resDate = resDate;
+        restbl.shopService = shopService;
+        restbl.shopArea = shopArea;
+
+        restbl.save(function (err, silence) {
+            if (err) {
+                console.log('err')
+                res.status(500).send('update error')
+                return;
+            }
+            res.status(200).send("Updated")
+        })
+    })
+})
+
+// delete
+app.post('/mongodelete', function (req, res, next) {
+    var resNumber = req.body.resNumber;
+
+    var restbls = Restbls.find({ 'resNumber': resNumber })
+    restbls.remove(function (err) {
+        if (err) {
+            console.log('err')
+            res.status(500).send('delete error')
+            return;
+        }
+        res.status(200).send("Removed")
+    })
+})
+
 module.exports = app;

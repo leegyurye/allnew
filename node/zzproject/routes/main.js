@@ -4,6 +4,7 @@ const mysql = require('sync-mysql');
 const mongoose = require("mongoose");
 const env = require('dotenv').config({ path: "../../.env" });
 
+//MySQL 연결 정보
 var connection = new mysql({
     host: process.env.host,
     user: process.env.user,
@@ -11,12 +12,30 @@ var connection = new mysql({
     database: process.env.database
 });
 
+// Moongo schema
+var restbl = mongoose.Schema({
+    resNumber: Number,
+    userId: String,
+    shopName: String,
+    resDate: String,
+    shopService: String,
+    shopArea: String
+}, {
+    versionKey: false
+})
+
 const app = express()
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//MY SQL > MONGO Insert 위한 Select
+function resselect_result(req) {
+    const result = connection.query('SELECT * FROM restbl');
+    return result;
+}
 
 function template_nodata(res) {
     res.writeHead(200);
@@ -72,45 +91,45 @@ function template_result2(result, res) {
     res.end(template);
 }
 
-function template_result3(result, res) {
-    res.writeHead(200);
-    var template = `
-    <!doctype html>
-    <html>
-    <head>
-        <title>Result</title>
-        <meta charset="utf-8">
-        <link type="text/css" rel="stylesheet" href="mystyle.css" />
-    </head>
-    <body>
-    <table border="1" style="margin:auto;">
-    <thead>
-        <tr><th>resNumber</th><th>userId</th><th>shopName</th><th>resDate</th><th>shopService</th><th>shopArea</th></tr>
-    </thead>
-    <tbody>
-    `;
-    for (var i = 0; i < result.length; i++) {
-        template += `
-    <tr>
-        <td>${result[i]['resNumber']}</td>
-        <td>${result[i]['userId']}</td>
-        <td>${result[i]['shopName']}</td>
-        <td>${result[i]['resDate']}</td>
-        <td>${result[i]['shopService']}</td>
-        <td>${result[i]['shopArea']}</td>
-    </tr>
-    `;
-    }
-    template += `
-    </tbody>
-    </table>
-    </body>
-    </html>
-    `;
-    res.end(template);
-}
+// function template_result3(result, res) {
+//     res.writeHead(200);
+//     var template = `
+//     <!doctype html>
+//     <html>
+//     <head>
+//         <title>Result</title>
+//         <meta charset="utf-8">
+//         <link type="text/css" rel="stylesheet" href="mystyle.css" />
+//     </head>
+//     <body>
+//     <table border="1" style="margin:auto;">
+//     <thead>
+//         <tr><th>resNumber</th><th>userId</th><th>shopName</th><th>resDate</th><th>shopService</th><th>shopArea</th></tr>
+//     </thead>
+//     <tbody>
+//     `;
+//     for (var i = 0; i < result.length; i++) {
+//         template += `
+//     <tr>
+//         <td>${result[i]['resNumber']}</td>
+//         <td>${result[i]['userId']}</td>
+//         <td>${result[i]['shopName']}</td>
+//         <td>${result[i]['resDate']}</td>
+//         <td>${result[i]['shopService']}</td>
+//         <td>${result[i]['shopArea']}</td>
+//     </tr>
+//     `;
+//     }
+//     template += `
+//     </tbody>
+//     </table>
+//     </body>
+//     </html>
+//     `;
+//     res.end(template);
+// }
 
-// login
+// 로그인
 app.post('/login', (req, res) => {
     const { id, pw } = req.body;
     const result = connection.query("select * from usertbl where userid=? and passwd=?", [id, pw]);
@@ -129,7 +148,7 @@ app.post('/login', (req, res) => {
     }
 })
 
-// register
+// 회원가입 
 app.post('/register', (req, res) => {
     const { id, pw, name, addr, num } = req.body;
     if (id == "") {
@@ -165,7 +184,7 @@ app.post('/register', (req, res) => {
 })
 
 
-// request O, query O
+//SelectDong ' 동 (Area) ' 에 따른 Shop 조회
 app.get('/selectDong', (req, res) => {
     const shopArea = req.query.shopArea;
     if (shopArea == "") {
@@ -174,7 +193,6 @@ app.get('/selectDong', (req, res) => {
     } else {
         const result = connection.query("SELECT * FROM shoptbl where shopArea=?", [shopArea]);
         console.log(result);
-        res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
         // res.send(result);
         if (result.length == 0) {
             template_nodata(res);
@@ -184,20 +202,21 @@ app.get('/selectDong', (req, res) => {
     }
 })
 
-// request O, query X
+// 전체 업체 검색
 app.get('/select', (req, res) => {
     const result = connection.query('SELECT * FROM shoptbl');
     console.log(result);
-    res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
+    //res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
     // res.send(result);
     if (result.length == 0) {
         template_nodata(res);
     } else {
         template_result2(result, res);
     }
+
 })
 
-// request O, query O
+// 예약 등록 
 app.post('/insert', (req, res) => {
     const { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
     if (resNumber == "" || userId == "" || shopName == "" || resDate == "" || shopService == "" || shopArea == "") {
@@ -232,52 +251,56 @@ app.post('/insert', (req, res) => {
     }
 })
 
-// request O, query X
-app.get('/select2', (req, res) => {
-    const result = connection.query('SELECT * FROM restbl');
-    console.log(result);
-    res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
-    // res.send(result);
-    if (result.length == 0) {
-        template_nodata(res);
-    } else {
-        template_result3(result, res);
-    }
-})
+// // request O, query X
+// app.get('/select2', (req, res) => {
+//     const result = connection.query('SELECT * FROM restbl');
+//     console.log(result);
+//     // res.send(result);
+//     if (result.length == 0) {
+//         template_nodata(res);
+//     } else {
+//         template_result3(result, res);
+//     }
+// })
 
 // define schema
-var userSchema = mongoose.Schema({
-    userid: String,
-    name: String,
-    city: String,
-    sex: String,
-    age: Number
+var restblSchema = mongoose.Schema({
+    resNumber: Number,
+    userId: String,
+    shopName: String,
+    resDate: String,
+    shopService: String,
+    shopArea: String
 })
 
 // create model with mongodb collection and schema
-var User = mongoose.model('users', userSchema);
+var Restbls = mongoose.model('restbls', restblSchema);
 
-for (var i = 0; i < result.length; i++) {
-    template = result[i]['userid']
-}
 
-// insert
-app.post('/insert2', function (req, res, next) {
-    var userid = req.body.userid;
-    var name = req.body.name;
-    var city = req.body.city;
-    var sex = req.body.sex;
-    var age = req.body.age;
-    var user = new User({ 'userid': userid, 'name': name, 'city': city, 'sex': sex, 'age': age })
+// mongo insert
+app.post('/mongoinsert', function (req, res) {
+    let result = resselect_result(req)
 
-    user.save(function (err, silence) {
-        if (err) {
-            console.log('err')
-            res.status(500).send('insert error')
-            return;
-        }
-        res.status(200).send("Inserted")
-    })
+    for (var i = 0; i < result.length; i++) {
+        var resNumber = result[i].resNumber;
+        var userId = result[i].userId;
+        var shopName = result[i].shopName;
+        var resDate = result[i].resDate;
+        var shopService = result[i].shopService;
+        var shopArea = result[i].shopArea;
+
+        var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopName': shopName, 'resDate': resDate, 'shopService': shopService, 'shopArea': shopArea })
+
+        restbls.save(function (err, silence) {
+            if (err) {
+                console.log('err')
+                res.status(500).send('insert error')
+                return;
+            } else {
+                res.status(200).send("Inserted")
+            }
+        })
+    }
 })
 
 module.exports = app;

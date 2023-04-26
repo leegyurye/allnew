@@ -238,7 +238,7 @@ app.post('/insert', (req, res) => {
             restbl = connection.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
             console.log(restbl);
             // res.redirect('/selectQuery?resNumber=' + req.body.resNumber);
-            res.send({ "ok": true, "restbl": [resNumber, userId, shopName, resDate, shopService, shopArea], "service": "Reservation" });
+            res.send({ "ok": true, "restbl": [{ "resNumber": resNumber, "userID": userId, "shopName": shopName, "resDate": resDate, "shopService": shopService, "shopArea": shopArea }], "service": "Reservation" });
         }
     }
 })
@@ -310,7 +310,7 @@ app.post('/mongoinsert', function (req, res) {
 app.get('/mongolist', function (req, res, next) {
     Restbls.find({}, function (err, mongolist) {
         if (err) console.log('err')
-        res.send({ "ok": true, "mongolist": [mongolist], "service": "mongoinsert" })
+        res.send({ "ok": true, "mongolist": [_id = 0, mongolist], "service": "mongoinsert" })
 
     })
 })
@@ -328,7 +328,7 @@ app.post('/mongoupdate', function (req, res, next) {
         if (err) {
             console.log('err')
             // res.status(500).send('update error')
-            res.status(500).send({ "ok": false, "mongoupdate": [restbl], "service": "mongoupdate" })
+            res.status(500).send({ "ok": false, "rstbl": [_id = 0, restbl], "service": "mongoupdate" })
             return;
         }
         restbl.userId = userId;
@@ -340,11 +340,11 @@ app.post('/mongoupdate', function (req, res, next) {
         restbl.save(function (err, silence) {
             if (err) {
                 console.log('err')
-                res.status(500).send({ "ok": false, "mongoupdate": [restbl], "service": "mongoupdate" })
+                res.status(500).send({ "ok": false, "rstbl": [_id = 0, restbl], "service": "mongoupdate" })
                 return;
             }
             // res.status(200).send("Updated")
-            res.status(200).send({ "ok": true, "mongoupdate": [restbl], "service": "mongoupdate" })
+            res.status(200).send({ "ok": true, "rstbl": [_id = 0, restbl], "service": "mongoupdate" })
 
         })
     })
@@ -358,11 +358,11 @@ app.post('/mongodelete', function (req, res, next) {
     restbls.remove(function (err) {
         if (err) {
             console.log('err')
-            res.status(500).send({ "ok": false, "mongodelete": [restbls], "service": "mongodelete" })
+            res.status(500).send({ "ok": false, "service": "mongodelete" })
             return;
         }
         // res.status(200).send("Removed")
-        res.status(200).send({ "ok": false, "mongodelete": [restbls], "service": "mongodelete" })
+        res.status(200).send({ "ok": true, "service": "mongodelete" })
     })
 })
 

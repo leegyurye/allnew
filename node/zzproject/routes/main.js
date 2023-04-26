@@ -12,18 +12,6 @@ var connection = new mysql({
     database: process.env.database
 });
 
-// Moongo schema
-var restbl = mongoose.Schema({
-    resNumber: Number,
-    userId: String,
-    shopName: String,
-    resDate: String,
-    shopService: String,
-    shopArea: String
-}, {
-    versionKey: false
-})
-
 const app = express()
 
 app.use(bodyParser.json());
@@ -140,11 +128,11 @@ app.post('/login', (req, res) => {
     if (id == 'admin' || id == 'root') {
         console.log(id + " => Administrator Logined")
         // res.redirect('member.html?id=' + id)
-        res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
+        res.send({ "ok": true, "id": [id], "service": "login" });
     } else {
         console.log(id + " => User Logined")
         // res.redirect('main.html?id=' + id)
-        res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
+        res.send({ "ok": true, "id": [id], "service": "login" });
     }
 })
 
@@ -177,7 +165,7 @@ app.post('/register', (req, res) => {
         } else {
             result = connection.query("insert into usertbl values (?, ?, ?, ?, ?)", [id, pw, name, addr, num]);
             console.log(result);
-            res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
+            res.send({ "ok": true, "result": [id, pw, name, addr, num], "service": "register" });
             // res.redirect('/');
         }
     }
@@ -195,9 +183,11 @@ app.get('/selectDong', (req, res) => {
         console.log(result);
         // res.send(result);
         if (result.length == 0) {
-            template_nodata(res);
+            // template_nodata(res);
+            res.send({ "ok": true, "result": [result], "service": "SelectDong" });
         } else {
-            template_result2(result, res);
+            // template_result2(result, res);
+            res.send({ "ok": true, "result": [result], "service": "SelectDong" });
         }
     }
 })
@@ -209,9 +199,11 @@ app.get('/select', (req, res) => {
     //res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
     // res.send(result);
     if (result.length == 0) {
-        template_nodata(res);
+        // template_nodata(res);
+        res.send({ "ok": true, "result": [result], "service": "select" });
     } else {
-        template_result2(result, res);
+        // template_result2(result, res);
+        res.send({ "ok": true, "result": [result], "service": "select" });
     }
 
 })
@@ -246,7 +238,7 @@ app.post('/insert', (req, res) => {
             result = connection.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
             console.log(result);
             // res.redirect('/selectQuery?resNumber=' + req.body.resNumber);
-            res.send('{"ok":true, "affectedRows":' + result.affectedRows + ', "service":"insert"}');
+            res.send({ "ok": true, "result": [result], "service": "insert" });
         }
     }
 })
@@ -257,9 +249,11 @@ app.get('/select2', (req, res) => {
     console.log(result);
     // res.send(result);
     if (result.length == 0) {
-        template_nodata(res);
+        // template_nodata(res);
+        res.send({ "ok": true, "result": [result], "service": "select" });
     } else {
-        template_result3(result, res);
+        // template_result3(result, res);
+        res.send({ "ok": true, "result": [result], "service": "select" });
     }
 })
 
@@ -302,9 +296,11 @@ app.post('/mongoinsert', function (req, res) {
     }
     if (flag) {
         console.log('err')
-        res.status(500).send('insert error')
+        // res.status(500).send('insert error')
+        res.send({ "ok": true, "result": [result], "service": "mongoinsert" });
     } else {
-        res.status(200).send("Inserted")
+        // res.status(200).send("Inserted")
+        res.send({ "ok": true, "result": [result], "service": "mongoinsert" });
     }
 
 })
@@ -314,6 +310,7 @@ app.get('/mongolist', function (req, res, next) {
     Restbls.find({}, function (err, docs) {
         if (err) console.log('err')
         res.send(docs)
+
     })
 })
 
@@ -329,6 +326,7 @@ app.post('/mongoupdate', function (req, res, next) {
     Restbls.findOne({ 'resNumber': resNumber }, function (err, restbl) {
         if (err) {
             console.log('err')
+            // res.status(500).send('update error')
             res.status(500).send('update error')
             return;
         }
@@ -344,7 +342,9 @@ app.post('/mongoupdate', function (req, res, next) {
                 res.status(500).send('update error')
                 return;
             }
-            res.status(200).send("Updated")
+            // res.status(200).send("Updated")
+            res.status(200).send({ "ok": true, "result": [restbl], "service": "mongoupdate" })
+
         })
     })
 })
@@ -360,7 +360,8 @@ app.post('/mongodelete', function (req, res, next) {
             res.status(500).send('delete error')
             return;
         }
-        res.status(200).send("Removed")
+        // res.status(200).send("Removed")
+        res.status(200).send({ "ok": true, "service": "mmongodelete" })
     })
 })
 

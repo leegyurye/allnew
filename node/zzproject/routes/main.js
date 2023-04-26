@@ -302,7 +302,6 @@ app.post('/mongoinsert', function (req, res) {
         // res.status(200).send("Inserted")
         res.send({ "ok": true, "result": [result], "service": "mongoinsert" });
     }
-
 })
 
 // list

@@ -2,17 +2,80 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>리스트로 메뉴 만들기</title>
-    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <meta charset="utf-8">
+    <title>예약 정보 확인 및 변경</title>
+    <link href="mystyle.css" type="text/css" rel="stylesheet">
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-    <h3>About Me</h3>
-    <hr />
-    <div class="box">
-        <img src="https://m.media-amazon.com/images/I/71+mDoHG4mL.png" width="100%" height="100%">
-    </div>
+    <h1>예약 정보 확인 및 변경</h1>
+    <script>
+        function reservationsend() {
+            let resNumber = document.getElementById("resNumber");
+            let userId = document.getElementById("userId");
+            let shopName = document.getElementById("shopName");
+            let resDate = document.getElementById("resDate");
+            let shopService = document.getElementById("shopService");
+            let shopArea = document.getElementById("shopArea");
+
+            console.log(resNumber.value);
+            console.log(userId.value);
+            console.log(shopName.value);
+            console.log(resDate.value);
+            console.log(shopService.value);
+            console.log(shopArea.value);
+        }
+    </script>
+
+    <form action="/mongoget" target="targetURL" name="shopForm2" method="get">
+
+        <div class="main-container">
+            <div class="login-input-wrap">
+                <p><input type="text" id="resNumber" placeholder="휴대전화 번호를 입력하세요. 예) 01012341234" /></p>
+            </div>
+            <div class="login-input-wrap">
+                <p><input type="text" id="userId" placeholder="아이디를 입력하세요." /></p>
+            </div>
+            <div class="login-input-wrap">
+                <p><input type="text" id="shopName" placeholder="예약을 원하는 가게 이름을 입력하세요." /></p>
+            </div>
+            <div class="login-input-wrap">
+                <p><input type="text" id="resDate" placeholder="예약을 원하는 날짜를 입력하세요. 예) 2023-00-00" /></p>
+            </div>
+            <div class="login-input-wrap">
+                <p><input type="text" id="shopService" placeholder="예약을 원하는 서비스명을 입력하세요." /></p>
+            </div>
+            <div class="login-input-wrap">
+                <p><input type="text" id="shopArea" placeholder="가게가 속한 동을 입력하세요. 예) 논현동" /></p>
+            </div>
+    </form>
+    <br>
+    <form action="/reservationsend" formaction="/mongoget" target="targetURL" name="reservationcheck" method="get">
+        <div class="login-input-wrap">
+            <input type="button" id="reservationcheck" value="예약확인" onclick="reservationsend()" />
+            <br>
+        </div>
+    </form>
+    <form action="/mongoupdate" target="targetURL" name="reservationupdate" method="get">
+        <div class="login-input-wrap">
+            <input type="submit" value="예약변경" />
+            <br>
+        </div>
+    </form>
+    <form action="/mongodelete" target="targetURL" name="reservationdelete" method="post">
+        <div class="login-input-wrap">
+            <input type="submit" value="예약취소" />
+            <br>
+        </div>
+    </form>
+    <!-- <div>
+        <iframe name=" targetURL" width="1000" height="1000" style="border: none" src="/mongolist"></iframe>
+    </div> -->
 </body>
 
 </html>

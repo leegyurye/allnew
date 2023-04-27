@@ -19,11 +19,51 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// define schema
+var restblSchema = mongoose.Schema({
+    resNumber: Number,
+    userId: String,
+    shopName: String,
+    resDate: String,
+    shopService: String,
+    shopArea: String
+})
+
+// create model with mongodb collection and schema
+var Restbls = mongoose.model('restbls', restblSchema);
+
 //MY SQL > MONGO Insert 위한 Select
 function resselect_result(req) {
     const result = connection.query('SELECT * FROM restbl');
     return result;
 }
+
+//MY SQL insert function
+function restblsql(req) {
+    var { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
+    const restblsql = connection.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
+    console.log("1 : " + resNumber)
+    return restblsql;
+}
+
+//Mongoose insert function
+function restblmongo(req) {
+    var { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
+    var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopName': shopName, 'resDate': resDate, 'shopService': shopService, 'shopArea': shopArea })
+
+    restbls.save(function (err, silence) {
+        if (err) {
+            console.log('err')
+            res.status(500).send('insert error')
+            return;
+        }
+        console.log("2")
+        res.status(200).send("Inserted")
+    })
+
+}
+
+
 
 function template_nodata(res) {
     res.writeHead(200);
@@ -42,13 +82,13 @@ function template_nodata(res) {
     res.end(template);
 }
 
-function template_result2(result, res) {
+function template_result2(shoptbl, res) {
     res.writeHead(200);
     var template = `
     <!doctype html>
     <html>
     <head>
-        <title>Result</title>
+        <title>shoptbl</title>
         <meta charset="utf-8">
         <link type="text/css" rel="stylesheet" href="mystyle.css" />
     </head>
@@ -59,14 +99,14 @@ function template_result2(result, res) {
     </thead>
     <tbody>
     `;
-    for (var i = 0; i < result.length; i++) {
+    for (var i = 0; i < shoptbl.length; i++) {
         template += `
     <tr>
-        <td>${result[i]['shopId']}</td>
-        <td>${result[i]['shopService']}</td>
-        <td>${result[i]['shopName']}</td>
-        <td>${result[i]['shopArea']}</td>
-        <td>${result[i]['shopAddr']}</td>
+        <td>${shoptbl[i]['shopId']}</td>
+        <td>${shoptbl[i]['shopService']}</td>
+        <td>${shoptbl[i]['shopName']}</td>
+        <td>${shoptbl[i]['shopArea']}</td>
+        <td>${shoptbl[i]['shopAddr']}</td>
     </tr>
     `;
     }
@@ -79,13 +119,13 @@ function template_result2(result, res) {
     res.end(template);
 }
 
-function template_result3(result, res) {
+function template_result3(restbl, res) {
     res.writeHead(200);
     var template = `
     <!doctype html>
     <html>
     <head>
-        <title>Result</title>
+        <title>restbl</title>
         <meta charset="utf-8">
         <link type="text/css" rel="stylesheet" href="mystyle.css" />
     </head>
@@ -96,15 +136,15 @@ function template_result3(result, res) {
     </thead>
     <tbody>
     `;
-    for (var i = 0; i < result.length; i++) {
+    for (var i = 0; i < restbl.length; i++) {
         template += `
     <tr>
-        <td>${result[i]['resNumber']}</td>
-        <td>${result[i]['userId']}</td>
-        <td>${result[i]['shopName']}</td>
-        <td>${result[i]['resDate']}</td>
-        <td>${result[i]['shopService']}</td>
-        <td>${result[i]['shopArea']}</td>
+        <td>${restbl[i]['resNumber']}</td>
+        <td>${restbl[i]['userId']}</td>
+        <td>${restbl[i]['shopName']}</td>
+        <td>${restbl[i]['resDate']}</td>
+        <td>${restbl[i]['shopService']}</td>
+        <td>${restbl[i]['shopArea']}</td>
     </tr>
     `;
     }
@@ -116,6 +156,7 @@ function template_result3(result, res) {
     `;
     res.end(template);
 }
+
 
 // 로그인
 app.post('/login', (req, res) => {
@@ -127,12 +168,12 @@ app.post('/login', (req, res) => {
     }
     if (id == 'admin' || id == 'root') {
         console.log(id + " => Administrator Logined")
-        // res.redirect('member.html?id=' + id)
-        res.send({ "ok": true, "userid": [id], "service": "Admin login" });
+        res.redirect('member.html?id=' + id)
+        // res.send({ "ok": true, "userid": [id], "service": "Admin login" });
     } else {
         console.log(id + " => User Logined")
-        // res.redirect('main.html?id=' + id)
-        res.send({ "ok": true, "userid": [id], "service": "User login" });
+        res.redirect('main.html?id=' + id)
+        // res.send({ "ok": true, "userid": [id], "service": "User login" });
     }
 })
 
@@ -165,8 +206,8 @@ app.post('/register', (req, res) => {
         } else {
             usertbl = connection.query("insert into usertbl values (?, ?, ?, ?, ?)", [id, pw, name, addr, num]);
             console.log(usertbl);
-            res.send({ "ok": true, "usertbl": [{ "id": id, "pw": pw, "name": name, "addr": addr, "num": num }], "service": "register" });
-            // res.redirect('/');
+            // res.send({ "ok": true, "usertbl": [{ "id": id, "pw": pw, "name": name, "addr": addr, "num": num }], "service": "register" });
+            res.redirect('/');
         }
     }
 })
@@ -180,14 +221,14 @@ app.get('/selectDong', (req, res) => {
         res.write("<script>alert('원하는 동을 입력하세요')</script>");
     } else {
         const shoptbl = connection.query("SELECT * FROM shoptbl where shopArea=?", [shopArea]);
-        console.log(shoptbl);
+        console.log(shoptbl.length);
         // res.send(shoptbl);
         if (shoptbl.length == 0) {
-            // template_nodata(res);
-            res.send({ "ok": false, "shoptbl": shoptbl, "service": "SelectDong" });
+            template_nodata(res);
+            // res.send({ "ok": false, "shoptbl": shoptbl, "service": "SelectDong" });
         } else {
-            // template_result2(result, res);
-            res.send({ "ok": true, "shopArea": shoptbl, "service": "SelectDong" });
+            template_result2(shoptbl, res);
+            // res.send({ "ok": true, "shopArea": shoptbl, "service": "SelectDong" });
         }
     }
 })
@@ -199,11 +240,11 @@ app.get('/select', (req, res) => {
     //res.send('{"ok":true, "affectedRows":' + shoptbl.affectedRows + ', "service":"insert"}');
     // res.send(shoptbl);
     if (shoptbl.length == 0) {
-        // template_nodata(res);
-        res.send({ "ok": false, "shoptbl": shoptbl, "service": "select" });
+        template_nodata(res);
+        // res.send({ "ok": false, "shoptbl": shoptbl, "service": "select" });
     } else {
-        // template_result2(result, res);
-        res.send({ "ok": true, "shoptbl": shoptbl, "service": "select" });
+        template_result2(shoptbl, res);
+        // res.send({ "ok": true, "shoptbl": shoptbl, "service": "select" });
     }
 
 })
@@ -213,7 +254,7 @@ app.post('/insert', (req, res) => {
     const { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
     if (resNumber == "" || userId == "" || shopName == "" || resDate == "" || shopService == "" || shopArea == "") {
         // res.send('정보를 빠짐없이 입력하세요.')
-        res.write({ "ok": false, "restbl": [restbl], "service": "Reservation" });
+        res.write("<script>alert('정보를 빠짐없이 입력하세요.')</script>");
     } else {
         let restbl = connection.query("select * from restbl where resNumber=?", [resNumber]);
         if (restbl.length > 0) {
@@ -228,20 +269,24 @@ app.post('/insert', (req, res) => {
         <body>
             <div>
                 <h3 style="margin-left: 30px">Registrer Failed</h3>
-                <h4 style="margin-left: 30px">이미 존재하는 아이디입니다.</h4>
+                <h4 style="margin-left: 30px">이미 예약이 완료되었습니다.</h4>
             </div>
         </body>
         </html>
         `;
             res.end(template);
         } else {
-            restbl = connection.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
+            restblsql(req)
+            restblmongo(req)
             console.log(restbl);
-            // res.redirect('/selectQuery?resNumber=' + req.body.resNumber);
-            res.send({ "ok": true, "restbl": [{ "resNumber": resNumber, "userID": userId, "shopName": shopName, "resDate": resDate, "shopService": shopService, "shopArea": shopArea }], "service": "Reservation" });
+            res.send("예약이 완료되었습니다.");
+
+            // res.redirect('/selectDong?resNumber=' + req.body);
+            // res.send({ "ok": true, "restbl": [{ "resNumber": resNumber, "userID": userId, "shopName": shopName, "resDate": resDate, "shopService": shopService, "shopArea": shopArea }], "service": "Reservation" });
         }
     }
 })
+
 
 // request O, query X
 app.get('/select2', (req, res) => {
@@ -256,20 +301,6 @@ app.get('/select2', (req, res) => {
         res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
     }
 })
-
-// define schema
-var restblSchema = mongoose.Schema({
-    resNumber: Number,
-    userId: String,
-    shopName: String,
-    resDate: String,
-    shopService: String,
-    shopArea: String
-})
-
-// create model with mongodb collection and schema
-var Restbls = mongoose.model('restbls', restblSchema);
-
 
 // mongo insert
 app.post('/mongoinsert', function (req, res) {
@@ -310,8 +341,18 @@ app.post('/mongoinsert', function (req, res) {
 app.get('/mongolist', function (req, res, next) {
     Restbls.find({}, { _id: 0 }, function (err, mongolist) {
         if (err) console.log('err')
-        res.send({ "ok": true, "mongolist": mongolist, "service": "mongolist" })
+        res.send(mongolist)
 
+    })
+})
+
+
+// get
+app.get('/mongoget', function (req, res, next) {
+    var resnumber = req.query.resNumber
+    Restbls.findOne({ 'resNumber': resnumber }, { _id: 0 }, function (err, mongoget) {
+        if (err) console.log(err)
+        res.send({ "고객님의 예약은 :": mongoget })
     })
 })
 

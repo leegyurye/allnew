@@ -3,25 +3,57 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Register</title>
+    <title>회원 가입</title>
     <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-    <h3>Register</h3>
+    <h1>회 원 가 입</h1>
     <hr />
-    <div class="box">
+    <div class="main-container">
+
         <form action="/register" name="userForm" method="post">
-            <div>
-                <p>User-id&nbsp; : <input type="text" size="15" name="id" /></p>
-                <p>Password : <input type="password" size="15" name="pw" /></p>
+            <br>
+            <br>
+
+            <div class="login-input-wrap">
+
+                <p><input placeholder="아이디" type="text" size="15" name="id" /></p>
             </div>
-            <div class="box-inner">
+            <br>
+            <div class="login-input-wrap">
+                <p><input placeholder="비밀번호" type="password" size="15" name="pw" /></p>
+            </div>
+            <br>
+            <div class="login-input-wrap">
+                <p><input placeholder="성함" type="text" size="15" name="name" /></p>
+            </div>
+            <br>
+            <div class="login-input-wrap">
+                <p><input placeholder="주소 (ex : 강남구 논현동)" type="text" size="15" name="addr" /></p>
+            </div>
+            <br>
+            <div class="login-input-wrap">
+                <p><input placeholder="핸드폰 번호" type="text" size="15" name="num" /></p>
+            </div>
+            <br>
+
+            <div class="login-input-wrap">
                 <input type="submit" value="회원가입" />&nbsp;&nbsp;
-                <input type="reset" value="취소" />
             </div>
-    </div>
-    </form>
+
+
+            <div class="login-button-wrap">
+                <button><a href="index.html" style="text-decoration : none" , text-align: center>
+                        취소</a></button>
+            </div>
+        </form>
+
 </body>
 
 </html>

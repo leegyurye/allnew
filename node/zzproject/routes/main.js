@@ -184,10 +184,10 @@ app.get('/selectDong', (req, res) => {
         // res.send(shoptbl);
         if (shoptbl.length == 0) {
             // template_nodata(res);
-            res.send({ "ok": false, "shopArea": [shopArea], "service": "SelectDong" });
+            res.send({ "ok": false, "shoptbl": shoptbl, "service": "SelectDong" });
         } else {
             // template_result2(result, res);
-            res.send({ "ok": true, "shopArea": [shopArea], "service": "SelectDong" });
+            res.send({ "ok": true, "shopArea": shoptbl, "service": "SelectDong" });
         }
     }
 })
@@ -200,10 +200,10 @@ app.get('/select', (req, res) => {
     // res.send(shoptbl);
     if (shoptbl.length == 0) {
         // template_nodata(res);
-        res.send({ "ok": false, "shoptbl": [shoptbl], "service": "select" });
+        res.send({ "ok": false, "shoptbl": shoptbl, "service": "select" });
     } else {
         // template_result2(result, res);
-        res.send({ "ok": true, "shoptbl": [shoptbl], "service": "select" });
+        res.send({ "ok": true, "shoptbl": shoptbl, "service": "select" });
     }
 
 })
@@ -243,17 +243,17 @@ app.post('/insert', (req, res) => {
     }
 })
 
-// ReservationSelect (예약 정보 출력)
+// request O, query X
 app.get('/select2', (req, res) => {
     const restbl = connection.query('SELECT * FROM restbl');
     console.log(restbl);
-    // res.send(restbl);
+    // res.send(restbl;
     if (restbl.length == 0) {
         // template_nodata(res);
-        res.send({ "ok": false, "restbl": [restbl], "service": "ReservationSelect" });
+        res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
     } else {
-        // template_result3(restbl, res);
-        res.send({ "ok": true, "restbl": [restbl], "service": "ReservationSelect" });
+        // template_result3(result, res);
+        res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
     }
 })
 
@@ -308,9 +308,9 @@ app.post('/mongoinsert', function (req, res) {
 
 // list
 app.get('/mongolist', function (req, res, next) {
-    Restbls.find({}, function (err, mongolist) {
+    Restbls.find({}, { _id: 0 }, function (err, mongolist) {
         if (err) console.log('err')
-        res.send({ "ok": true, "mongolist": [_id = 0, mongolist], "service": "mongoinsert" })
+        res.send({ "ok": true, "mongolist": mongolist, "service": "mongolist" })
 
     })
 })
@@ -328,7 +328,7 @@ app.post('/mongoupdate', function (req, res, next) {
         if (err) {
             console.log('err')
             // res.status(500).send('update error')
-            res.status(500).send({ "ok": false, "rstbl": [_id = 0, restbl], "service": "mongoupdate" })
+            res.status(500).send({ "ok": false, "rstbl": [restbl], "service": "mongoupdate" })
             return;
         }
         restbl.userId = userId;
@@ -340,11 +340,11 @@ app.post('/mongoupdate', function (req, res, next) {
         restbl.save(function (err, silence) {
             if (err) {
                 console.log('err')
-                res.status(500).send({ "ok": false, "rstbl": [_id = 0, restbl], "service": "mongoupdate" })
+                res.status(500).send({ "ok": false, "rstbl": [restbl], "service": "mongoupdate" })
                 return;
             }
             // res.status(200).send("Updated")
-            res.status(200).send({ "ok": true, "rstbl": [_id = 0, restbl], "service": "mongoupdate" })
+            res.status(200).send({ "ok": true, "rstbl": [restbl], "service": "mongoupdate" })
 
         })
     })

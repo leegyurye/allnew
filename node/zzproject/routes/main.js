@@ -1,16 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('sync-mysql');
+const mysql = require('mysql2');
 const mongoose = require("mongoose");
-const env = require('dotenv').config({ path: "../../.env" });
-
-//MySQL 연결 정보
-var connection = new mysql({
-    host: process.env.host,
-    user: process.env.user,
-    password: process.env.password,
-    database: process.env.database
-});
+const pool = require("../config/pool")
 
 const app = express()
 
@@ -33,17 +25,17 @@ var restblSchema = mongoose.Schema({
 var Restbls = mongoose.model('restbls', restblSchema);
 
 //MY SQL > MONGO Insert 위한 Select
-function resselect_result(req) {
-    const result = connection.query('SELECT * FROM restbl');
-    return result;
+async function resselect_result(req) {
+    const [rows, fields] = await pool.query('SELECT * FROM restbl');
+    return rows;
 }
 
 //MY SQL insert function
-function restblsql(req) {
+async function restblsql(req) {
     var { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
-    const restblsql = connection.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
+    const [rows, fields] = await pool.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
     console.log("1 : " + resNumber)
-    return restblsql;
+    return rows;
 }
 
 //Mongoose insert function
@@ -82,7 +74,7 @@ function template_nodata(res) {
     res.end(template);
 }
 
-function template_result2(shoptbl, res) {
+function template_result2(rows, res) {
     res.writeHead(200);
     var template = `
     <!doctype html>
@@ -99,14 +91,14 @@ function template_result2(shoptbl, res) {
     </thead>
     <tbody>
     `;
-    for (var i = 0; i < shoptbl.length; i++) {
+    for (var i = 0; i < rows.length; i++) {
         template += `
     <tr>
-        <td>${shoptbl[i]['shopId']}</td>
-        <td>${shoptbl[i]['shopService']}</td>
-        <td>${shoptbl[i]['shopName']}</td>
-        <td>${shoptbl[i]['shopArea']}</td>
-        <td>${shoptbl[i]['shopAddr']}</td>
+        <td>${rows[i]['shopId']}</td>
+        <td>${rows[i]['shopService']}</td>
+        <td>${rows[i]['shopName']}</td>
+        <td>${rows[i]['shopArea']}</td>
+        <td>${rows[i]['shopAddr']}</td>
     </tr>
     `;
     }
@@ -159,11 +151,11 @@ function template_result3(restbl, res) {
 
 
 // 로그인
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { id, pw } = req.body;
-    const usertbl = connection.query("select * from usertbl where userid=? and passwd=?", [id, pw]);
+    const [rows, fields] = await pool.query("select * from usertbl where userid=? and passwd=?", [id, pw]);
     // console.log(usertbl);
-    if (usertbl.length == 0) {
+    if (rows.length == 0) {
         res.redirect('error.html')
     }
     if (id == 'admin' || id == 'root') {
@@ -178,13 +170,13 @@ app.post('/login', (req, res) => {
 })
 
 // 회원가입 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
     const { id, pw, name, addr, num } = req.body;
     if (id == "") {
         res.redirect('register.html')
     } else {
-        let usertbl = connection.query("select * from usertbl where userid=? and passwd=? and userName=? and userAddr=? and userNumber=?", [id, pw, name, addr, num]);
-        if (usertbl.length > 0) {
+        let [rows, fields] = await pool.query("select * from usertbl where userid=? and passwd=? and userName=? and userAddr=? and userNumber=?", [id, pw, name, addr, num]);
+        if (rows.length > 0) {
             res.writeHead(200);
             var template = `
         <!doctype html>
@@ -204,8 +196,8 @@ app.post('/register', (req, res) => {
         `;
             res.end(template);
         } else {
-            usertbl = connection.query("insert into usertbl values (?, ?, ?, ?, ?)", [id, pw, name, addr, num]);
-            console.log(usertbl);
+            rows = await pool.query("insert into usertbl values (?, ?, ?, ?, ?)", [id, pw, name, addr, num]);
+            console.log(rows);
             // res.send({ "ok": true, "usertbl": [{ "id": id, "pw": pw, "name": name, "addr": addr, "num": num }], "service": "register" });
             res.redirect('/');
         }
@@ -214,50 +206,50 @@ app.post('/register', (req, res) => {
 
 
 //SelectDong ' 동 (Area) ' 에 따른 Shop 조회
-app.get('/selectDong', (req, res) => {
+app.get('/selectDong', async (req, res) => {
     const shopArea = req.query.shopArea;
     if (shopArea == "") {
         // res.send('원하는 동을 입력하세요.')
         res.write("<script>alert('원하는 동을 입력하세요')</script>");
     } else {
-        const shoptbl = connection.query("SELECT * FROM shoptbl where shopArea=?", [shopArea]);
-        console.log(shoptbl.length);
+        const [rows, fields] = await pool.query("SELECT * FROM shoptbl where shopArea=?", [shopArea]);
+        console.log(rows.length);
         // res.send(shoptbl);
-        if (shoptbl.length == 0) {
+        if (rows.length == 0) {
             template_nodata(res);
             // res.send({ "ok": false, "shoptbl": shoptbl, "service": "SelectDong" });
         } else {
-            template_result2(shoptbl, res);
+            template_result2(rows, res);
             // res.send({ "ok": true, "shopArea": shoptbl, "service": "SelectDong" });
         }
     }
 })
 
 // 전체 업체 검색
-app.get('/select', (req, res) => {
-    const shoptbl = connection.query('SELECT * FROM shoptbl');
-    console.log(shoptbl);
+app.get('/select', async (req, res) => {
+    const [rows, fields] = await pool.query('SELECT * FROM shoptbl');
+    console.log(rows);
     //res.send('{"ok":true, "affectedRows":' + shoptbl.affectedRows + ', "service":"insert"}');
     // res.send(shoptbl);
-    if (shoptbl.length == 0) {
+    if (rows.length == 0) {
         template_nodata(res);
         // res.send({ "ok": false, "shoptbl": shoptbl, "service": "select" });
     } else {
-        template_result2(shoptbl, res);
+        template_result2(rows, res);
         // res.send({ "ok": true, "shoptbl": shoptbl, "service": "select" });
     }
 
 })
 
 // 예약 등록 
-app.post('/insert', (req, res) => {
+app.post('/insert', async (req, res) => {
     const { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
     if (resNumber == "" || userId == "" || shopName == "" || resDate == "" || shopService == "" || shopArea == "") {
         // res.send('정보를 빠짐없이 입력하세요.')
         res.write("<script>alert('정보를 빠짐없이 입력하세요.')</script>");
     } else {
-        let restbl = connection.query("select * from restbl where resNumber=?", [resNumber]);
-        if (restbl.length > 0) {
+        let [rows, fields] = await pool.query("select * from restbl where resNumber=?", [resNumber]);
+        if (rows.length > 0) {
             res.writeHead(200);
             var template = `
         <!doctype html>
@@ -278,7 +270,7 @@ app.post('/insert', (req, res) => {
         } else {
             restblsql(req)
             restblmongo(req)
-            console.log(restbl);
+            console.log(rows);
             res.send("예약이 완료되었습니다.");
 
             // res.redirect('/selectDong?resNumber=' + req.body);
@@ -289,21 +281,21 @@ app.post('/insert', (req, res) => {
 
 
 // request O, query X
-app.get('/select2', (req, res) => {
-    const restbl = connection.query('SELECT * FROM restbl');
-    console.log(restbl);
+app.get('/select2', async (req, res) => {
+    const [rows, fields] = await pool.query('SELECT * FROM restbl');
+    console.log(rows);
     // res.send(restbl;
-    if (restbl.length == 0) {
+    if (rows.length == 0) {
         // template_nodata(res);
-        res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+        res.send({ "ok": true, "restbl": rows, "service": "ReservationSelect" });
     } else {
         // template_result3(result, res);
-        res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+        res.send({ "ok": true, "restbl": rows, "service": "ReservationSelect" });
     }
 })
 
 // mongo insert
-app.post('/mongoinsert', function (req, res) {
+app.post('/mongoinsert', async function (req, res) {
     let result = resselect_result(req)
     //상위에 지정한 My SQL > Mongo로 이동하는 Function 이므로 result로 변수 선언
     let flag = 0

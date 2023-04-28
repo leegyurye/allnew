@@ -246,9 +246,9 @@ app.post('/register', (req, res) => {
     if (id == "") {
         res.redirect('register.html')
     } else {
-        let usertbl = connection.query("select * from usertbl where userid=? and passwd=? and userName=? and userAddr=? and userNumber=?", [id, pw, name, addr, num]);
+        let usertbl = connection.query("select * from usertbl where userid=? ", [id]);
         if (usertbl.length > 0) {
-            res.writeHead(200);
+            //res.writeHead(200);
             var template = `
         <!doctype html>
         <html>
@@ -479,8 +479,8 @@ app.post('/mongodelete', function (req, res) {
     let rescode_mongo = deletemongo(req)
     let rescode_mysql = deletesql(req, res)
     console.log({ "mongo_delete ": rescode_mongo, "mysql_delete": rescode_mysql })
-    // res.status(200).send({ "mongo_delete ": rescode_mongo, "mysql_delete": rescode_mysql });
-    res.status(200).send("예약이 취소되었습니다.");
+    res.status(200).send({ "mongo_delete ": rescode_mongo, "mysql_delete": rescode_mysql });
+    // res.status(200).send("예약이 취소되었습니다.");
 
 })
 

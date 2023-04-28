@@ -156,9 +156,47 @@ function template_result3(restbl, res) {
     res.end(template);
 }
 
+function template_result4(usertbl, res) {
+    res.writeHead(200);
+    var template = `
+    <!doctype html>
+    <html>
+    <head>
+        <title>usertbl</title>
+        <meta charset="utf-8">
+        <link type="text/css" rel="stylesheet" href="mystyle.css" />
+    </head>
+    <body>
+    <table border="1" style="margin:auto;">
+    <thead>
+        <tr><th>userId</th><th>passwd</th><th>userName</th><th>userAddr</th><th>userNumber</th></tr>
+    </thead>
+    <tbody>
+    `;
+    for (var i = 0; i < usertbl.length; i++) {
+        template += `
+    <tr>
+        <td>${usertbl[i]['userId']}</td>
+        <td>${usertbl[i]['passwd']}</td>
+        <td>${usertbl[i]['userName']}</td>
+        <td>${usertbl[i]['userAddr']}</td>
+        <td>${usertbl[i]['userNumber']}</td>
+    </tr>
+    `;
+    }
+    template += `
+    </tbody>
+    </table>
+    </body>
+    </html>
+    `;
+    res.end(template);
+}
+
 //MY SQL delete function
-function deletesql(req) {
+function deletesql(req, res) {
     const resNumber = req.body.resNumber;
+    let rescode = 0;
     if (resNumber == "") {
         res.write("<script>alert('휴대전화번호를 입력하세요.')</script>");
     } else {
@@ -167,25 +205,23 @@ function deletesql(req) {
             template_nodata(res);
         } else {
             const deletesql = connection.query("delete from restbl where resNumber=?", [resNumber]);
-            return deletesql;
+            return rescode = 1;
         }
     }
 }
 
 //Mongoose delete function
-function deletemongo(req, res) {
+function deletemongo(req) {
     var resNumber = req.body.resNumber;
+    let rescode = 0;
+
     var restbls = Restbls.find({ 'resNumber': resNumber })
     restbls.deleteOne(function (err) {
-        if (err) {
+        if (err)
             console.log('err')
-            res.status(500).send('delete error')
-            return;
-        }
-        res.status(200).send("예약이 삭제되었습니다.")
     })
+    return rescode = 1;
 }
-
 
 
 
@@ -319,17 +355,32 @@ app.post('/insert', (req, res) => {
 })
 
 
-// request O, query X
-app.get('/select2', (req, res) => {
+// 전체 예약 select
+app.get('/resselect', (req, res) => {
     const restbl = connection.query('SELECT * FROM restbl');
     console.log(restbl);
     // res.send(restbl;
     if (restbl.length == 0) {
-        // template_nodata(res);
-        res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+        template_nodata(res);
+        // res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
     } else {
-        // template_result3(result, res);
-        res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+        template_result3(restbl, res);
+        // res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+    }
+})
+
+
+// 전체 고객 select
+app.get('/userselect', (req, res) => {
+    const usertbl = connection.query('SELECT * FROM usertbl');
+    console.log(usertbl);
+    // res.send(restbl;
+    if (usertbl.length == 0) {
+        template_nodata(res);
+        // res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+    } else {
+        template_result4(usertbl, res);
+        // res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
     }
 })
 
@@ -424,11 +475,11 @@ app.post('/mongoupdate', function (req, res, next) {
 
 
 // delete
-app.post('/mongodelete', function (req, res, next) {
-    var resNumber = req.body.resNumber;
-    var restbls = Restbls.find({ 'resNumber': resNumber })
-    deletemongo(req, res)
-    deletesql(req, res)
+app.post('/mongodelete', function (req, res) {
+    let rescode_mongo = deletemongo(req)
+    let rescode_mysql = deletesql(req, res)
+    console.log({ "mongo_delete ": rescode_mongo, "mysql_delete": rescode_mysql })
+    res.status(200).send({ "mongo_delete ": rescode_mongo, "mysql_delete": rescode_mysql });
 
 })
 

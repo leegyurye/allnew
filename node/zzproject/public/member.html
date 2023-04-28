@@ -18,30 +18,26 @@
     <nav id="menubar">
         <ul>
             <li style="float : left;"><a href="/main.html">메인페이지</a></li>
-            <li style="float : right;"><a href="/index.html">로그아웃</a></li>
+            <li style="float : right;"><a href="/reservation.html">예약페이지</a></li>
         </ul>
     </nav>
-    <form action="/insert" target="targetURL" name="shopForm2" method="post">
-
-        <div class="main-container">
-
-            <div class="login-input-wrap">
-                <input type="button" value="검색"
-                    onclick='document.targetURL.location.href="/selectDong?shopArea="+document.shopForm.shopArea.value' />
-            </div>
-
-    </form>
-    <form action="/selectDong" target="targetURL" name="shopForm" method="get">
+    <div class="main-container">
 
         <div class="login-input-wrap">
-            <input type="button" value="검색"
-                onclick='document.targetURL.location.href="/selectDong?shopArea="+document.shopForm.shopArea.value' />
+            <input type="button" value="전체 가게 정보 확인" onclick='document.targetURL.location.href="/select"' />
+        </div>
+
+        <div class="login-input-wrap">
+            <input type="button" value="전체 고객 정보 확인" onclick='document.targetURL.location.href="/userselect"' />
+        </div>
+
+        <div class="login-input-wrap">
+            <input type="button" value="전체 예약 정보 확인" onclick='document.targetURL.location.href="resselect"' />
         </div>
         <br>
-    </form>
-    <div>
-        <iframe name="targetURL" width="1000" height="1000" style="border: none" src=""></iframe>
-    </div>
+        <div>
+            <iframe name="targetURL" width="1000" height="1000" style="border: none" src=""></iframe>
+        </div>
 </body>
 
 </html>

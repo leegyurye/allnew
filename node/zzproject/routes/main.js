@@ -21,12 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // define schema
 var restblSchema = mongoose.Schema({
-    resNumber: Number,
+    resNumber: String,
     userId: String,
-    shopName: String,
+    shopId: Number,
     resDate: String,
-    shopService: String,
-    shopArea: String
+    shopService: String
 })
 
 // create model with mongodb collection and schema
@@ -39,25 +38,23 @@ function resselect_result(req) {
 }
 
 //MY SQL insert function
-function restblsql(req) {
-    var { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
-    const restblsql = connection.query("insert into restbl values (?, ?, ?, ?, ?, ?)", [resNumber, userId, shopName, resDate, shopService, shopArea]);
-    console.log("1 : " + resNumber)
-    return restblsql;
+function restblsql(req, res) {
+    var { resNumber, userId, shopId, resDate, shopService } = req.body;
+    let rescode = 0;
+    const restblsql = connection.query("insert into restbl values (?, ?, ?, ?, ?)", [resNumber, userId, shopId, resDate, shopService]);
+    return rescode = 1;
 }
 
 //Mongoose insert function
 function restblmongo(req, res) {
-    var { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
-    var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopName': shopName, 'resDate': resDate, 'shopService': shopService, 'shopArea': shopArea })
-
+    var { resNumber, userId, shopId, resDate, shopService } = req.body;
+    var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopId': shopId, 'resDate': resDate, 'shopService': shopService })
+    let rescode = 0;
     restbls.save(function (err, silence) {
         if (err) {
             console.log('err')
-            res.status(500).send('예약이 완료되지 않았습니다.')
-            return;
         }
-        res.status(200).send("예약이 완료되었습니다.")
+        return rescode = 1;
     })
 
 }
@@ -131,7 +128,7 @@ function template_result3(restbl, res) {
     <body>
     <table border="1" style="margin:auto;">
     <thead>
-        <tr><th>resNumber</th><th>userId</th><th>shopName</th><th>resDate</th><th>shopService</th><th>shopArea</th></tr>
+        <tr><th>resNumber</th><th>userId</th><th>shopId</th><th>resDate</th><th>shopService</th></tr>
     </thead>
     <tbody>
     `;
@@ -140,10 +137,9 @@ function template_result3(restbl, res) {
     <tr>
         <td>${restbl[i]['resNumber']}</td>
         <td>${restbl[i]['userId']}</td>
-        <td>${restbl[i]['shopName']}</td>
+        <td>${restbl[i]['shopId']}</td>
         <td>${restbl[i]['resDate']}</td>
         <td>${restbl[i]['shopService']}</td>
-        <td>${restbl[i]['shopArea']}</td>
     </tr>
     `;
     }
@@ -318,8 +314,8 @@ app.get('/select', (req, res) => {
 
 // 예약 등록 
 app.post('/insert', (req, res) => {
-    const { resNumber, userId, shopName, resDate, shopService, shopArea } = req.body;
-    if (resNumber == "" || userId == "" || shopName == "" || resDate == "" || shopService == "" || shopArea == "") {
+    const { resNumber, userId, shopId, resDate, shopService } = req.body;
+    if (resNumber == "" || userId == "" || shopId == "" || resDate == "" || shopService == "") {
         // res.send('정보를 빠짐없이 입력하세요.')
         res.write("<script>alert('정보를 빠짐없이 입력하세요.')</script>");
     } else {
@@ -346,10 +342,10 @@ app.post('/insert', (req, res) => {
             restblsql(req)
             restblmongo(req, res)
             console.log(restbl);
-            // res.send("예약이 완료되었습니다.");
+            res.status(200).send("예약이 완료되었습니다.");
 
             // res.redirect('/selectDong?resNumber=' + req.body);
-            // res.send({ "ok": true, "restbl": [{ "resNumber": resNumber, "userID": userId, "shopName": shopName, "resDate": resDate, "shopService": shopService, "shopArea": shopArea }], "service": "Reservation" });
+            // res.send({ "ok": true, "restbl": [{ "resNumber": resNumber, "userID": userId, "shopId": shopId, "resDate": resDate, "shopService": shopService }], "service": "Reservation" });
         }
     }
 })
@@ -374,13 +370,13 @@ app.get('/resselect', (req, res) => {
 app.get('/userselect', (req, res) => {
     const usertbl = connection.query('SELECT * FROM usertbl');
     console.log(usertbl);
-    // res.send(restbl;
+    // res.send(usertbl;
     if (usertbl.length == 0) {
         template_nodata(res);
-        // res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+        // res.send({ "ok": true, "usertbl": usertbl, "service": "ReservationSelect" });
     } else {
         template_result4(usertbl, res);
-        // res.send({ "ok": true, "restbl": restbl, "service": "ReservationSelect" });
+        // res.send({ "ok": true, "usertbl": usertbl, "service": "ReservationSelect" });
     }
 })
 
@@ -393,12 +389,11 @@ app.post('/mongoinsert', function (req, res) {
     for (var i = 0; i < result.length; i++) {
         var resNumber = result[i].resNumber;
         var userId = result[i].userId;
-        var shopName = result[i].shopName;
+        var shopId = result[i].shopId;
         var resDate = result[i].resDate;
         var shopService = result[i].shopService;
-        var shopArea = result[i].shopArea;
 
-        var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopName': shopName, 'resDate': resDate, 'shopService': shopService, 'shopArea': shopArea })
+        var restbls = new Restbls({ 'resNumber': resNumber, 'userId': userId, 'shopId': shopId, 'resDate': resDate, 'shopService': shopService })
 
         restbls.save(function (err, silence) {
             if (err) {
@@ -430,9 +425,9 @@ app.get('/mongolist', function (req, res, next) {
 
 
 // get
-app.get('/mongoget', function (req, res, next) {
-    var resnumber = req.query.resNumber
-    Restbls.findOne({ 'resNumber': resnumber }, { _id: 0 }, function (err, mongoget) {
+app.get('/mongoget', function (req, res) {
+    var resNumber = req.query.resNumber
+    Restbls.findOne({ 'resNumber': resNumber }, { _id: 0 }, function (err, mongoget) {
         if (err) console.log(err)
         res.send({ "고객님의 예약은 :": mongoget })
     })
@@ -442,10 +437,9 @@ app.get('/mongoget', function (req, res, next) {
 app.post('/mongoupdate', function (req, res, next) {
     var resNumber = req.body.resNumber;
     var userId = req.body.userId;
-    var shopName = req.body.shopName;
+    var shopId = req.body.shopId;
     var resDate = req.body.resDate;
     var shopService = req.body.shopService;
-    var shopArea = req.body.shopArea;
 
     Restbls.findOne({ 'resNumber': resNumber }, function (err, restbl) {
         if (err) {
@@ -455,10 +449,10 @@ app.post('/mongoupdate', function (req, res, next) {
             return;
         }
         restbl.userId = userId;
-        restbl.shopName = shopName;
+        restbl.shopId = shopId;
         restbl.resDate = resDate;
         restbl.shopService = shopService;
-        restbl.shopArea = shopArea;
+
 
         restbl.save(function (err, silence) {
             if (err) {

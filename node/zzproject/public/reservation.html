@@ -3,67 +3,79 @@
 
 <head>
     <meta charset="utf-8">
-    <title>마이예약페이지</title>
+    <title>예약 정보 확인 및 변경</title>
     <link href="mystyle.css" type="text/css" rel="stylesheet">
     <style>
         h1 {
             text-align: center;
         }
     </style>
+
+
 </head>
 
 <body>
     <h1>예약 정보 확인 및 변경</h1>
-    <hr />
-    <nav id="menubar">
-        <ul>
-            <li style="float : left;"><a href="/main.html">이전페이지로 돌아가기</a></li>
-            <li style="float : right;"><a href="/index.html">로그아웃</a></li>
-        </ul>
-    </nav>
+    <script>
+        function reservationsend() {
+            let resNumber = document.getElementById("resNumber");
+            let userId = document.getElementById("userId");
+            let shopName = document.getElementById("shopName");
+            let resDate = document.getElementById("resDate");
+            let shopService = document.getElementById("shopService");
+            let shopArea = document.getElementById("shopArea");
 
-    <form action="/mongoget" target="targetURL" name="shopForm2" method="get">
+            if (resNumber.value && userId.value && shopName.value && resDate.value && shopService.value && shopArea.value) {
+                console.log(resNumber.value);
+                console.log(userId.value);
+                console.log(shopName.value);
+                console.log(resDate.value);
+                console.log(shopService.value);
+                console.log(shopArea.value);
+            }
+        }
 
+    </script>
+
+
+    <form action="/mongoinsert" target="targetURL" name="shopForm2" method="get">
         <div class="main-container">
             <div class="login-input-wrap">
-                <p><input type="text" id="resNumber" placeholder="앞자리 0을 제외한 휴대전화 번호를 입력하세요. 예) 1012341234" /></p>
+                <p><input type="text" id="resNumber" placeholder="휴대전화 번호를 입력하세요. 예) 01012341234" /></p>
             </div>
+
             <div class="login-input-wrap">
                 <p><input type="text" id="userId" placeholder="아이디를 입력하세요." /></p>
             </div>
             <div class="login-input-wrap">
-                <p><input type="text" id="shopName" placeholder="예약을 진행한/변경을 원하는 가게 이름을 입력하세요." /></p>
+                <p><input type="text" id="shopName" placeholder="예약을 원하는 가게 이름을 입력하세요." /></p>
             </div>
             <div class="login-input-wrap">
-                <p><input type="text" id="resDate" placeholder="예약을 진행한/변경을 원하는 날짜를 입력하세요. 예) 2023-00-00" /></p>
+                <p><input type="text" id="resDate" placeholder="예약을 원하는 날짜를 입력하세요. 예) 2023-00-00" /></p>
             </div>
             <div class="login-input-wrap">
-                <p><input type="text" id="shopService" placeholder="예약을 진행한/변경을 원하는 서비스명을 입력하세요." /></p>
+                <p><input type="text" id="shopService" placeholder="예약을 원하는 서비스명을 입력하세요." /></p>
             </div>
             <div class="login-input-wrap">
                 <p><input type="text" id="shopArea" placeholder="가게가 속한 동을 입력하세요. 예) 논현동" /></p>
             </div>
     </form>
     <br>
-    <form action="/mongolist" target="targetURL" name="rescheck" method="get">
+
+    <form action="/mongoupdate" target="targetURL" name="reservationupdate" method="get">
         <div class="login-input-wrap">
-            <input type="button" value="예약확인" onclick='document.targetURL.location.href="/mongolist"' />
+            <input type="submit" value="예약변경" />
             <br>
         </div>
     </form>
-
-    <div class="login-input-wrap">
-        <input type="submit" value="예약변경" formaction="/mongoupdate>
-        <br>
-    </div>
-    
-    <div class=" login-input-wrap">
-        <input type="submit" value="예약취소" formaction="/mongodelete>
+    <form action="/mongodelete" target="targetURL" name="reservationdelete" method="post">
+        <div class="login-input-wrap">
+            <input type="submit" value="예약취소" />
             <br>
-        </div>
-    
-    <div>
-        <iframe name=" targetURL" width="1000" height="1000" style="border: none" src=""></iframe>
+    </form>
+
+
+    <iframe name=" targetURL" width="1000" height="1000" style="border: none" src="/mongoget"></iframe>
     </div>
 </body>
 

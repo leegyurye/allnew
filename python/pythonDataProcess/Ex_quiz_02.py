@@ -2,14 +2,9 @@ import urllib.request
 from bs4 import BeautifulSoup
 import pandas as pd
 from pandas import DataFrame
-import matplotlib
 import matplotlib.pyplot as plt
 
-from matplotlib import font_manager
-
-font_location = 'c:/windows/fonts/malgun.ttf'
-font_name = font_manager.FontProperties(fname=font_location).get_name()
-matplotlib.rc('font', family=font_name)
+plt.rcParams['font.family'] = 'Malgun Gothic'
 
 url = "https://movie.daum.net/ranking/reservation"
 html = urllib.request.urlopen(url)

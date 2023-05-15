@@ -17,7 +17,7 @@ class Visualization:
         alice_color_file = 'alice_color.png'
         alice_coloring = np.array(Image.open(alice_color_file))
 
-        fontpath = "malgun Gothic.ttf"
+        fontpath = "malgun.ttf"
         wordcloud = WordCloud(font_path=fontpath, mask=alice_coloring, relative_scaling=0.2, background_color='lightyellow')
         print(self.wordList)
         wordcloud = wordcloud.generate_from_frequencies(self.wordDict)

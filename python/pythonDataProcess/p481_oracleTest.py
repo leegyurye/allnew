@@ -38,7 +38,7 @@ try:
 
     plt.show()
 
-    myframe = pd.read_sql(sql, conn, index_col="COUNTRY_TXT")
+    myframe = pd.read_sql(sql, conn, index_col="COUNTRY_TXT") # 중요함 read_sql!!
     print(type(myframe))
     print(myframe)
 

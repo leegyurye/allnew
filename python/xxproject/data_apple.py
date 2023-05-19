@@ -1,7 +1,6 @@
 import requests
 import json
 import pandas as pd
-from datetime import datetime, timedelta
 import os.path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.relpath("./")))
@@ -17,22 +16,23 @@ def get_secret(setting, secrets=secrets):
         errorMsg = "Set the {} environment variable.".format(setting)
         return errorMsg
 
-url = 'http://openapi.seoul.go.kr:8088'
+url = 'https://apis.data.go.kr/1390804/Nihhs_Fruit_Area3/ctlArea'
 
-params = '/' + get_secret("S_data_apiKey")
-params += '/xml'
-params += '/ksccPatternStation'
-params += '/1'
-params += '/10/'
+params = '?serviceKey=' + get_secret("data_apiKey")
+params += '&pageNo=1'
+params += '&numOfRows=17'
+params += '&fs_gb=감귤'
+params += '&year=2021'
+params += '&fs_nm=전체'
 
 url += params
 print(url)
 
-# response = requests.get(url)
-# print(response)
-# print('-' * 50)
+response = requests.get(url)
+print(response)
+print('-' * 50)
 
-# contents = response.text
+# contents = response.xml
 # print(type(contents))
 # print(contents)
 # print('-' * 50)
@@ -47,9 +47,9 @@ print(url)
 # print(items)
 # print('-' * 50)
 
-# # item = ['gPntCnt', 'hPntCnt', 'accExamCnt', 'statusDt']
-# validItem = {key : value for key, value in items.fromkeys(item).items()}
-# print(validItem)
+# item = ['gPntCnt', 'hPntCnt', 'accExamCnt', 'statusDt']
+# # validItem = {key : value for key, value in items.fromkeys(item).items()}
+# # print(validItem)
 
 # validItem = {}
 # for _ in item:

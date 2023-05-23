@@ -35,15 +35,15 @@ response = requests.get(url)
 print(response)
 print('-' * 50)
 
-# contents = response.text
-# print(type(contents))
-# print(contents)
-# print('-' * 50)
+contents = response.text
+print(type(contents))
+print(contents)
+print('-' * 50)
 
-# dict = json.loads(contents)
-# print(type(dict))
-# print(dict)
-# print('-' * 50)
+dict = json.loads(contents)
+print(type(dict))
+print(dict)
+print('-' * 50)
 
 # items = dict['items'][0]
 # print(type(items))

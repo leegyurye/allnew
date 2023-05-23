@@ -229,10 +229,13 @@ def graph_citrus():
 def graph_combined1():
     regions = ["충청북도", "경상북도"]
     plt.rcParams['font.family'] = 'AppleGothic'
-    plt.figure(figsize=(10,6))
+    fig, ax1 = plt.subplots(figsize=(10,6))
+    
+    ax2 = ax1.twinx()
 
     # Temperature
-    for region in regions:
+    colors = ['red', 'green']
+    for i, region in enumerate(regions):
         data = list(collection.find({'C1_NM': region}))
 
         for item in data:
@@ -249,7 +252,7 @@ def graph_combined1():
         
         df = df.groupby('년도')['평균기온'].mean().reset_index()
 
-        plt.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온')
+        ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
     # Fruit
     for region in regions:
@@ -269,16 +272,20 @@ def graph_combined1():
         df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
         df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
 
-        plt.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 감귤 재배면적')
+        ax2.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 감귤 재배면적')
 
-    plt.title('충청북도-경상북도 평균기온 & 감귤 재배 면적 비교')
-    plt.xlabel('년도')
-    plt.legend()
+    ax1.set_title('충청북도-경상북도 평균기온 & 감귤 재배 면적 비교')
+    ax1.set_xlabel('년도')
+    ax1.set_ylabel('평균기온(℃)')
+    ax2.set_ylabel('재배면적(ha)')
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
 
     filename = 'combined1.png'
     plt.savefig(filename)
 
     return {"filename": filename}
+
 
 def getdata_apple():
     data = list(collection2.find({}))
@@ -340,10 +347,13 @@ def graph_apple():
 def graph_combined2():
     regions = ["경기도", "강원도"]
     plt.rcParams['font.family'] = 'AppleGothic'
-    plt.figure(figsize=(10,6))
+    fig, ax1 = plt.subplots(figsize=(10,6))
+    
+    ax2 = ax1.twinx()
 
     # Temperature
-    for region in regions:
+    colors = ['red', 'green']
+    for i, region in enumerate(regions):
         data = list(collection.find({'C1_NM': region}))
 
         for item in data:
@@ -360,7 +370,7 @@ def graph_combined2():
         
         df = df.groupby('년도')['평균기온'].mean().reset_index()
 
-        plt.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온')
+        ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
     # Fruit
     for region in regions:
@@ -378,13 +388,16 @@ def graph_combined2():
         df = df[df['과수명'] == '사과']
 
         df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
-        df = df.groupby('년도')['재배면적(ha)'].mean().reset_index()
+        df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
 
-        plt.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 사과 재배면적')
+        ax2.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 사과 재배면적')
 
-    plt.title('경기도-강원도 평균기온 & 사과 재배 면적 비교')
-    plt.xlabel('년도')
-    plt.legend()
+    ax1.set_title('충청북도-경상북도 평균기온 & 사과 재배 면적 비교')
+    ax1.set_xlabel('년도')
+    ax1.set_ylabel('평균기온(℃)')
+    ax2.set_ylabel('재배면적(ha)')
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
 
     filename = 'combined2.png'
     plt.savefig(filename)
@@ -451,10 +464,13 @@ def graph_peach():
 def graph_combined3():
     regions = ["충청북도", "경상북도"]
     plt.rcParams['font.family'] = 'AppleGothic'
-    plt.figure(figsize=(10,6))
+    fig, ax1 = plt.subplots(figsize=(10,6))
+    
+    ax2 = ax1.twinx()
 
     # Temperature
-    for region in regions:
+    colors = ['red', 'green']
+    for i, region in enumerate(regions):
         data = list(collection.find({'C1_NM': region}))
 
         for item in data:
@@ -471,7 +487,7 @@ def graph_combined3():
         
         df = df.groupby('년도')['평균기온'].mean().reset_index()
 
-        plt.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온')
+        ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
     # Fruit
     for region in regions:
@@ -489,13 +505,16 @@ def graph_combined3():
         df = df[df['과수명'] == '복숭아']
 
         df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
-        df = df.groupby('년도')['재배면적(ha)'].mean().reset_index()
+        df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
 
-        plt.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 복숭아 재배면적')
+        ax2.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 복숭아 재배면적')
 
-    plt.title('충청북도-경상북도 평균기온 & 복숭아 재배 면적 비교')
-    plt.xlabel('년도')
-    plt.legend()
+    ax1.set_title('충청북도-경상북도 평균기온 & 복숭아 재배 면적 비교')
+    ax1.set_xlabel('년도')
+    ax1.set_ylabel('평균기온(℃)')
+    ax2.set_ylabel('재배면적(ha)')
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
 
     filename = 'combined3.png'
     plt.savefig(filename)

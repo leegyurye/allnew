@@ -31,14 +31,22 @@ async def getdata_fruit():
 async def dropdata_fruit():
     return data.dropdata_fruit()
 
-@app.get('/getcleandata_fruit')
-async def getcleandata_fruit():
-    return data.getcleandata_fruit()
+@app.get('/getdata_citrus')
+async def getdata_citrus():
+    return data.getdata_citrus()
 
-@app.get('/graph_fruit')
-async def graph_fruit():
-    return data.graph_fruit()
+@app.get('/getdata_apple')
+async def getdata_apple():
+    return data.getdata_apple()
 
-@app.get('/graph_combined')
-async def graph_combined():
-    return data.graph_combined()
+@app.get('/graph_citrus')
+async def graph_citrus():
+    return data.graph_citrus()
+
+@app.get('/graph_apple')
+async def graph_apple():
+    return data.graph_apple()
+
+@app.get('/graph_combined2')
+async def graph_combined2():
+    return data.graph_combined2()

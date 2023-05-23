@@ -72,7 +72,7 @@ def getcleandata_temperature():
     return json.loads(data)
 
 def graph_temperature():
-    regions = ["충청북도", "경상북도"]
+    regions = ["충청북도", "경상북도", "강원도"]
     plt.rcParams['font.family'] = 'AppleGothic'
     plt.figure(figsize=(10,6))
 
@@ -98,7 +98,7 @@ def graph_temperature():
 
         plt.plot(df['년도'], df['평균기온'], label=region)
 
-    plt.title('충청북도-경상북도 평균기온 비교')
+    plt.title('충청북도-경상북도-강원도 평균기온 비교')
     plt.xlabel('년도')
     plt.ylabel('평균기온')
     plt.legend()
@@ -113,7 +113,6 @@ def getdata_fruit():
     params = '?serviceKey=' + get_secret("data_apiKey")
     params += '&pageNo=1'
     params += '&numOfRows=10000'
-    params += '&fs_gb=감귤'
     params += '&fs_nm=전체'
     url += params
 
@@ -170,7 +169,7 @@ def dropdata_fruit():
     collection2.drop()
     return {"drop data..."}
 
-def getcleandata_fruit():
+def getdata_citrus():
     data = list(collection2.find({}))
 
     for item in data:
@@ -186,11 +185,13 @@ def getcleandata_fruit():
 
     df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
+    df = df[df['과수명'] == '감귤']
+
     data = df.to_json(orient='records')
 
     return json.loads(data)
 
-def graph_fruit():
+def graph_citrus():
     regions = ["충청북도", "경상북도"]
     plt.rcParams['font.family'] = 'AppleGothic'
     plt.figure(figsize=(10,6))
@@ -207,6 +208,8 @@ def graph_fruit():
         
         df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
+        df = df[df['과수명'] == '감귤']
+
         df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
 
         df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
@@ -218,12 +221,12 @@ def graph_fruit():
     plt.ylabel('재배면적(ha)')
     plt.legend()
 
-    filename = 'fruit.png'
+    filename = 'citrus.png'
     plt.savefig(filename)
 
     return {"filename": filename}
 
-def graph_combined():
+def graph_combined1():
     regions = ["충청북도", "경상북도"]
     plt.rcParams['font.family'] = 'AppleGothic'
     plt.figure(figsize=(10,6))
@@ -261,6 +264,8 @@ def graph_combined():
 
         df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
+        df = df[df['과수명'] == '감귤']
+
         df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
         df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
 
@@ -270,7 +275,118 @@ def graph_combined():
     plt.xlabel('년도')
     plt.legend()
 
-    filename = 'combined.png'
+    filename = 'combined1.png'
+    plt.savefig(filename)
+
+    return {"filename": filename}
+
+def getdata_apple():
+    data = list(collection2.find({}))
+    
+    for item in data:
+        item.pop('_id', None)
+
+    df = pd.DataFrame(data)
+
+    columns = ['년도', '시도명', '과수명', '재배면적(ha)']
+
+    df = df[columns]
+
+    df['년도'] = df['년도'].astype(int)
+
+    df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+
+    df = df[df['과수명'] == '사과']
+
+    data = df.to_json(orient='records')
+
+    return json.loads(data)
+
+def graph_apple():
+    regions = ["강원도", "경상북도"]
+    plt.rcParams['font.family'] = 'AppleGothic'
+    plt.figure(figsize=(10,6))
+
+    for region in regions:
+        data = list(collection2.find({'시도명': region}))
+
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+
+        df['년도'] = df['년도'].astype(int)
+        
+        df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+
+        df = df[df['과수명'] == '사과']
+
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+
+        df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
+
+        plt.plot(df['년도'], df['재배면적(ha)'], label=region)
+
+    plt.title('강원도-경상북도 사과 재배 면적 비교')
+    plt.xlabel('년도')
+    plt.ylabel('재배면적(ha)')
+    plt.legend()
+
+    filename = 'apple.png'
+    plt.savefig(filename)
+
+    return {"filename": filename}
+
+def graph_combined2():
+    regions = ["강원도", "경상북도"]
+    plt.rcParams['font.family'] = 'AppleGothic'
+    plt.figure(figsize=(10,6))
+
+    # Temperature
+    for region in regions:
+        data = list(collection.find({'C1_NM': region}))
+
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        df = df.rename(columns={'PRD_DE': '년도', 'DT': '평균기온', 'C1_NM': '지역'})
+
+        df['년도'] = df['년도'].astype(int)
+
+        df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+
+        df['평균기온'] = df['평균기온'].astype(float)
+        
+        df = df.groupby('년도')['평균기온'].mean().reset_index()
+
+        plt.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온')
+
+    # Fruit
+    for region in regions:
+        data = list(collection2.find({'시도명': region}))
+
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        
+        df['년도'] = df['년도'].astype(int)
+
+        df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+
+        df = df[df['과수명'] == '사과']
+
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df.groupby('년도')['재배면적(ha)'].mean().reset_index()
+
+        plt.plot(df['년도'], df['재배면적(ha)'], label=f'{region} 사과 재배면적')
+
+    plt.title('강원도-경상북도 평균기온 & 사과 재배 면적 비교')
+    plt.xlabel('년도')
+    plt.legend()
+
+    filename = 'combined2.png'
     plt.savefig(filename)
 
     return {"filename": filename}

@@ -1,9 +1,13 @@
-import requests, json, os.path, math
+import requests, json, os.path, math, sqlalchemy, folium
 import pandas as pd
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 from pymongo import mongo_client
-import folium
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import *
+from models import get_temperature, get_citrus, get_apple, get_peach
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.relpath("./")))
 secret_file = os.path.join(BASE_DIR, '../secret.json')
@@ -18,6 +22,7 @@ def get_secret(setting, secrets=secrets):
         errorMsg = "Set the {} environment variable.".format(setting)
         return errorMsg
 
+# 몽고DB연결
 HOSTNAME = get_secret("ATLAS_Hostname")
 USERNAME = get_secret("ATLAS_Username")
 PASSWORD = get_secret("ATLAS_Password")
@@ -28,6 +33,30 @@ print('Connected to Mongodb....')
 db = client['project']
 collection = db['projectdb']
 collection2 = db['projectdb2']
+
+# MySQL연결
+HOSTNAME = get_secret("Mysql_Hostname")
+PORT = get_secret("Mysql_Port")
+USERNAME = get_secret("Mysql_Username")
+PASSWORD = get_secret("Mysql_Password")
+DBNAME = get_secret("Mysql_DBname")
+
+DB_URL = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DBNAME}'
+print('Connected to Mysql....')
+
+class db_conn:
+    def __init__(self):
+        self.engine = create_engine(DB_URL, pool_recycle=500)
+
+    def sessionmaker(self):
+        Session = sessionmaker(bind=self.engine)
+        session = Session()
+        return session
+    
+    def connection(self):
+        conn = self.engine.connection()
+        return conn
+
 
 def healthCheck():
     return "OK"
@@ -250,8 +279,6 @@ def graph_combined1():
         df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
         df['평균기온'] = df['평균기온'].astype(float)
-        
-        df = df.groupby('년도')['평균기온'].mean().reset_index()
 
         ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
@@ -368,8 +395,6 @@ def graph_combined2():
         df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
         df['평균기온'] = df['평균기온'].astype(float)
-        
-        df = df.groupby('년도')['평균기온'].mean().reset_index()
 
         ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
@@ -485,8 +510,6 @@ def graph_combined3():
         df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
         df['평균기온'] = df['평균기온'].astype(float)
-        
-        df = df.groupby('년도')['평균기온'].mean().reset_index()
 
         ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
@@ -671,3 +694,50 @@ def get_map_peach():
         filenames.append(filename)
 
     return filenames
+
+#####################################################################MySQL연결
+
+engine = sqlalchemy.create_engine(DB_URL)
+Session = sessionmaker(bind=engine)
+session = Session()
+
+def sql_temperature():
+    json_data1 = getcleandata_temperature()
+
+    for item in json_data1:
+        temperature_data = get_temperature(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'])
+        session.add(temperature_data)
+
+    session.commit()
+    session.close()
+
+
+def sql_citrus():
+    json_data2 = getdata_citrus()
+
+    for item in json_data2:
+        citrus_data = get_citrus(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
+        session.add(citrus_data)
+
+    session.commit()
+    session.close()
+
+def sql_apple():
+    json_data3 = getdata_apple()
+
+    for item in json_data3:
+        apple_data = get_apple(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
+        session.add(apple_data)
+
+    session.commit()
+    session.close()
+
+def sql_peach():
+    json_data4 = getdata_peach()
+
+    for item in json_data4:
+        peach_data = get_peach(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
+        session.add(peach_data)
+
+    session.commit()
+    session.close()

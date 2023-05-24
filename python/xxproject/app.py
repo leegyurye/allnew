@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 import data
+from data import db_conn
 
 app = FastAPI()
+
+db = db_conn()
+session = db.sessionmaker()
 
 @app.get('/')
 async def healthCheck():
@@ -78,3 +83,22 @@ async def get_map_apple():
 @app.get('/get_map_peach')
 async def get_map_peach():
     return data.get_map_peach()
+
+
+######################################################
+
+@app.get('/sql_temperature')
+async def sql_temperature():
+    return data.sql_temperature()
+
+@app.get('/sql_citrus')
+async def sql_citrus():
+    return data.sql_citrus()
+
+@app.get('/sql_apple')
+async def sql_apple():
+    return data.sql_apple()
+
+@app.get('/sql_peach')
+async def sql_peach():
+    return data.sql_peach()

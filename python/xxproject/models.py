@@ -33,3 +33,13 @@ class get_peach(Base):
     sido = Column(TEXT, nullable=False)
     fs_gb = Column(TEXT, nullable=False)
     clt_area = Column(FLOAT, nullable=False)
+
+class get_combined1(Base):
+    __tablename__ = "combined1"
+
+    PRD_DE = Column(INT, nullable=False, primary_key=True)
+    DT = Column(FLOAT, nullable=False)
+    C1_NM = Column(TEXT, nullable=False)
+    clt_area = Column(FLOAT, nullable=False)
+    fs_gb = Column(TEXT, nullable=False)
+    

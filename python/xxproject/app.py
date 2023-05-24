@@ -102,3 +102,11 @@ async def sql_apple():
 @app.get('/sql_peach')
 async def sql_peach():
     return data.sql_peach()
+
+@app.get('/dataframe_combined1')
+async def dataframe_combined1():
+    return data.dataframe_combined1()
+
+@app.get('/sql_combined1')
+async def sql_combined1():
+    return data.sql_combined1()

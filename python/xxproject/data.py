@@ -6,7 +6,7 @@ from pymongo import mongo_client
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import *
-from models import get_temperature, get_citrus, get_apple, get_peach
+from models import get_temperature, get_citrus, get_apple, get_peach, get_combined1
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.relpath("./")))
@@ -279,6 +279,8 @@ def graph_combined1():
         df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
 
         df['평균기온'] = df['평균기온'].astype(float)
+        
+        df = df.groupby('년도')['평균기온'].mean().reset_index()
 
         ax1.plot(df['년도'], df['평균기온'], label=f'{region} 평균기온', color=colors[i])
 
@@ -738,6 +740,63 @@ def sql_peach():
     for item in json_data4:
         peach_data = get_peach(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
         session.add(peach_data)
+
+    session.commit()
+    session.close()
+
+
+def dataframe_combined1():
+    regions = ["충청북도", "경상북도"]
+    
+    df_combined_list = []
+
+    for region in regions:
+        
+        # Temperature data
+        data_temp = list(collection.find({'C1_NM': region}))
+
+        for item in data_temp:
+            item.pop('_id', None)
+
+        df_temp = pd.DataFrame(data_temp)
+        df_temp = df_temp.rename(columns={'PRD_DE': '년도', 'DT': '평균기온', 'C1_NM': '지역'})
+
+        df_temp = df_temp[['년도', '평균기온', '지역']]
+
+        df_temp['년도'] = df_temp['년도'].astype(int)
+        df_temp = df_temp[(df_temp['년도'] >= 2011) & (df_temp['년도'] <= 2020)]
+        df_temp['평균기온'] = df_temp['평균기온'].astype(float)
+        
+        # Fruit data
+        data_fruit = list(collection2.find({'시도명': region}))
+
+        for item in data_fruit:
+            item.pop('_id', None)
+
+        df_fruit = pd.DataFrame(data_fruit)
+
+        df_fruit['년도'] = df_fruit['년도'].astype(int)
+        df_fruit = df_fruit[(df_fruit['년도'] >= 2011) & (df_fruit['년도'] <= 2020)]
+        df_fruit = df_fruit[df_fruit['과수명'] == '감귤']
+        df_fruit['재배면적(ha)'] = df_fruit['재배면적(ha)'].astype(float)
+        df_fruit = df_fruit.groupby('년도')['재배면적(ha)'].sum().reset_index()
+        df_fruit['지역'] = region
+        df_fruit['과수명'] = '감귤'
+
+        # merge
+        df_region = pd.merge(df_temp, df_fruit, on=['년도', '지역'])
+        df_combined_list.append(df_region) 
+
+    df_combined = pd.concat(df_combined_list, ignore_index=True)
+
+    return df_combined.to_dict("records")
+
+def sql_combined1():
+    json_data5 = dataframe_combined1()
+
+    for item in json_data5:
+        combined1_data = get_combined1(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+        session.add(combined1_data)
 
     session.commit()
     session.close()

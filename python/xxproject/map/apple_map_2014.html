@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_618f1688aa6fe0932b26d2f68fc776cf {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_618f1688aa6fe0932b26d2f68fc776cf" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_618f1688aa6fe0932b26d2f68fc776cf = L.map(
+                "map_618f1688aa6fe0932b26d2f68fc776cf",
+                {
+                    center: [36.5, 128.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 7,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_35fb45675b57cc2c359ed3d4f4f25ffa = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+            var circle_marker_04bebed02036fdaf9323763b038fb228 = L.circleMarker(
+                [37.8228, 128.1555],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10.44, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_57c7587af5d890dab5d91f3f96e1a584 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_3eac2ca5c0d29e9118a4eb69bbfdd059 = $(`<div id="html_3eac2ca5c0d29e9118a4eb69bbfdd059" style="width: 100.0%; height: 100.0%;">강원도 2014년 사과 재배 면적: 522.0</div>`)[0];
+                popup_57c7587af5d890dab5d91f3f96e1a584.setContent(html_3eac2ca5c0d29e9118a4eb69bbfdd059);
+            
+        
+
+        circle_marker_04bebed02036fdaf9323763b038fb228.bindPopup(popup_57c7587af5d890dab5d91f3f96e1a584)
+        ;
+
+        
+    
+    
+            var circle_marker_19315c4aacd880f8bf5c4ccf21c9b744 = L.circleMarker(
+                [37.4138, 127.5183],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5.36, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_f69f79192d7d4653b1c72262a697dcf0 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_8df4ae608cf991b9bdccec063903c445 = $(`<div id="html_8df4ae608cf991b9bdccec063903c445" style="width: 100.0%; height: 100.0%;">경기도 2014년 사과 재배 면적: 268.0</div>`)[0];
+                popup_f69f79192d7d4653b1c72262a697dcf0.setContent(html_8df4ae608cf991b9bdccec063903c445);
+            
+        
+
+        circle_marker_19315c4aacd880f8bf5c4ccf21c9b744.bindPopup(popup_f69f79192d7d4653b1c72262a697dcf0)
+        ;
+
+        
+    
+    
+            var circle_marker_f6976adb532cb847c1ed7014707e7b79 = L.circleMarker(
+                [35.4606, 128.2132],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.74, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_da52579c334de02a11bd6ca002b27293 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_1b38f23a11336d75d962c44459e6be38 = $(`<div id="html_1b38f23a11336d75d962c44459e6be38" style="width: 100.0%; height: 100.0%;">경상남도 2014년 사과 재배 면적: 3370.0</div>`)[0];
+                popup_da52579c334de02a11bd6ca002b27293.setContent(html_1b38f23a11336d75d962c44459e6be38);
+            
+        
+
+        circle_marker_f6976adb532cb847c1ed7014707e7b79.bindPopup(popup_da52579c334de02a11bd6ca002b27293)
+        ;
+
+        
+    
+    
+            var circle_marker_6dfb96f9e4072fa8783df829ee13ecbb = L.circleMarker(
+                [36.4919, 128.8889],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 37.622, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_22aa0512fc66f0d14f07367c65e0e081 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ca4e44affec543f46544661ef1236794 = $(`<div id="html_ca4e44affec543f46544661ef1236794" style="width: 100.0%; height: 100.0%;">경상북도 2014년 사과 재배 면적: 18811.0</div>`)[0];
+                popup_22aa0512fc66f0d14f07367c65e0e081.setContent(html_ca4e44affec543f46544661ef1236794);
+            
+        
+
+        circle_marker_6dfb96f9e4072fa8783df829ee13ecbb.bindPopup(popup_22aa0512fc66f0d14f07367c65e0e081)
+        ;
+
+        
+    
+    
+            var circle_marker_aae5915ec44972fcc8dd23aeb509e4ae = L.circleMarker(
+                [35.1605, 126.8514],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_9343b3350dd9c13ac5fb7408fe9fe955 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_9e04ea986c5e1fe7e657a9097fa34d95 = $(`<div id="html_9e04ea986c5e1fe7e657a9097fa34d95" style="width: 100.0%; height: 100.0%;">광주광역시 2014년 사과 재배 면적: 0.0</div>`)[0];
+                popup_9343b3350dd9c13ac5fb7408fe9fe955.setContent(html_9e04ea986c5e1fe7e657a9097fa34d95);
+            
+        
+
+        circle_marker_aae5915ec44972fcc8dd23aeb509e4ae.bindPopup(popup_9343b3350dd9c13ac5fb7408fe9fe955)
+        ;
+
+        
+    
+    
+            var circle_marker_660a39fcb2693ff851511c7756922658 = L.circleMarker(
+                [35.8714, 128.6014],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 1.56, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_d7bef20f53bba1a651da3d65910b9838 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_8662753b02b5fc622b328b95140c24ed = $(`<div id="html_8662753b02b5fc622b328b95140c24ed" style="width: 100.0%; height: 100.0%;">대구광역시 2014년 사과 재배 면적: 78.0</div>`)[0];
+                popup_d7bef20f53bba1a651da3d65910b9838.setContent(html_8662753b02b5fc622b328b95140c24ed);
+            
+        
+
+        circle_marker_660a39fcb2693ff851511c7756922658.bindPopup(popup_d7bef20f53bba1a651da3d65910b9838)
+        ;
+
+        
+    
+    
+            var circle_marker_e605119e854c5568c9199ff209842f2e = L.circleMarker(
+                [36.3504, 127.3845],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.1, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_c09ba4c88654bd15b0ce3f5049746ab0 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_312967a34d9480e053e8fb570bfd7873 = $(`<div id="html_312967a34d9480e053e8fb570bfd7873" style="width: 100.0%; height: 100.0%;">대전광역시 2014년 사과 재배 면적: 5.0</div>`)[0];
+                popup_c09ba4c88654bd15b0ce3f5049746ab0.setContent(html_312967a34d9480e053e8fb570bfd7873);
+            
+        
+
+        circle_marker_e605119e854c5568c9199ff209842f2e.bindPopup(popup_c09ba4c88654bd15b0ce3f5049746ab0)
+        ;
+
+        
+    
+    
+            var circle_marker_b74272b2fdcd01050ba0bf01b526a07c = L.circleMarker(
+                [35.1796, 129.0756],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.02, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_f0d3dcc60efa18a0fa9e65dafde39508 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ed569db454103cc6b5747e4f25c71112 = $(`<div id="html_ed569db454103cc6b5747e4f25c71112" style="width: 100.0%; height: 100.0%;">부산광역시 2014년 사과 재배 면적: 1.0</div>`)[0];
+                popup_f0d3dcc60efa18a0fa9e65dafde39508.setContent(html_ed569db454103cc6b5747e4f25c71112);
+            
+        
+
+        circle_marker_b74272b2fdcd01050ba0bf01b526a07c.bindPopup(popup_f0d3dcc60efa18a0fa9e65dafde39508)
+        ;
+
+        
+    
+    
+            var circle_marker_622455adbc2f6cf2e363dbcd04b30e3c = L.circleMarker(
+                [37.5665, 126.978],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_66bf364e35433c4a171f01eed9e09728 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_8c4578c0b6c5fe6a3c96a300af953355 = $(`<div id="html_8c4578c0b6c5fe6a3c96a300af953355" style="width: 100.0%; height: 100.0%;">서울특별시 2014년 사과 재배 면적: 0.0</div>`)[0];
+                popup_66bf364e35433c4a171f01eed9e09728.setContent(html_8c4578c0b6c5fe6a3c96a300af953355);
+            
+        
+
+        circle_marker_622455adbc2f6cf2e363dbcd04b30e3c.bindPopup(popup_66bf364e35433c4a171f01eed9e09728)
+        ;
+
+        
+    
+    
+            var circle_marker_65b167572fd3a8647ebe7d415c5e935d = L.circleMarker(
+                [35.5384, 129.3114],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.06, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_cfbc4150bbb1f7ee205ad550ca07ac1a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_976e0c2fafc6fd667f3c4967e667067d = $(`<div id="html_976e0c2fafc6fd667f3c4967e667067d" style="width: 100.0%; height: 100.0%;">울산광역시 2014년 사과 재배 면적: 3.0</div>`)[0];
+                popup_cfbc4150bbb1f7ee205ad550ca07ac1a.setContent(html_976e0c2fafc6fd667f3c4967e667067d);
+            
+        
+
+        circle_marker_65b167572fd3a8647ebe7d415c5e935d.bindPopup(popup_cfbc4150bbb1f7ee205ad550ca07ac1a)
+        ;
+
+        
+    
+    
+            var circle_marker_f0ebff4702964c0a619c4a2739b9fbeb = L.circleMarker(
+                [37.4563, 126.7052],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.46, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_b16428f45c304c1557cb69bc5bff078e = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b05680f9d22db31e5841dde39086b0e7 = $(`<div id="html_b05680f9d22db31e5841dde39086b0e7" style="width: 100.0%; height: 100.0%;">인천광역시 2014년 사과 재배 면적: 23.0</div>`)[0];
+                popup_b16428f45c304c1557cb69bc5bff078e.setContent(html_b05680f9d22db31e5841dde39086b0e7);
+            
+        
+
+        circle_marker_f0ebff4702964c0a619c4a2739b9fbeb.bindPopup(popup_b16428f45c304c1557cb69bc5bff078e)
+        ;
+
+        
+    
+    
+            var circle_marker_56b84fb2adc4092423025e65811c1fc3 = L.circleMarker(
+                [34.8194, 126.893],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6.16, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_99792e1b2fb8ffe3d0fcfe89e454a70b = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_67c06f029e8bdd9d0d951d805c3d0637 = $(`<div id="html_67c06f029e8bdd9d0d951d805c3d0637" style="width: 100.0%; height: 100.0%;">전라남도 2014년 사과 재배 면적: 308.0</div>`)[0];
+                popup_99792e1b2fb8ffe3d0fcfe89e454a70b.setContent(html_67c06f029e8bdd9d0d951d805c3d0637);
+            
+        
+
+        circle_marker_56b84fb2adc4092423025e65811c1fc3.bindPopup(popup_99792e1b2fb8ffe3d0fcfe89e454a70b)
+        ;
+
+        
+    
+    
+            var circle_marker_51b31175d5180f35b6f44986e77b9acf = L.circleMarker(
+                [35.7167, 127.1448],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4.156, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_e4ccca6f0c6965014ebbc3b8a0bdf487 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_93a140b5adf0dd646e898b8154833ee7 = $(`<div id="html_93a140b5adf0dd646e898b8154833ee7" style="width: 100.0%; height: 100.0%;">전라북도 2014년 사과 재배 면적: 2078.0</div>`)[0];
+                popup_e4ccca6f0c6965014ebbc3b8a0bdf487.setContent(html_93a140b5adf0dd646e898b8154833ee7);
+            
+        
+
+        circle_marker_51b31175d5180f35b6f44986e77b9acf.bindPopup(popup_e4ccca6f0c6965014ebbc3b8a0bdf487)
+        ;
+
+        
+    
+    
+            var circle_marker_011c6e4da07461ad711ae0eb999c84f6 = L.circleMarker(
+                [33.4996, 126.5312],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_c891aad0415f4241ff800a6f4c8ecece = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_f8de731985b7ebf13e54c3bc40e961f9 = $(`<div id="html_f8de731985b7ebf13e54c3bc40e961f9" style="width: 100.0%; height: 100.0%;">제주특별자치도 2014년 사과 재배 면적: 0.0</div>`)[0];
+                popup_c891aad0415f4241ff800a6f4c8ecece.setContent(html_f8de731985b7ebf13e54c3bc40e961f9);
+            
+        
+
+        circle_marker_011c6e4da07461ad711ae0eb999c84f6.bindPopup(popup_c891aad0415f4241ff800a6f4c8ecece)
+        ;
+
+        
+    
+    
+            var circle_marker_e9be784c6a6d5b585e4717e1f7516d8c = L.circleMarker(
+                [36.6588, 126.6728],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 27.16, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_1fd54f8067b75c016dfb3a13ee86a90c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ee81fd0eeb20954183dd5ed7e4ab0c54 = $(`<div id="html_ee81fd0eeb20954183dd5ed7e4ab0c54" style="width: 100.0%; height: 100.0%;">충청남도 2014년 사과 재배 면적: 1358.0</div>`)[0];
+                popup_1fd54f8067b75c016dfb3a13ee86a90c.setContent(html_ee81fd0eeb20954183dd5ed7e4ab0c54);
+            
+        
+
+        circle_marker_e9be784c6a6d5b585e4717e1f7516d8c.bindPopup(popup_1fd54f8067b75c016dfb3a13ee86a90c)
+        ;
+
+        
+    
+    
+            var circle_marker_2ae1052d722f5cf11bdce7d4e3ef3b70 = L.circleMarker(
+                [36.6285, 127.9293],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 7.754, "stroke": true, "weight": 3}
+            ).addTo(map_618f1688aa6fe0932b26d2f68fc776cf);
+        
+    
+        var popup_d6f59a2f9017871837e170c210a6bf5f = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_44fae0e0e3dbd40e1f6823db8766550f = $(`<div id="html_44fae0e0e3dbd40e1f6823db8766550f" style="width: 100.0%; height: 100.0%;">충청북도 2014년 사과 재배 면적: 3877.0</div>`)[0];
+                popup_d6f59a2f9017871837e170c210a6bf5f.setContent(html_44fae0e0e3dbd40e1f6823db8766550f);
+            
+        
+
+        circle_marker_2ae1052d722f5cf11bdce7d4e3ef3b70.bindPopup(popup_d6f59a2f9017871837e170c210a6bf5f)
+        ;
+
+        
+    
+</script>
+</html>

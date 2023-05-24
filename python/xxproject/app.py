@@ -67,6 +67,14 @@ async def graph_combined2():
 async def graph_combined3():
     return data.graph_combined3()
 
-@app.get('/get_map_fruit')
-async def get_map_fruit():
-    return data.get_map_fruit()
+@app.get('/get_map_citrus')
+async def get_map_citrus():
+    return data.get_map_citrus()
+
+@app.get('/get_map_apple')
+async def get_map_apple():
+    return data.get_map_apple()
+
+@app.get('/get_map_peach')
+async def get_map_peach():
+    return data.get_map_peach()

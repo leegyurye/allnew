@@ -522,7 +522,7 @@ def graph_combined3():
 
     return {"filename": filename}
 
-def get_map_fruit():
+def get_map_citrus():
     regions_df = pd.read_csv('regions.csv')
     regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
 
@@ -548,13 +548,13 @@ def get_map_fruit():
             
             if area > 2000:
                 color = 'red'
-                scale = 1000
+                scale = 500
             elif area == 0:
                 color = 'black'
-                scale = 1
+                scale = 0.5
             else:
                 color = 'yellow'
-                scale = 500
+                scale = 2
 
             folium.CircleMarker(
                 regions_coordinates[region],
@@ -566,7 +566,107 @@ def get_map_fruit():
                 popup=f'{region} {year}년 감귤 재배 면적: {area}'
             ).add_to(m)
         
-        filename = f'fruit_map_{year}.html'
+        filename = f'map/citrus_map_{year}.html'
+        m.save(filename)
+        filenames.append(filename)
+
+    return filenames
+
+def get_map_apple():
+    regions_df = pd.read_csv('regions.csv')
+    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
+
+    filenames = []
+
+    for year in range(2011, 2021):
+        m = folium.Map(location=[36.5, 128], zoom_start=7)
+
+        data = list(collection2.find({'년도': str(year)}))
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        df = df[df['과수명'] == '사과']
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
+
+        max_area = df['재배면적(ha)'].max()
+        min_area = df['재배면적(ha)'].min()
+
+        for region in df['시도명'].unique():
+            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
+            
+            if area > 2000:
+                color = 'red'
+                scale = 500
+            elif area == 0:
+                color = 'black'
+                scale = 0.5
+            else:
+                color = 'yellow'
+                scale = 50
+
+            folium.CircleMarker(
+                regions_coordinates[region],
+                radius = (area / scale),
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.6,
+                popup=f'{region} {year}년 사과 재배 면적: {area}'
+            ).add_to(m)
+        
+        filename = f'map/apple_map_{year}.html'
+        m.save(filename)
+        filenames.append(filename)
+
+    return filenames
+
+def get_map_peach():
+    regions_df = pd.read_csv('regions.csv')
+    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
+
+    filenames = []
+
+    for year in range(2011, 2021):
+        m = folium.Map(location=[36.5, 128], zoom_start=7)
+
+        data = list(collection2.find({'년도': str(year)}))
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        df = df[df['과수명'] == '복숭아']
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
+
+        max_area = df['재배면적(ha)'].max()
+        min_area = df['재배면적(ha)'].min()
+
+        for region in df['시도명'].unique():
+            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
+            
+            if area > 2000:
+                color = 'red'
+                scale = 500
+            elif area == 0:
+                color = 'black'
+                scale = 0.5
+            else:
+                color = 'yellow'
+                scale = 50
+
+            folium.CircleMarker(
+                regions_coordinates[region],
+                radius = (area / scale),
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.6,
+                popup=f'{region} {year}년 복숭아 재배 면적: {area}'
+            ).add_to(m)
+        
+        filename = f'map/peach_map_{year}.html'
         m.save(filename)
         filenames.append(filename)
 

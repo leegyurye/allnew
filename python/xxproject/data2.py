@@ -42,7 +42,7 @@ def graph_citrus2():
     df = pd.DataFrame(data)
 
     df['년도'] = df['년도'].astype(int)
-    df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+    df = df[(df['년도'] >= 1982) & (df['년도'] <= 2021)]
     df = df[df['과수명'] == '감귤']
     df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
     df = df.groupby(['년도'])['재배면적(ha)'].sum().reset_index()
@@ -70,7 +70,7 @@ def graph_apple2():
     df = pd.DataFrame(data)
 
     df['년도'] = df['년도'].astype(int)
-    df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+    df = df[(df['년도'] >= 1982) & (df['년도'] <= 2021)]
     df = df[df['과수명'] == '사과']
     df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
     df = df.groupby(['년도'])['재배면적(ha)'].sum().reset_index()
@@ -98,8 +98,36 @@ def graph_peach2():
     df = pd.DataFrame(data)
 
     df['년도'] = df['년도'].astype(int)
-    df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+    df = df[(df['년도'] >= 1982) & (df['년도'] <= 2021)]
     df = df[df['과수명'] == '복숭아']
+    df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+    df = df.groupby(['년도'])['재배면적(ha)'].sum().reset_index()
+
+    plt.plot(df['년도'], df['재배면적(ha)'])
+
+    plt.title('전체 지역 복숭아 재배 면적 변화')
+    plt.xlabel('년도')
+    plt.ylabel('재배면적(ha)')
+
+    filename = 'peach2.png'
+    plt.savefig(filename)
+
+    return {"filename": filename}
+
+def graph_2():
+    plt.rcParams['font.family'] = 'AppleGothic'
+    plt.figure(figsize=(10,6))
+    
+    data = list(collection2.find())
+
+    for item in data:
+        item.pop('_id', None)
+
+    df = pd.DataFrame(data)
+
+    df['년도'] = df['년도'].astype(int)
+    df = df[(df['년도'] >= 1982) & (df['년도'] <= 2021)]
+    df = df[df['과수명'] == '포도']
     df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
     df = df.groupby(['년도'])['재배면적(ha)'].sum().reset_index()
 

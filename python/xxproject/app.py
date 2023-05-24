@@ -66,3 +66,7 @@ async def graph_combined2():
 @app.get('/graph_combined3')
 async def graph_combined3():
     return data.graph_combined3()
+
+@app.get('/get_map_fruit')
+async def get_map_fruit():
+    return data.get_map_fruit()

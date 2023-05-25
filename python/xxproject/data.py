@@ -104,18 +104,6 @@ def getcleandata_temperature():
 
     return json.loads(data)
 
-def sql_temperature():
-    json_data1 = getcleandata_temperature()
-
-    for item in json_data1:
-        temperature_data = get_temperature(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'])
-        session.add(temperature_data)
-
-    session.commit()
-    session.close()
-
-    return {"insert sql_temperature"}
-
 def getdata_fruit_all():
     url = 'https://apis.data.go.kr/1390804/Nihhs_Fruit_Area3/ctlArea'
     params = '?serviceKey=' + get_secret("data_apiKey")
@@ -308,16 +296,13 @@ def graph_fruit(fruit, regions):
 
     return {"filename": filename}
 
-
 def graph_combined(fruit):
     plt.rcParams['font.family'] = 'AppleGothic'
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
 
-    if fruit == '감귤':
-        regions = ["충청북도", "경상북도"]
-    elif fruit == '사과':
+    if fruit == '사과':
         regions = ["경기도", "강원도"]
-    elif fruit == '복숭아':
+    elif fruit == '감귤' or fruit == '복숭아':
         regions = ["충청북도", "경상북도"]
     else:
         raise ValueError("유효하지 않은 과일입니다.")
@@ -325,7 +310,10 @@ def graph_combined(fruit):
     # Temperature
     colors = ['red', 'green']
     for i, region in enumerate(regions):
-        query = session.query(get_combined_citrus).filter_by(C1_NM=region)
+        if fruit == '사과':
+            query = session.query(get_combined_apple).filter_by(C1_NM=region)
+        else:
+            query = session.query(get_combined_citrus).filter_by(C1_NM=region)
         data = [item.__dict__ for item in query]
 
         df = pd.DataFrame(data)
@@ -344,39 +332,40 @@ def graph_combined(fruit):
     for region in regions:
         if fruit == '감귤':
             query = session.query(get_combined_citrus).filter_by(C1_NM=region, fs_gb='감귤')
-        elif fruit == '사과':
-            query = session.query(get_combined_apple).filter_by(C1_NM=region, fs_gb='사과')
         elif fruit == '복숭아':
             query = session.query(get_combined_peach).filter_by(C1_NM=region, fs_gb='복숭아')
+        elif fruit == '사과':
+            query = session.query(get_combined_apple).filter_by(C1_NM=region, fs_gb='사과')
 
         data = [item.__dict__ for item in query]
 
-        df = pd.DataFrame(data)
+        df = pd.DataFrame(data, columns=['PRD_DE', 'DT', 'C1_NM', 'clt_area', 'fs_gb'])
 
         df['PRD_DE'] = df['PRD_DE'].astype(int)
 
         df = df[(df['PRD_DE'] >= 2011) & (df['PRD_DE'] <= 2020)]
 
+        df = df[df['fs_gb'] == fruit]
+
         df['clt_area'] = df['clt_area'].astype(float)
         df = df.groupby('PRD_DE')['clt_area'].sum().reset_index()
 
-    print(df)
-    #     ax2.plot(df['PRD_DE'], df['clt_area'], label=f'{region} {fruit} 재배면적')
+        ax2.plot(df['PRD_DE'], df['clt_area'], label=f'{region} {fruit} 재배면적')
 
-    # ax1.set_title(f'{regions[0]}-{regions[1]} 평균기온 & {fruit} 재배 면적 비교')
-    # ax1.set_xlabel('년도')
-    # ax1.set_ylabel('평균기온(℃)')
-    # ax2.set_ylabel('재배면적(ha)')
-    # ax1.legend(loc='upper left')
-    # ax2.legend(loc='upper right')
+    ax1.set_title(f'{regions[0]}-{regions[1]} 평균기온 & {fruit} 재배 면적 비교')
+    ax1.set_xlabel('년도')
+    ax1.set_ylabel('평균기온(℃)')
+    ax2.set_ylabel('재배면적(ha)')
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
 
-    # filename = f'combined_{fruit}.png'
-    # plt.savefig(filename)
+    filename = f'combined_{fruit}.png'
+    plt.savefig(filename)
 
-    # return {"filename": filename}
+    return {"filename": filename}
 
 
-def get_map_citrus():
+def get_map_fruit(fruit):
     regions_df = pd.read_csv('regions.csv')
     regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
 
@@ -390,7 +379,7 @@ def get_map_citrus():
             item.pop('_id', None)
 
         df = pd.DataFrame(data)
-        df = df[df['과수명'] == '감귤']
+        df = df[df['과수명'] == fruit]
         df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
         df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
 
@@ -405,10 +394,10 @@ def get_map_citrus():
                 scale = 500
             elif area == 0:
                 color = 'black'
-                scale = 0.5
+                scale = 1
             else:
                 color = 'yellow'
-                scale = 2
+                scale = 10
 
             folium.CircleMarker(
                 regions_coordinates[region],
@@ -417,160 +406,11 @@ def get_map_citrus():
                 fill=True,
                 fill_color=color,
                 fill_opacity=0.6,
-                popup=f'{region} {year}년 감귤 재배 면적: {area}'
+                popup=f'{region} {year}년 {fruit} 재배 면적: {area}'
             ).add_to(m)
         
-        filename = f'map/citrus_map_{year}.html'
+        filename = f'map/{fruit.lower()}_map_{year}.html'
         m.save(filename)
         filenames.append(filename)
 
     return filenames
-
-def get_map_apple():
-    regions_df = pd.read_csv('regions.csv')
-    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
-
-    filenames = []
-
-    for year in range(2011, 2021):
-        m = folium.Map(location=[36.5, 128], zoom_start=7)
-
-        data = list(collection2.find({'년도': str(year)}))
-        for item in data:
-            item.pop('_id', None)
-
-        df = pd.DataFrame(data)
-        df = df[df['과수명'] == '사과']
-        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
-        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
-
-        max_area = df['재배면적(ha)'].max()
-        min_area = df['재배면적(ha)'].min()
-
-        for region in df['시도명'].unique():
-            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
-            
-            if area > 2000:
-                color = 'red'
-                scale = 500
-            elif area == 0:
-                color = 'black'
-                scale = 0.5
-            else:
-                color = 'yellow'
-                scale = 50
-
-            folium.CircleMarker(
-                regions_coordinates[region],
-                radius = (area / scale),
-                color=color,
-                fill=True,
-                fill_color=color,
-                fill_opacity=0.6,
-                popup=f'{region} {year}년 사과 재배 면적: {area}'
-            ).add_to(m)
-        
-        filename = f'map/apple_map_{year}.html'
-        m.save(filename)
-        filenames.append(filename)
-
-    return filenames
-
-def get_map_peach():
-    regions_df = pd.read_csv('regions.csv')
-    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
-
-    filenames = []
-
-    for year in range(2011, 2021):
-        m = folium.Map(location=[36.5, 128], zoom_start=7)
-
-        data = list(collection2.find({'년도': str(year)}))
-        for item in data:
-            item.pop('_id', None)
-
-        df = pd.DataFrame(data)
-        df = df[df['과수명'] == '복숭아']
-        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
-        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
-
-        max_area = df['재배면적(ha)'].max()
-        min_area = df['재배면적(ha)'].min()
-
-        for region in df['시도명'].unique():
-            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
-            
-            if area > 2000:
-                color = 'red'
-                scale = 500
-            elif area == 0:
-                color = 'black'
-                scale = 0.5
-            else:
-                color = 'yellow'
-                scale = 50
-
-            folium.CircleMarker(
-                regions_coordinates[region],
-                radius = (area / scale),
-                color=color,
-                fill=True,
-                fill_color=color,
-                fill_opacity=0.6,
-                popup=f'{region} {year}년 복숭아 재배 면적: {area}'
-            ).add_to(m)
-        
-        filename = f'map/peach_map_{year}.html'
-        m.save(filename)
-        filenames.append(filename)
-
-    return filenames
-
-#####################################################################MySQL연결
-
-
-
-
-
-def sql_combined_citrus():
-    items = dataframe_combined_citrus()
-
-    for item in items:
-        existing_data = session.query(get_combined_citrus).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
-        if not existing_data:
-            combined_citrus_data = get_combined_citrus(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
-            session.add(combined_citrus_data)
-
-    session.commit()
-    session.close()
-
-    return {"insert sql_combined_citrus"}
-
-def sql_combined_apple():
-    items = dataframe_combined_apple()
-
-    for item in items:
-        existing_data = session.query(get_combined_apple).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
-        if not existing_data:
-            combined_apple_data = get_combined_apple(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
-            session.add(combined_apple_data)
-
-    session.commit()
-    session.close()
-
-    return {"insert sql_combined_apple"}
-
-def sql_combined_peach():
-    items = dataframe_combined_peach()
-
-    for item in items:
-        existing_data = session.query(get_combined_peach).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
-        if not existing_data:
-            combined_peach_data = get_combined_peach(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
-            session.add(combined_peach_data)
-
-    session.commit()
-    session.close()
-
-    return {"insert sql_combined_peach"}
-

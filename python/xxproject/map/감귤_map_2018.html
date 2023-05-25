@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_b38c23f741db5c38f8773962a6a4e88c {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_b38c23f741db5c38f8773962a6a4e88c" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_b38c23f741db5c38f8773962a6a4e88c = L.map(
+                "map_b38c23f741db5c38f8773962a6a4e88c",
+                {
+                    center: [36.5, 128.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 7,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_b011e675da5d0ad1ba1537953e1628c2 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+            var circle_marker_6209c1d56ef934fd875dfd0c936d496a = L.circleMarker(
+                [37.8228, 128.1555],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_84fc1c28e97db44538173760efbeb5ec = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_30d91b4fd6e9909960d02c85cca5ce84 = $(`<div id="html_30d91b4fd6e9909960d02c85cca5ce84" style="width: 100.0%; height: 100.0%;">강원도 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_84fc1c28e97db44538173760efbeb5ec.setContent(html_30d91b4fd6e9909960d02c85cca5ce84);
+            
+        
+
+        circle_marker_6209c1d56ef934fd875dfd0c936d496a.bindPopup(popup_84fc1c28e97db44538173760efbeb5ec)
+        ;
+
+        
+    
+    
+            var circle_marker_903834abaeb68f0c950c1fdb1a28c928 = L.circleMarker(
+                [37.4138, 127.5183],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_381b833fc1fb8ed5e92cbaae634d94d2 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_5e7a01a6c7deab69e05184a92725d173 = $(`<div id="html_5e7a01a6c7deab69e05184a92725d173" style="width: 100.0%; height: 100.0%;">경기도 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_381b833fc1fb8ed5e92cbaae634d94d2.setContent(html_5e7a01a6c7deab69e05184a92725d173);
+            
+        
+
+        circle_marker_903834abaeb68f0c950c1fdb1a28c928.bindPopup(popup_381b833fc1fb8ed5e92cbaae634d94d2)
+        ;
+
+        
+    
+    
+            var circle_marker_9ddaee5d1c6c35316a00b9e2207d2551 = L.circleMarker(
+                [35.4606, 128.2132],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.5, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_856e33ec07969e2028501d736455fa70 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_fe703a785d0665903e74feae84967af1 = $(`<div id="html_fe703a785d0665903e74feae84967af1" style="width: 100.0%; height: 100.0%;">경상남도 2018년 감귤 재배 면적: 5.0</div>`)[0];
+                popup_856e33ec07969e2028501d736455fa70.setContent(html_fe703a785d0665903e74feae84967af1);
+            
+        
+
+        circle_marker_9ddaee5d1c6c35316a00b9e2207d2551.bindPopup(popup_856e33ec07969e2028501d736455fa70)
+        ;
+
+        
+    
+    
+            var circle_marker_29f73a561430d3fbb219262d9e8190b1 = L.circleMarker(
+                [36.4919, 128.8889],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.4, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_658b850ec6e7270c8758f4bcfd471ad6 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_8333153bd9c0fbb7d0a48e663cdcebe4 = $(`<div id="html_8333153bd9c0fbb7d0a48e663cdcebe4" style="width: 100.0%; height: 100.0%;">경상북도 2018년 감귤 재배 면적: 4.0</div>`)[0];
+                popup_658b850ec6e7270c8758f4bcfd471ad6.setContent(html_8333153bd9c0fbb7d0a48e663cdcebe4);
+            
+        
+
+        circle_marker_29f73a561430d3fbb219262d9e8190b1.bindPopup(popup_658b850ec6e7270c8758f4bcfd471ad6)
+        ;
+
+        
+    
+    
+            var circle_marker_ffcc647cd36ca46e5de0d3e913a29d0b = L.circleMarker(
+                [35.1605, 126.8514],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.6, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_65d58ff800b57702a6e97e62fac2c790 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_2fe3a618c1a0a40b306dcb31dc48d569 = $(`<div id="html_2fe3a618c1a0a40b306dcb31dc48d569" style="width: 100.0%; height: 100.0%;">광주광역시 2018년 감귤 재배 면적: 6.0</div>`)[0];
+                popup_65d58ff800b57702a6e97e62fac2c790.setContent(html_2fe3a618c1a0a40b306dcb31dc48d569);
+            
+        
+
+        circle_marker_ffcc647cd36ca46e5de0d3e913a29d0b.bindPopup(popup_65d58ff800b57702a6e97e62fac2c790)
+        ;
+
+        
+    
+    
+            var circle_marker_60665efadd0d51e2d012e555e6705c1d = L.circleMarker(
+                [35.8714, 128.6014],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_0b4172c6ac41b6ee98c841ff40c450c5 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_37359424540b56c992180620c3af9aff = $(`<div id="html_37359424540b56c992180620c3af9aff" style="width: 100.0%; height: 100.0%;">대구광역시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_0b4172c6ac41b6ee98c841ff40c450c5.setContent(html_37359424540b56c992180620c3af9aff);
+            
+        
+
+        circle_marker_60665efadd0d51e2d012e555e6705c1d.bindPopup(popup_0b4172c6ac41b6ee98c841ff40c450c5)
+        ;
+
+        
+    
+    
+            var circle_marker_5e6361b9975a8582edebc9d62e102c1c = L.circleMarker(
+                [36.3504, 127.3845],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_64be198e7ac61e391521c237d9913ab1 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_0aa262f0f78423eb92317c5e996ca91d = $(`<div id="html_0aa262f0f78423eb92317c5e996ca91d" style="width: 100.0%; height: 100.0%;">대전광역시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_64be198e7ac61e391521c237d9913ab1.setContent(html_0aa262f0f78423eb92317c5e996ca91d);
+            
+        
+
+        circle_marker_5e6361b9975a8582edebc9d62e102c1c.bindPopup(popup_64be198e7ac61e391521c237d9913ab1)
+        ;
+
+        
+    
+    
+            var circle_marker_cb9db3d80ea50ad343b9c9630552c297 = L.circleMarker(
+                [35.1796, 129.0756],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_548c84c0ca479791b6c6e9b5b40cbba9 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_226f822f5dcade6d710485c0bb2e32e7 = $(`<div id="html_226f822f5dcade6d710485c0bb2e32e7" style="width: 100.0%; height: 100.0%;">부산광역시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_548c84c0ca479791b6c6e9b5b40cbba9.setContent(html_226f822f5dcade6d710485c0bb2e32e7);
+            
+        
+
+        circle_marker_cb9db3d80ea50ad343b9c9630552c297.bindPopup(popup_548c84c0ca479791b6c6e9b5b40cbba9)
+        ;
+
+        
+    
+    
+            var circle_marker_e7859e007b7bf260e49a343390c60faa = L.circleMarker(
+                [37.5665, 126.978],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_45f26dfd867425a7eb2b610f3f771ae6 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_11fc0e8b900b9a16e35c312262bfe31d = $(`<div id="html_11fc0e8b900b9a16e35c312262bfe31d" style="width: 100.0%; height: 100.0%;">서울특별시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_45f26dfd867425a7eb2b610f3f771ae6.setContent(html_11fc0e8b900b9a16e35c312262bfe31d);
+            
+        
+
+        circle_marker_e7859e007b7bf260e49a343390c60faa.bindPopup(popup_45f26dfd867425a7eb2b610f3f771ae6)
+        ;
+
+        
+    
+    
+            var circle_marker_080d3bd6d9de685dc35b05224c71ed54 = L.circleMarker(
+                [36.4801, 127.2892],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_b39a219415b49280bb794fb7dc3a50fc = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_ae91cb2fa0f7671842710c5e3622aab6 = $(`<div id="html_ae91cb2fa0f7671842710c5e3622aab6" style="width: 100.0%; height: 100.0%;">세종특별자치시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_b39a219415b49280bb794fb7dc3a50fc.setContent(html_ae91cb2fa0f7671842710c5e3622aab6);
+            
+        
+
+        circle_marker_080d3bd6d9de685dc35b05224c71ed54.bindPopup(popup_b39a219415b49280bb794fb7dc3a50fc)
+        ;
+
+        
+    
+    
+            var circle_marker_f351cec4a5010e9c26cdbc12e443e7ce = L.circleMarker(
+                [35.5384, 129.3114],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_3f1cd344f6f6181b5a1697f32ba0e3be = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_404b70c56d9ddafd900f97e2956af17b = $(`<div id="html_404b70c56d9ddafd900f97e2956af17b" style="width: 100.0%; height: 100.0%;">울산광역시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_3f1cd344f6f6181b5a1697f32ba0e3be.setContent(html_404b70c56d9ddafd900f97e2956af17b);
+            
+        
+
+        circle_marker_f351cec4a5010e9c26cdbc12e443e7ce.bindPopup(popup_3f1cd344f6f6181b5a1697f32ba0e3be)
+        ;
+
+        
+    
+    
+            var circle_marker_0af20216901d1d88b2f015648bcdd907 = L.circleMarker(
+                [37.4563, 126.7052],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_63761538dd95fbcc0c06d189d8965dc8 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_5f54d833d5a893f97b19b8ba06b0bb2a = $(`<div id="html_5f54d833d5a893f97b19b8ba06b0bb2a" style="width: 100.0%; height: 100.0%;">인천광역시 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_63761538dd95fbcc0c06d189d8965dc8.setContent(html_5f54d833d5a893f97b19b8ba06b0bb2a);
+            
+        
+
+        circle_marker_0af20216901d1d88b2f015648bcdd907.bindPopup(popup_63761538dd95fbcc0c06d189d8965dc8)
+        ;
+
+        
+    
+    
+            var circle_marker_48b719c9ab6e6f69de721c1649e51cf7 = L.circleMarker(
+                [34.8194, 126.893],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 9.2, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_e8b14cfdb49d4283f7740f775df0ca4c = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b6e4438c0b8d4ec1674f02da5f3a1d05 = $(`<div id="html_b6e4438c0b8d4ec1674f02da5f3a1d05" style="width: 100.0%; height: 100.0%;">전라남도 2018년 감귤 재배 면적: 92.0</div>`)[0];
+                popup_e8b14cfdb49d4283f7740f775df0ca4c.setContent(html_b6e4438c0b8d4ec1674f02da5f3a1d05);
+            
+        
+
+        circle_marker_48b719c9ab6e6f69de721c1649e51cf7.bindPopup(popup_e8b14cfdb49d4283f7740f775df0ca4c)
+        ;
+
+        
+    
+    
+            var circle_marker_c266b6737d1d7fbf1e6da9f83026b0de = L.circleMarker(
+                [35.7167, 127.1448],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 0.8, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_f63738aac704c5b8e0dda9c1cf451e03 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_6a0bbc9b2c1e08e745fe60a7e7ece5a5 = $(`<div id="html_6a0bbc9b2c1e08e745fe60a7e7ece5a5" style="width: 100.0%; height: 100.0%;">전라북도 2018년 감귤 재배 면적: 8.0</div>`)[0];
+                popup_f63738aac704c5b8e0dda9c1cf451e03.setContent(html_6a0bbc9b2c1e08e745fe60a7e7ece5a5);
+            
+        
+
+        circle_marker_c266b6737d1d7fbf1e6da9f83026b0de.bindPopup(popup_f63738aac704c5b8e0dda9c1cf451e03)
+        ;
+
+        
+    
+    
+            var circle_marker_9394e345f6ac075f92fcfd3f08f9b0be = L.circleMarker(
+                [33.4996, 126.5312],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 42.916, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_9110e5eded1641f4e0a599cd5d6c1780 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_15c953aef0b9c08bb564836a1f5f327c = $(`<div id="html_15c953aef0b9c08bb564836a1f5f327c" style="width: 100.0%; height: 100.0%;">제주특별자치도 2018년 감귤 재배 면적: 21458.0</div>`)[0];
+                popup_9110e5eded1641f4e0a599cd5d6c1780.setContent(html_15c953aef0b9c08bb564836a1f5f327c);
+            
+        
+
+        circle_marker_9394e345f6ac075f92fcfd3f08f9b0be.bindPopup(popup_9110e5eded1641f4e0a599cd5d6c1780)
+        ;
+
+        
+    
+    
+            var circle_marker_fc825990b8230149b85a5af4606e4094 = L.circleMarker(
+                [36.6588, 126.6728],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_c13c04fd4d73e110679363a43ad12109 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_71579eb1d8b912e063a03178288dee23 = $(`<div id="html_71579eb1d8b912e063a03178288dee23" style="width: 100.0%; height: 100.0%;">충청남도 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_c13c04fd4d73e110679363a43ad12109.setContent(html_71579eb1d8b912e063a03178288dee23);
+            
+        
+
+        circle_marker_fc825990b8230149b85a5af4606e4094.bindPopup(popup_c13c04fd4d73e110679363a43ad12109)
+        ;
+
+        
+    
+    
+            var circle_marker_f19473ca5369be1964de1c51bd499858 = L.circleMarker(
+                [36.6285, 127.9293],
+                {"bubblingMouseEvents": true, "color": "black", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "black", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "stroke": true, "weight": 3}
+            ).addTo(map_b38c23f741db5c38f8773962a6a4e88c);
+        
+    
+        var popup_9090ae8be730a1a5f8806911d807d07a = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_b577b7fc92eb0f0ea4d098eb113b9606 = $(`<div id="html_b577b7fc92eb0f0ea4d098eb113b9606" style="width: 100.0%; height: 100.0%;">충청북도 2018년 감귤 재배 면적: 0.0</div>`)[0];
+                popup_9090ae8be730a1a5f8806911d807d07a.setContent(html_b577b7fc92eb0f0ea4d098eb113b9606);
+            
+        
+
+        circle_marker_f19473ca5369be1964de1c51bd499858.bindPopup(popup_9090ae8be730a1a5f8806911d807d07a)
+        ;
+
+        
+    
+</script>
+</html>

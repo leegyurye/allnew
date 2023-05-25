@@ -25,10 +25,6 @@ async def dropdata_temperature():
 async def getcleandata_temperature():
     return data.getcleandata_temperature()
 
-@app.get('/sql_temperature')
-async def sql_temperature():
-    return data.sql_temperature()
-
 @app.get('/getdata_fruit_all')
 async def getdata_fruit_all():
     return data.getdata_fruit_all()
@@ -54,17 +50,9 @@ async def get_graph_fruit(fruit: str, regions: str):
 async def graph_combined(fruit: str):
     return data.graph_combined(fruit)
 
-@app.get('/get_map_citrus')
-async def get_map_citrus():
-    return data.get_map_citrus()
-
-@app.get('/get_map_apple')
-async def get_map_apple():
-    return data.get_map_apple()
-
-@app.get('/get_map_peach')
-async def get_map_peach():
-    return data.get_map_peach()
+@app.get('/get_map_fruit/{fruit}')
+async def get_map_fruit(fruit: str):
+    return data.get_map_fruit(fruit)
 
 
 

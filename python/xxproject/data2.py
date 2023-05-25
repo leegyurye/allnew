@@ -763,3 +763,213 @@ def sql_fruit(fruit):
     session.close()
 
     return {"insert sql_" + fruit}
+
+
+#######################################################################
+
+def sql_combined_citrus():
+    items = dataframe_combined_citrus()
+
+    for item in items:
+        existing_data = session.query(get_combined_citrus).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
+        if not existing_data:
+            combined_citrus_data = get_combined_citrus(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+            session.add(combined_citrus_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_combined_citrus"}
+
+def sql_combined_apple():
+    items = dataframe_combined_apple()
+
+    for item in items:
+        existing_data = session.query(get_combined_apple).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
+        if not existing_data:
+            combined_apple_data = get_combined_apple(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+            session.add(combined_apple_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_combined_apple"}
+
+def sql_combined_peach():
+    items = dataframe_combined_peach()
+
+    for item in items:
+        existing_data = session.query(get_combined_peach).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
+        if not existing_data:
+            combined_peach_data = get_combined_peach(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+            session.add(combined_peach_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_combined_peach"}
+
+###########################################################################
+def get_map_citrus():
+    regions_df = pd.read_csv('regions.csv')
+    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
+
+    filenames = []
+
+    for year in range(2011, 2021):
+        m = folium.Map(location=[36.5, 128], zoom_start=7)
+
+        data = list(collection2.find({'년도': str(year)}))
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        df = df[df['과수명'] == '감귤']
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
+
+        max_area = df['재배면적(ha)'].max()
+        min_area = df['재배면적(ha)'].min()
+
+        for region in df['시도명'].unique():
+            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
+            
+            if area > 2000:
+                color = 'red'
+                scale = 500
+            elif area == 0:
+                color = 'black'
+                scale = 0.5
+            else:
+                color = 'yellow'
+                scale = 2
+
+            folium.CircleMarker(
+                regions_coordinates[region],
+                radius = (area / scale),
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.6,
+                popup=f'{region} {year}년 감귤 재배 면적: {area}'
+            ).add_to(m)
+        
+        filename = f'map/citrus_map_{year}.html'
+        m.save(filename)
+        filenames.append(filename)
+
+    return filenames
+
+def get_map_apple():
+    regions_df = pd.read_csv('regions.csv')
+    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
+
+    filenames = []
+
+    for year in range(2011, 2021):
+        m = folium.Map(location=[36.5, 128], zoom_start=7)
+
+        data = list(collection2.find({'년도': str(year)}))
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        df = df[df['과수명'] == '사과']
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
+
+        max_area = df['재배면적(ha)'].max()
+        min_area = df['재배면적(ha)'].min()
+
+        for region in df['시도명'].unique():
+            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
+            
+            if area > 2000:
+                color = 'red'
+                scale = 500
+            elif area == 0:
+                color = 'black'
+                scale = 0.5
+            else:
+                color = 'yellow'
+                scale = 50
+
+            folium.CircleMarker(
+                regions_coordinates[region],
+                radius = (area / scale),
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.6,
+                popup=f'{region} {year}년 사과 재배 면적: {area}'
+            ).add_to(m)
+        
+        filename = f'map/apple_map_{year}.html'
+        m.save(filename)
+        filenames.append(filename)
+
+    return filenames
+
+def get_map_peach():
+    regions_df = pd.read_csv('regions.csv')
+    regions_coordinates = {row['지역명']: [row['위도'], row['경도']] for index, row in regions_df.iterrows()}
+
+    filenames = []
+
+    for year in range(2011, 2021):
+        m = folium.Map(location=[36.5, 128], zoom_start=7)
+
+        data = list(collection2.find({'년도': str(year)}))
+        for item in data:
+            item.pop('_id', None)
+
+        df = pd.DataFrame(data)
+        df = df[df['과수명'] == '복숭아']
+        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df.groupby('시도명')['재배면적(ha)'].sum().reset_index()
+
+        max_area = df['재배면적(ha)'].max()
+        min_area = df['재배면적(ha)'].min()
+
+        for region in df['시도명'].unique():
+            area = df[df['시도명']==region]['재배면적(ha)'].values[0]
+            
+            if area > 2000:
+                color = 'red'
+                scale = 500
+            elif area == 0:
+                color = 'black'
+                scale = 0.5
+            else:
+                color = 'yellow'
+                scale = 50
+
+            folium.CircleMarker(
+                regions_coordinates[region],
+                radius = (area / scale),
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.6,
+                popup=f'{region} {year}년 복숭아 재배 면적: {area}'
+            ).add_to(m)
+        
+        filename = f'map/peach_map_{year}.html'
+        m.save(filename)
+        filenames.append(filename)
+
+    return filenames
+
+################################################
+
+def sql_temperature():
+    json_data1 = getcleandata_temperature()
+
+    for item in json_data1:
+        temperature_data = get_temperature(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'])
+        session.add(temperature_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_temperature"}

@@ -6,8 +6,7 @@ from pymongo import mongo_client
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import *
-from models import get_temperature, get_citrus, get_apple, get_peach, get_combined1
-
+from models import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.relpath("./")))
 secret_file = os.path.join(BASE_DIR, '../secret.json')
@@ -43,6 +42,10 @@ DBNAME = get_secret("Mysql_DBname")
 
 DB_URL = f'mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DBNAME}'
 print('Connected to Mysql....')
+
+engine = sqlalchemy.create_engine(DB_URL)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 class db_conn:
     def __init__(self):
@@ -101,6 +104,18 @@ def getcleandata_temperature():
 
     return json.loads(data)
 
+def sql_temperature():
+    json_data1 = getcleandata_temperature()
+
+    for item in json_data1:
+        temperature_data = get_temperature(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'])
+        session.add(temperature_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_temperature"}
+
 def graph_temperature():
     regions = ["충청북도", "경상북도", "강원도", "경기도"]
     plt.rcParams['font.family'] = 'AppleGothic'
@@ -138,7 +153,7 @@ def graph_temperature():
 
     return {"filename": filename}
 
-def getdata_fruit():
+def getdata_fruit_all():
     url = 'https://apis.data.go.kr/1390804/Nihhs_Fruit_Area3/ctlArea'
     params = '?serviceKey=' + get_secret("data_apiKey")
     params += '&pageNo=1'
@@ -195,68 +210,100 @@ def getdata_fruit():
     collection2.insert_many(dataList)
     return {"get data..."}
 
+
 def dropdata_fruit():
     collection2.drop()
     return {"drop data..."}
 
-def getdata_citrus():
+def getdata_fruit(fruit):
     data = list(collection2.find({}))
-
+    
     for item in data:
         item.pop('_id', None)
 
     df = pd.DataFrame(data)
-
     columns = ['년도', '시도명', '과수명', '재배면적(ha)']
-
     df = df[columns]
-
     df['년도'] = df['년도'].astype(int)
-
     df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
-
-    df = df[df['과수명'] == '감귤']
-
+    df = df[df['과수명'] == fruit]
     data = df.to_json(orient='records')
 
     return json.loads(data)
 
-def graph_citrus():
-    regions = ["충청북도", "경상북도"]
+
+def sql_fruit(fruit):
+    if fruit == '감귤':
+        items = getdata_fruit('감귤')
+        fruit_data = get_citrus
+    elif fruit == '사과':
+        items = getdata_fruit('사과')
+        fruit_data = get_apple
+    elif fruit == '복숭아':
+        items = getdata_fruit('복숭아')
+        fruit_data = get_peach
+    else:
+        return {"error": "Invalid fruit"}
+
+    for item in items:
+        fruit_data_obj = fruit_data(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
+        session.add(fruit_data_obj)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_" + fruit}
+
+def graph_fruit(fruit, regions):
     plt.rcParams['font.family'] = 'AppleGothic'
-    plt.figure(figsize=(10,6))
+    plt.figure(figsize=(10, 6))
 
     for region in regions:
-        data = list(collection2.find({'시도명': region}))
+        if fruit == '감귤':
+            query = session.query(get_citrus).filter(get_citrus.sido == region)
+        elif fruit == '사과':
+            query = session.query(get_apple).filter(get_apple.sido == region)
+        elif fruit == '복숭아':
+            query = session.query(get_peach).filter(get_peach.sido == region)
+        else:
+            raise ValueError("유효하지 않은 과일입니다.")
 
-        for item in data:
-            item.pop('_id', None)
+        data = [item.__dict__ for item in query]
 
         df = pd.DataFrame(data)
 
-        df['년도'] = df['년도'].astype(int)
-        
-        df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
+        df['year'] = df['year'].astype(int)
 
-        df = df[df['과수명'] == '감귤']
+        df = df[(df['year'] >= 2011) & (df['year'] <= 2020)]
 
-        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
+        df = df[df['fs_gb'] == fruit]
 
-        df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
+        df['clt_area'] = df['clt_area'].astype(float)
 
-        plt.plot(df['년도'], df['재배면적(ha)'], label=region)
+        df = df.groupby('year')['clt_area'].sum().reset_index()
 
-    plt.title('충청북도-경상북도 감귤 재배 면적 비교')
+        plt.plot(df['year'], df['clt_area'], label=region)
+
+    plt.title(f'{regions[0]}-{regions[1]} {fruit} 재배 면적 비교')
     plt.xlabel('년도')
     plt.ylabel('재배면적(ha)')
     plt.legend()
 
-    filename = 'citrus.png'
+    filename = f'{fruit}.png'
     plt.savefig(filename)
 
     return {"filename": filename}
 
-def graph_combined1():
+regions_citrus = ["충청북도", "경상북도"]
+graph_fruit('감귤', regions_citrus)
+
+regions_apple = ["경기도", "강원도"]
+graph_fruit('사과', regions_apple)
+
+regions_peach = ["충청북도", "경상북도"]
+graph_fruit('복숭아', regions_peach)
+
+def graph_combined_citrus():
     regions = ["충청북도", "경상북도"]
     plt.rcParams['font.family'] = 'AppleGothic'
     fig, ax1 = plt.subplots(figsize=(10,6))
@@ -316,65 +363,7 @@ def graph_combined1():
 
     return {"filename": filename}
 
-
-def getdata_apple():
-    data = list(collection2.find({}))
-    
-    for item in data:
-        item.pop('_id', None)
-
-    df = pd.DataFrame(data)
-
-    columns = ['년도', '시도명', '과수명', '재배면적(ha)']
-
-    df = df[columns]
-
-    df['년도'] = df['년도'].astype(int)
-
-    df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
-
-    df = df[df['과수명'] == '사과']
-
-    data = df.to_json(orient='records')
-
-    return json.loads(data)
-
-def graph_apple():
-    regions = ["경기도", "강원도"]
-    plt.rcParams['font.family'] = 'AppleGothic'
-    plt.figure(figsize=(10,6))
-
-    for region in regions:
-        data = list(collection2.find({'시도명': region}))
-
-        for item in data:
-            item.pop('_id', None)
-
-        df = pd.DataFrame(data)
-
-        df['년도'] = df['년도'].astype(int)
-        
-        df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
-
-        df = df[df['과수명'] == '사과']
-
-        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
-
-        df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
-
-        plt.plot(df['년도'], df['재배면적(ha)'], label=region)
-
-    plt.title('경기도-강원도 사과 재배 면적 비교')
-    plt.xlabel('년도')
-    plt.ylabel('재배면적(ha)')
-    plt.legend()
-
-    filename = 'apple.png'
-    plt.savefig(filename)
-
-    return {"filename": filename}
-
-def graph_combined2():
+def graph_combined_apple():
     regions = ["경기도", "강원도"]
     plt.rcParams['font.family'] = 'AppleGothic'
     fig, ax1 = plt.subplots(figsize=(10,6))
@@ -432,64 +421,7 @@ def graph_combined2():
 
     return {"filename": filename}
 
-def getdata_peach():
-    data = list(collection2.find({}))
-    
-    for item in data:
-        item.pop('_id', None)
-
-    df = pd.DataFrame(data)
-
-    columns = ['년도', '시도명', '과수명', '재배면적(ha)']
-
-    df = df[columns]
-
-    df['년도'] = df['년도'].astype(int)
-
-    df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
-
-    df = df[df['과수명'] == '복숭아']
-
-    data = df.to_json(orient='records')
-
-    return json.loads(data)
-
-def graph_peach():
-    regions = ["충청북도", "경상북도"]
-    plt.rcParams['font.family'] = 'AppleGothic'
-    plt.figure(figsize=(10,6))
-
-    for region in regions:
-        data = list(collection2.find({'시도명': region}))
-
-        for item in data:
-            item.pop('_id', None)
-
-        df = pd.DataFrame(data)
-
-        df['년도'] = df['년도'].astype(int)
-        
-        df = df[(df['년도'] >= 2011) & (df['년도'] <= 2020)]
-
-        df = df[df['과수명'] == '복숭아']
-
-        df['재배면적(ha)'] = df['재배면적(ha)'].astype(float)
-
-        df = df.groupby('년도')['재배면적(ha)'].sum().reset_index()
-
-        plt.plot(df['년도'], df['재배면적(ha)'], label=region)
-
-    plt.title('충청북도-경상북도 복숭아 재배 면적 비교')
-    plt.xlabel('년도')
-    plt.ylabel('재배면적(ha)')
-    plt.legend()
-
-    filename = 'peach.png'
-    plt.savefig(filename)
-
-    return {"filename": filename}
-
-def graph_combined3():
+def graph_combined_peach():
     regions = ["충청북도", "경상북도"]
     plt.rcParams['font.family'] = 'AppleGothic'
     fig, ax1 = plt.subplots(figsize=(10,6))
@@ -699,53 +631,9 @@ def get_map_peach():
 
 #####################################################################MySQL연결
 
-engine = sqlalchemy.create_engine(DB_URL)
-Session = sessionmaker(bind=engine)
-session = Session()
-
-def sql_temperature():
-    json_data1 = getcleandata_temperature()
-
-    for item in json_data1:
-        temperature_data = get_temperature(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'])
-        session.add(temperature_data)
-
-    session.commit()
-    session.close()
 
 
-def sql_citrus():
-    json_data2 = getdata_citrus()
-
-    for item in json_data2:
-        citrus_data = get_citrus(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
-        session.add(citrus_data)
-
-    session.commit()
-    session.close()
-
-def sql_apple():
-    json_data3 = getdata_apple()
-
-    for item in json_data3:
-        apple_data = get_apple(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
-        session.add(apple_data)
-
-    session.commit()
-    session.close()
-
-def sql_peach():
-    json_data4 = getdata_peach()
-
-    for item in json_data4:
-        peach_data = get_peach(year=item['년도'], sido=item['시도명'], fs_gb=item['과수명'], clt_area=item['재배면적(ha)'])
-        session.add(peach_data)
-
-    session.commit()
-    session.close()
-
-
-def dataframe_combined1():
+def dataframe_combined_citrus():
     regions = ["충청북도", "경상북도"]
     
     df_combined_list = []
@@ -791,12 +679,153 @@ def dataframe_combined1():
 
     return df_combined.to_dict("records")
 
-def sql_combined1():
-    json_data5 = dataframe_combined1()
+def dataframe_combined_apple():
+    regions = ["경기도", "강원도"]
+    
+    df_combined_list = []
 
-    for item in json_data5:
-        combined1_data = get_combined1(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
-        session.add(combined1_data)
+    for region in regions:
+        
+        # Temperature data
+        data_temp = list(collection.find({'C1_NM': region}))
+
+        for item in data_temp:
+            item.pop('_id', None)
+
+        df_temp = pd.DataFrame(data_temp)
+        df_temp = df_temp.rename(columns={'PRD_DE': '년도', 'DT': '평균기온', 'C1_NM': '지역'})
+
+        df_temp = df_temp[['년도', '평균기온', '지역']]
+
+        df_temp['년도'] = df_temp['년도'].astype(int)
+        df_temp = df_temp[(df_temp['년도'] >= 2011) & (df_temp['년도'] <= 2020)]
+        df_temp['평균기온'] = df_temp['평균기온'].astype(float)
+        
+        # Fruit data
+        data_fruit = list(collection2.find({'시도명': region}))
+
+        for item in data_fruit:
+            item.pop('_id', None)
+
+        df_fruit = pd.DataFrame(data_fruit)
+
+        df_fruit['년도'] = df_fruit['년도'].astype(int)
+        df_fruit = df_fruit[(df_fruit['년도'] >= 2011) & (df_fruit['년도'] <= 2020)]
+        df_fruit = df_fruit[df_fruit['과수명'] == '사과']
+        df_fruit['재배면적(ha)'] = df_fruit['재배면적(ha)'].astype(float)
+        df_fruit = df_fruit.groupby('년도')['재배면적(ha)'].sum().reset_index()
+        df_fruit['지역'] = region
+        df_fruit['과수명'] = '사과'
+
+        # merge
+        df_region = pd.merge(df_temp, df_fruit, on=['년도', '지역'])
+        df_combined_list.append(df_region) 
+
+    df_combined = pd.concat(df_combined_list, ignore_index=True)
+
+    return df_combined.to_dict("records")
+
+def dataframe_combined_peach():
+    regions = ["충청북도", "경상북도"]
+    
+    df_combined_list = []
+
+    for region in regions:
+        
+        # Temperature data
+        data_temp = list(collection.find({'C1_NM': region}))
+
+        for item in data_temp:
+            item.pop('_id', None)
+
+        df_temp = pd.DataFrame(data_temp)
+        df_temp = df_temp.rename(columns={'PRD_DE': '년도', 'DT': '평균기온', 'C1_NM': '지역'})
+
+        df_temp = df_temp[['년도', '평균기온', '지역']]
+
+        df_temp['년도'] = df_temp['년도'].astype(int)
+        df_temp = df_temp[(df_temp['년도'] >= 2011) & (df_temp['년도'] <= 2020)]
+        df_temp['평균기온'] = df_temp['평균기온'].astype(float)
+        
+        # Fruit data
+        data_fruit = list(collection2.find({'시도명': region}))
+
+        for item in data_fruit:
+            item.pop('_id', None)
+
+        df_fruit = pd.DataFrame(data_fruit)
+
+        df_fruit['년도'] = df_fruit['년도'].astype(int)
+        df_fruit = df_fruit[(df_fruit['년도'] >= 2011) & (df_fruit['년도'] <= 2020)]
+        df_fruit = df_fruit[df_fruit['과수명'] == '복숭아']
+        df_fruit['재배면적(ha)'] = df_fruit['재배면적(ha)'].astype(float)
+        df_fruit = df_fruit.groupby('년도')['재배면적(ha)'].sum().reset_index()
+        df_fruit['지역'] = region
+        df_fruit['과수명'] = '복숭아'
+
+        # merge
+        df_region = pd.merge(df_temp, df_fruit, on=['년도', '지역'])
+        df_combined_list.append(df_region)
+
+    df_combined = pd.concat(df_combined_list, ignore_index=True)
+
+    return df_combined.to_dict("records")
+
+
+# def sql_combined_citrus():
+#     json_data5 = dataframe_combined_citrus()
+
+#     for item in json_data5:
+#         combined_citrus_data = get_combined_citrus(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+#         session.add(combined_citrus_data)
+
+#     session.commit()
+#     session.close()
+
+def sql_combined_citrus():
+    items = dataframe_combined_citrus()
+
+    for item in items:
+        existing_data = session.query(get_combined_citrus).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
+        if not existing_data:
+            combined_citrus_data = get_combined_citrus(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+            session.add(combined_citrus_data)
 
     session.commit()
     session.close()
+
+    return {"insert sql_combined_citrus"}
+#############################################################################
+
+
+
+
+##########################################################################
+def sql_combined_apple():
+    items = dataframe_combined_apple()
+
+    for item in items:
+        existing_data = session.query(get_combined_apple).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
+        if not existing_data:
+            combined_apple_data = get_combined_apple(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+            session.add(combined_apple_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_combined_apple"}
+
+def sql_combined_peach():
+    items = dataframe_combined_peach()
+
+    for item in items:
+        existing_data = session.query(get_combined_peach).filter_by(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명']).first()
+        if not existing_data:
+            combined_peach_data = get_combined_peach(PRD_DE=item['년도'], DT=item['평균기온'], C1_NM=item['지역'], clt_area=item['재배면적(ha)'], fs_gb=item['과수명'])
+            session.add(combined_peach_data)
+
+    session.commit()
+    session.close()
+
+    return {"insert sql_combined_peach"}
+

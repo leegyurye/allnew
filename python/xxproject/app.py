@@ -30,8 +30,8 @@ async def getdata_fruit_all():
     return data.getdata_fruit_all()
 
 @app.get('/dropdata_fruit_all')
-async def dropdata_fruit():
-    return data.dropdata_fruit()
+async def dropdata_fruit_all():
+    return data.dropdata_fruit_all()
 
 @app.get('/getdata_fruit/{fruit}')
 async def getdata_fruit(fruit: str):
@@ -42,7 +42,7 @@ async def getdata_fruit(fruit: str):
 async def dataframe_combined(fruit: str):
     return data.dataframe_combined(fruit)
 
-@app.get('/graph_fruit/{fruit}{regions[0]}{regions[1]}')
+@app.get('/graph_fruit/{fruit}/{regions}')
 async def get_graph_fruit(fruit: str, regions: str):
     return data.graph_fruit(fruit, regions)
 
@@ -53,10 +53,3 @@ async def graph_combined(fruit: str):
 @app.get('/get_map_fruit/{fruit}')
 async def get_map_fruit(fruit: str):
     return data.get_map_fruit(fruit)
-
-
-
-
-
-
-

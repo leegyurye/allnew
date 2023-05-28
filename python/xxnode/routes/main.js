@@ -19,19 +19,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+
+
 app.get('/hello', (req, res) => {
     res.send('Hello World~!!')
 })
 
-app.get('/select', (req, res) => {
-    const result = connection.query('select * from combined_citrus');
-    console.log(result);
-    res.send(result);
-})
-
-app.get('/randomUUID', (req, res) => {
+app.get('/getdata_temperature', (req, res) => {
     axios
-        .get('http://192.168.1.101:3000/randomUUID')
+        .get('http://192.168.1.101:3000/getdata_temperature')
         .then(response => {
             console.log(`statusCode : ${response.status}`)
             console.log(response.data)
@@ -41,6 +38,114 @@ app.get('/randomUUID', (req, res) => {
             console.log(error)
         })
 })
+
+app.get('/dropdata_temperature', (req, res) => {
+    axios
+        .get('http://192.168.1.101:3000/dropdata_temperature')
+        .then(response => {
+            console.log(`statusCode : ${response.status}`)
+            console.log(response.data)
+            res.send(response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+})
+
+app.get('/getcleandata_temperature', (req, res) => {
+    axios
+        .get('http://192.168.1.101:3000/getcleandata_temperature')
+        .then(response => {
+            console.log(`statusCode : ${response.status}`)
+            console.log(response.data)
+            res.send(response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+})
+
+app.get('/getdata_fruit_all', (req, res) => {
+    axios
+        .get('http://192.168.1.101:3000/getdata_fruit_all')
+        .then(response => {
+            console.log(`statusCode : ${response.status}`)
+            console.log(response.data)
+            res.send(response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+})
+
+app.get('/dropdata_fruit_all', (req, res) => {
+    axios
+        .get('http://192.168.1.101:3000/dropdata_fruit_all')
+        .then(response => {
+            console.log(`statusCode : ${response.status}`)
+            console.log(response.data)
+            res.send(response.data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+})
+
+app.get('/getdata_fruit/:fruit', (req, res) => {
+    const fruit = req.params.fruit;
+    axios
+        .get(`http://192.168.1.101:3000/getdata_fruit/${fruit}`)
+        .then(response => {
+            console.log(`statusCode: ${response.status}`);
+            console.log(response.data);
+            res.send(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
+
+app.get('/dataframe_combined/:fruit', (req, res) => {
+    const fruit = req.params.fruit;
+    axios
+        .get(`http://192.168.1.101:3000/dataframe_combined/${fruit}`)
+        .then(response => {
+            console.log(`statusCode: ${response.status}`);
+            console.log(response.data);
+            res.send(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
+
+app.get('/graph_combined/:fruit', (req, res) => {
+    const fruit = req.params.fruit;
+    axios
+        .get(`http://192.168.1.101:3000/graph_combined/${fruit}`)
+        .then(response => {
+            console.log(`statusCode: ${response.status}`);
+            console.log(response.data);
+            res.send(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
+
+app.get('/get_map_fruit/:fruit', (req, res) => {
+    const fruit = req.params.fruit;
+    axios
+        .get(`http://192.168.1.101:3000/get_map_fruit/${fruit}`)
+        .then(response => {
+            console.log(`statusCode: ${response.status}`);
+            console.log(response.data);
+            res.send(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
 
 
 module.exports = app;

@@ -161,7 +161,7 @@ def getdata_fruit_all():
 
     # return dataList
     collection2.insert_many(dataList)
-    # return {"get data..."}
+    return {"get data..."}
 
 
 def dropdata_fruit_all():

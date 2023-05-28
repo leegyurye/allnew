@@ -22,4 +22,4 @@ app.listen(app.get('port'), () => {
 
 //mongoose configuration
 const mongoose = require("mongoose")
-mongoose.connect("mongodb://192.168.1.101:27017/test")
+mongoose.connect("mongodb://192.168.1.101:27017/project")

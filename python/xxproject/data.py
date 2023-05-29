@@ -78,7 +78,7 @@ def getdata_temperature():
 
 def dropdata_temperature():
     collection.drop()
-    return {"drop data..."}
+    return {"result: {} drop complete..."}
 
 def getcleandata_temperature():
     data = list(collection.find({}))
@@ -159,14 +159,14 @@ def getdata_fruit_all():
         else :
             break
 
-    # return dataList
-    collection2.insert_many(dataList)
-    return {"get data..."}
+    # collection2.insert_many(dataList)
+    return dataList
+    # return {"get data..."}
 
 
 def dropdata_fruit_all():
     collection2.drop()
-    return {"drop data..."}
+    return {"result: {} drop complete..."}
 
 def getdata_fruit(fruit):
     data = list(collection2.find({}))
@@ -416,4 +416,4 @@ def get_map_fruit(fruit):
         m.save(filename)
         filenames.append(filename)
 
-    return filenames
+    return {"filename": filename}

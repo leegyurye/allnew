@@ -1,0 +1,53 @@
+body {
+    background-color: #fff9d5;
+}
+
+hr {
+    background-color: orange;
+    height: 10px;
+    border: 0px;
+}
+
+.logo {
+    background-image: url('https://www.nongsaro.go.kr/ps/img/curation/20220608/images/bg_top.jpg');
+    background-size: 200px 100px;
+    background-repeat: no-repeat;
+    padding: 50px;
+}
+
+#menubar {
+    width: 100%;
+}
+
+#menubar td {
+    text-align: center;
+    padding: 10px;
+}
+
+#menubar td a {
+    text-decoration: none;
+    color: black;
+}
+
+.image_3 {
+    display: flex;
+    justify-content: center;
+}
+
+.image_3 img {
+    width: 300px;
+    height: 300px;
+    margin: 50px
+}
+
+button.img-button1 {
+    background: url("https: //cdn-icons-png.flaticon.com/512/5601/5601388.png") no-repeat;
+    width: 100px;
+    height: 100px;
+}
+
+button.img-button2 {
+    background: url("https: //cdn.pixabay.com/photo/2021/04/26/14/41/basket-6209144_960_720.png") no-repeat;
+    width: 100px;
+    height: 100px;
+}

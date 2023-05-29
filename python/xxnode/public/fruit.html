@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>fruit</title>
+    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <script>
+        function getdata_fruit_all() {
+            const xhr = new XMLHttpRequest();
+            const method = "GET";
+            const url = "/getdata_fruit_all";
+            xhr.open(method, url);
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = xhr.responseText;
+                } else {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
+
+        function dropdata_fruit_all() {
+            const xhr = new XMLHttpRequest();
+            const method = "GET";
+            const url = "/dropdata_fruit_all";
+            xhr.open(method, url);
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send();
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.response);
+                    console.log(res);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = JSON.stringify(res);
+                } else {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
+    </script>
+</head>
+
+<body>
+    <div class="logo">
+    </div>
+    <table id="menubar">
+        <tr>
+            <td><a href="/fruit.html">과일 재배지 변동 추이</a></td>
+            <td><a href="/change.html">과일 재배지 변동 지도</a></td>
+            <td><a href="/index.html" style="font-weight:bold; color:red;">시작페이지로</a></td>
+        </tr>
+    </table>
+    <hr>
+    <br>
+    <button type="button" class="img-button1" onclick="getdata_fruit_all()">
+        <img src="https: //cdn-icons-png.flaticon.com/512/5601/5601388.png" height="90" width="90" />
+    </button>
+    <button type="button" class="img-button2" onclick="dropdata_fruit_all()">
+        <img src="https: //cdn.pixabay.com/photo/2021/04/26/14/41/basket-6209144_960_720.png" height="90" width="90" />
+    </button>
+
+    <form style="text-align: center" id="fruitForm">
+        <label for="fruit">과일 재배지 변동 추이</label>
+        <select name="fruit" id="fruit">
+            <option value="감귤">감귤</option>
+            <option value="사과">사과</option>
+            <option value="복숭아">복숭아</option>
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+        const form = document.getElementById('fruitForm');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const fruit = document.getElementById('fruit').value;
+            const url = `http://192.168.1.101:8000/getdata_fruit/${fruit}`;
+
+            axios.get(url)
+                .then(response => {
+                    console.log(`statusCode: ${response.status}`);
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        });
+    </script>
+
+
+    <div id="section1">
+        <span id="ss1"></span>
+    </div>
+</body>
+
+</html>

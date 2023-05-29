@@ -3,118 +3,33 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Project</title>
-    <script>
-        function getHello() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/hello";
-            xhr.open(method, url);
-            xhr.send();
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    const element = document.getElementById("ss1");
-                    element.innerHTML = xhr.responseText;
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        }
-
-        function getSelect() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/select";
-            xhr.open(method, url);
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.send();
-
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    const res = JSON.parse(xhr.response);
-                    console.log(res);
-                    const element = document.getElementById("ss2");
-                    element.innerHTML = JSON.stringify(res);
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        }
-
-        function getRandom() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/randomUUID";
-            xhr.open(method, url);
-            xhr.send();
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    const element = document.getElementById("ss3");
-                    element.innerHTML = xhr.responseText;
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        }
-
-        function getUsers() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/users";
-            xhr.open(method, url);
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.send();
-
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    const res = JSON.parse(xhr.response);
-                    console.log(res);
-                    const element = document.getElementById("ss4");
-                    element.innerHTML = JSON.stringify(res);
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        }
-    </script>
+    <title>main</title>
+    <link type="text/css" rel="stylesheet" href="mystyle.css">
 </head>
 
 <body>
-    <h3>Project</h3>
-    <hr />
-    <input type="button" value="Node Hello" onclick="getHello()" />
-    <div id="section1">
-        <h3>Node Hello</h3>
-        <span id="ss1"></span>
+    <div class="logo">
     </div>
-    <hr />
-    <input type="button" value="Node Select" onclick="getSelect()" />
-    <div id="section2">
-        <h3>Node Select</h3>
-        <span id="ss2"></span>
+    <table id="menubar">
+        <tr>
+            <td><a href="/temperatures.html">연평균 기온 변화</a></td>
+            <td><a href="/fruit.html">과일 재배지 변동 추이</a></td>
+            <td><a href="/change.html">과일 재배지 변동 지도</a></td>
+        </tr>
+    </table>
+    <hr>
+    <div class="image_3">
+        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbf4I81%2FbtshG7H3QAg%2FCGm1cLya4m1fM2SCippk8K%2Fimg.png"
+            alt="Image 1">
+        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcHj8dT%2FbtshAqh5ZwT%2FKwtBQj549gYjGY7IKXiDSK%2Fimg.png"
+            alt="Image 2">
+        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FPWzgz%2FbtshAvJ7dYZ%2FhkEpyEplkGPOkESf1vOhk0%2Fimg.png"
+            alt="Image 3">
     </div>
-    <hr />
-    <input type="button" value="Python randomUUID" onclick="getRandom()" />
-    <div id="section2">
-        <h3>Python randomUUID</h3>
-        <span id="ss3"></span>
+    <div style="text-align: center;">
+        <h2>감귤, 사과, 복숭아의<br> 지난 10년간 국내 재배지 변화를 통한<br> 미래 재배지 예측</h2>
     </div>
-    <hr />
-    <input type="button" value="JSON-Server Users" onclick="getUsers()" />
-    <div id="section3">
-        <h3>Json-server users</h3>
-        <span id="ss4"></span>
-    </div>
-    </form>
-    <hr />
+
 </body>
 
 </html>

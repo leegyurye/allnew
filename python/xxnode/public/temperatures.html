@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>temperatures</title>
+    <link type="text/css" rel="stylesheet" href="mystyle.css">
+</head>
+
+<body>
+    <div class="logo">
+    </div>
+    <table id="menubar">
+        <tr>
+            <td><a href="/fruit.html">과일 재배지 변동 추이</a></td>
+            <td><a href="/change.html">과일 재배지 변동 지도</a></td>
+            <td><a href="/index.html" style="font-weight:bold; color:red;">시작페이지로</a></td>
+        </tr>
+    </table>
+    <hr>
+    <br>
+    <form style="text-align: center" id="temperatureForm">
+        <label for="temperatures">연평균 기온데이터</label>
+        <select name="temperatures" id="temperatures">
+            <option value="insert">전체 기온 데이터 삽입</option>
+            <option value="delete">전체 기온 데이터 삭제</option>
+            <option value="filter">기온데이터 선별</option>
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+    <div id="section">
+        <span id="ss1"></span>
+    </div>
+
+    <script>
+        document.getElementById("temperatureForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var selectElement = document.getElementById("temperatures");
+            var selectedValue = selectElement.value;
+
+            if (selectedValue === "insert") {
+                window.location.href = "/getdata_temperature";
+            } else if (selectedValue === "delete") {
+                window.location.href = "/dropdata_temperature";
+            } else if (selectedValue === "filter") {
+                window.location.href = "/getcleandata_temperature";
+            }
+        });
+
+        const element = document.getElementById("ss1");
+        element.innerHTML = "";
+    </script>
+
+    <div id="section3">
+        <span id="ss1"></span>
+    </div>
+</body>
+
+</html>

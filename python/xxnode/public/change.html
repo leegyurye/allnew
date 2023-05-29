@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Project</title>
+    <title>change</title>
+    <link type="text/css" rel="stylesheet" href="mystyle.css">
     <script>
-        function getHello() {
+        function getdata_fruit_all() {
             const xhr = new XMLHttpRequest();
             const method = "GET";
-            const url = "/hello";
+            const url = "/getdata_fruit_all";
             xhr.open(method, url);
             xhr.send();
 
@@ -25,10 +26,10 @@
             };
         }
 
-        function getSelect() {
+        function dropdata_fruit_all() {
             const xhr = new XMLHttpRequest();
             const method = "GET";
-            const url = "/select";
+            const url = "/dropdata_fruit_all";
             xhr.open(method, url);
             xhr.setRequestHeader("content-type", "application/json");
             xhr.send();
@@ -37,47 +38,7 @@
                 if (xhr.status === 200) {
                     const res = JSON.parse(xhr.response);
                     console.log(res);
-                    const element = document.getElementById("ss2");
-                    element.innerHTML = JSON.stringify(res);
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        }
-
-        function getRandom() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/randomUUID";
-            xhr.open(method, url);
-            xhr.send();
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    const element = document.getElementById("ss3");
-                    element.innerHTML = xhr.responseText;
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        }
-
-        function getUsers() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/users";
-            xhr.open(method, url);
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.send();
-
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    const res = JSON.parse(xhr.response);
-                    console.log(res);
-                    const element = document.getElementById("ss4");
+                    const element = document.getElementById("ss1");
                     element.innerHTML = JSON.stringify(res);
                 } else {
                     console.log("HTTP error", xhr.status, xhr.statusText);
@@ -88,33 +49,64 @@
 </head>
 
 <body>
-    <h3>Project</h3>
-    <hr />
-    <input type="button" value="Node Hello" onclick="getHello()" />
+    <div class="logo">
+    </div>
+    <table id="menubar">
+        <tr>
+            <td><a href="/temperatures.html">연평균 기온 변화</a></td>
+            <td><a href="/fruit.html">과일 재배지 변동 추이</a></td>
+            <td><a href="/index.html" style="font-weight:bold; color:red;">시작페이지로</a></td>
+        </tr>
+    </table>
+    <hr>
+    <br>
+    <div style='text-align: center;'>
+        <button type="button" class="img-button1" onclick="getdata_fruit_all()">
+            <img src="https://cdn-icons-png.flaticon.com/512/6122/6122286.png" height="90" width="90" />
+        </button>
+        <button type="button" class="img-button2" onclick="dropdata_fruit_all()">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU5sWDI3DaLDp3k9nHmVv--1kA_rb16A84oxfLp4bV0mLUEigp4NEun8Usj5n4AD_LRks&usqp=CAU"
+                height="90" width="90" />
+        </button>
+    </div>
+    <br>
+    <form style="text-align: center" id="fruitForm">
+        <label for="fruit">과일 재배지 변동 추이</label>
+        <select name="fruit" id="fruit">
+            <option value="감귤">감귤</option>
+            <option value="사과">사과</option>
+            <option value="복숭아">복숭아</option>
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+        const form = document.getElementById('fruitForm');
+        const resultElement = document.getElementById('ss1');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const fruit = document.getElementById('fruit').value;
+            const url = `http://192.168.1.101:8000/getdata_fruit/${fruit}`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = xhr.responseText;
+                } else if (xhr.status !== 200) {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        });
+    </script>
+
     <div id="section1">
-        <h3>Node Hello</h3>
         <span id="ss1"></span>
     </div>
-    <hr />
-    <input type="button" value="Node Select" onclick="getSelect()" />
-    <div id="section2">
-        <h3>Node Select</h3>
-        <span id="ss2"></span>
-    </div>
-    <hr />
-    <input type="button" value="Python randomUUID" onclick="getRandom()" />
-    <div id="section2">
-        <h3>Python randomUUID</h3>
-        <span id="ss3"></span>
-    </div>
-    <hr />
-    <input type="button" value="JSON-Server Users" onclick="getUsers()" />
-    <div id="section3">
-        <h3>Json-server users</h3>
-        <span id="ss4"></span>
-    </div>
-    </form>
-    <hr />
 </body>
 
 </html>

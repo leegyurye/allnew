@@ -41,13 +41,13 @@ hr {
 }
 
 button.img-button1 {
-    background: url("https: //cdn-icons-png.flaticon.com/512/5601/5601388.png") no-repeat;
+    text-align: center;
     width: 100px;
     height: 100px;
 }
 
 button.img-button2 {
-    background: url("https: //cdn.pixabay.com/photo/2021/04/26/14/41/basket-6209144_960_720.png") no-repeat;
+    text-align: center;
     width: 100px;
     height: 100px;
 }

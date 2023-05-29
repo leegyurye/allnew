@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import *
 from models import *
+import pydantic
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.relpath("./")))
 secret_file = os.path.join(BASE_DIR, '../secret.json')
@@ -109,24 +110,24 @@ def getdata_fruit_all():
     url = 'https://apis.data.go.kr/1390804/Nihhs_Fruit_Area3/ctlArea'
     params = '?serviceKey=' + get_secret("data_apiKey")
     params += '&pageNo=1'
-    params += '&numOfRows=10000'
+    params += '&numOfRows=8624'
     params += '&fs_nm=전체'
     url += params
 
     dataList = []
 
-    pageNo = 1 
-    numOfRows = 10000
+    pageNo = 1
+    numOfRows = 8624
 
-    while(True):
+    while True:
         response = requests.get(url)
         contents = response.text
         xmlTree = ET.fromstring(contents)
 
         if xmlTree.find('Header').find('ReturnCode').text == '00':
             totalCount = int(xmlTree.find('Header').find('RecordCount').text)
-            listTree = xmlTree.find('Body') 
-            if listTree is not None: 
+            listTree = xmlTree.find('Body')
+            if listTree is not None:
                 listTree = listTree.findall('Model')
 
             for node in listTree:
@@ -139,29 +140,29 @@ def getdata_fruit_all():
                 clt_area = node.find("clt_area").text
                 area_rate = node.find("area_rate").text
                 sido_p_area_od = node.find("sido_p_area_od").text
-                if sgg is None :
-                    sgg = ""            
+                if sgg is None:
+                    sgg = ""
 
-                onedict = {'시도명':sido, \
-                        '시군명':sgg, '년도':year, \
-                        '품목':fs_nm, '과수명':fs_gb, \
-                        '구분':type_gb, '재배면적(ha)':clt_area, '면적비율':area_rate, \
-                        '시도별면적순위':sido_p_area_od}
+                onedict = {'시도명': sido, '시군명': sgg, '년도': year,
+                           '품목': fs_nm, '과수명': fs_gb,
+                           '구분': type_gb, '재배면적(ha)': clt_area, '면적비율': area_rate,
+                           '시도별면적순위': sido_p_area_od}
                 dataList.append(onedict)
 
             if totalCount == 0:
                 break
             nPage = math.ceil(totalCount / numOfRows)
-            if (pageNo == nPage):
-                break 
+            if pageNo == nPage:
+                break
 
             pageNo += 1
-        else :
+        else:
             break
 
-    # collection2.insert_many(dataList)
-    return dataList
-    # return {"get data..."}
+    collection2.insert_many(dataList)
+
+    result = collection2.find_one({}, {'_id': 0})
+    return result if result else None
 
 
 def dropdata_fruit_all():

@@ -28,11 +28,73 @@
         </select>
         <input type="submit" value="Submit" />
     </form>
+    <br>
+    <hr>
     <div id="section">
         <span id="ss1"></span>
     </div>
 
     <script>
+        function getdata_temperature() {
+            const xhr = new XMLHttpRequest();
+            const method = "GET";
+            const url = "/getdata_temperature";
+            xhr.open(method, url);
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = xhr.responseText;
+                } else {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
+
+        function dropdata_temperature() {
+            const xhr = new XMLHttpRequest();
+            const method = "GET";
+            const url = "/dropdata_temperature";
+            xhr.open(method, url);
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send();
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.response);
+                    console.log(res);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = JSON.stringify(res);
+                } else {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
+
+        function getcleandata_temperature() {
+            const xhr = new XMLHttpRequest();
+            const method = "GET";
+            const url = "/getcleandata_temperature";
+            xhr.open(method, url);
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send();
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.response);
+                    console.log(res);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = JSON.stringify(res);
+                } else {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
+
         document.getElementById("temperatureForm").addEventListener("submit", function (event) {
             event.preventDefault();
 
@@ -40,21 +102,14 @@
             var selectedValue = selectElement.value;
 
             if (selectedValue === "insert") {
-                window.location.href = "/getdata_temperature";
+                getdata_temperature();
             } else if (selectedValue === "delete") {
-                window.location.href = "/dropdata_temperature";
+                dropdata_temperature();
             } else if (selectedValue === "filter") {
-                window.location.href = "/getcleandata_temperature";
+                getcleandata_temperature();
             }
         });
-
-        const element = document.getElementById("ss1");
-        element.innerHTML = "";
     </script>
-
-    <div id="section3">
-        <span id="ss1"></span>
-    </div>
 </body>
 
 </html>

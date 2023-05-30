@@ -1,4 +1,4 @@
-import requests, json, os.path, math, sqlalchemy, folium
+import requests, json, os.path, math, sqlalchemy, folium, os
 import pandas as pd
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
@@ -300,6 +300,8 @@ def graph_fruit(fruit, regions):
 
     return {"filename": filename}
 
+IMAGE_DIR = '/allnew/python/xxnode/public/'
+
 def graph_combined(fruit):
     plt.rcParams['font.family'] = 'AppleGothic'
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
@@ -364,9 +366,12 @@ def graph_combined(fruit):
     ax2.legend(loc='upper right')
 
     filename = f'combined_{fruit}.png'
-    plt.savefig(filename)
+    filepath = os.path.join(IMAGE_DIR, filename)
 
-    return {"filename": filename}
+    # 이미지 파일 저장
+    plt.savefig(filepath)
+
+    return filepath
 
 
 def get_map_fruit(fruit):

@@ -59,6 +59,49 @@
                 }
             };
         }
+
+        function graph_combined(event) {
+            const xhr = new XMLHttpRequest();
+            event.preventDefault();
+            const fruit = document.getElementById('graph').value;
+            const url = `http://192.168.1.101:8000/graph_combined/${fruit}`;
+            const imagePath = `combined_${fruit}.png`;
+
+            xhr.open('GET', url);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status === 200) {
+                    const res = xhr.response;
+                    console.log(res);
+                    const element = document.getElementById("ss2");
+                    element.innerHTML = `<img src="${imagePath}" alt="Graph" style="width: 600px; height: 700px;" />`;
+                } else if (xhr.status !== 200) {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
+
+        function get_map_fruit(event) {
+            const xhr = new XMLHttpRequest();
+            event.preventDefault();
+            const fruit = document.getElementById('map').value;
+            const url = `http://192.168.1.101:8000/get_map_fruit/${fruit}`;
+
+            xhr.open('GET', url);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status === 200) {
+                    const res = xhr.response;
+                    console.log(res);
+                    const element = document.getElementById("ss2");
+                    element.innerHTML = res;
+                } else if (xhr.status !== 200) {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
     </script>
 </head>
 
@@ -94,16 +137,7 @@
                 <option value="사과">사과</option>
                 <option value="복숭아">복숭아</option>
             </select>
-            <input type="submit" value="Submit" />
-        </form>
-        <form id="graph_print">
-            <label for="print">'기온-과일' 종합 그래프 출력</label>
-            <select name="print" id="print">
-                <option value="감귤">감귤</option>
-                <option value="사과">사과</option>
-                <option value="복숭아">복숭아</option>
-            </select>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Submit" onclick="graph_combined(event)" />
         </form>
     </div>
     <div style="width:300px; height:50px; float:right;">
@@ -114,45 +148,10 @@
                 <option value="사과">사과</option>
                 <option value="복숭아">복숭아</option>
             </select>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Submit" onclick="get_map_fruit(event)" />
         </form>
     </div>
     <br>
-
-    <script>
-        const form2 = document.getElementById('graph_combined');
-        form2.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const fruit = document.getElementById('graph').value;
-            const url = `http://192.168.1.101:8000/graph_combined/${fruit}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url);
-            xhr.send();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    const element = document.getElementById("ss2");
-                    element.innerHTML = xhr.responseText;
-                } else if (xhr.status !== 200) {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        });
-
-        const form3 = document.getElementById('graph_print');
-        form3.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const fruit = document.getElementById('print').value;
-            const imagePath = `../../combined_${fruit}.png`;
-
-            const element = document.getElementById("ss2");
-            element.innerHTML = `<img src="../../${imagePath}" alt="Graph" style="width: 600px; height: 700px;" />`;
-        });
-
-
-    </script>
     <br>
     <br>
     <div id="section1" style="width:49%; height:800px; border:1px solid orange;float:left;">

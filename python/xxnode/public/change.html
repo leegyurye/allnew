@@ -83,24 +83,21 @@
         }
 
         function get_map_fruit(event) {
-            const xhr = new XMLHttpRequest();
             event.preventDefault();
             const fruit = document.getElementById('map').value;
-            const url = `http://192.168.1.101:8000/get_map_fruit/${fruit}`;
+            const if1 = document.getElementById('if1');
+            const if2 = document.getElementById('if2');
 
-            xhr.open('GET', url);
-            xhr.send();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200) {
-                    const res = xhr.response;
-                    console.log(res);
-                    const element = document.getElementById("ss2");
-                    element.innerHTML = res;
-                } else if (xhr.status !== 200) {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
+            if (fruit === '감귤') {
+                if1.src = 'http://localhost:52330/python/xxproject/map/%EA%B0%90%EA%B7%A4_map_2011.html';
+                if2.src = 'http://localhost:52330/python/xxproject/map/%EA%B0%90%EA%B7%A4_map_2020.html';
+            } else if (fruit === '복숭아') {
+                if1.src = 'http://localhost:52330/python/xxproject/map/%EB%B3%B5%EC%88%AD%EC%95%84_map_2011.html';
+                if2.src = 'http://localhost:52330/python/xxproject/map/%EB%B3%B5%EC%88%AD%EC%95%84_map_2020.html';
+            } else if (fruit === '사과') {
+                if1.src = 'http://localhost:52330/python/xxproject/map/%EC%82%AC%EA%B3%BC_map_2011.html';
+                if2.src = 'http://localhost:52330/python/xxproject/map/%EC%82%AC%EA%B3%BC_map_2020.html';
+            }
         }
     </script>
 </head>
@@ -154,12 +151,24 @@
     <br>
     <br>
     <br>
-    <div id="section1" style="width:49%; height:800px; border:1px solid orange;float:left;">
+    <div class="section1" style="width:49%; height:10000px; border:1px solid orange;float:left; position:relative;">
         <span id="ss1"></span>
     </div>
-    <div id="section2" style="width:49%; height:800px; border:1px solid orange;float:right;">
+    <div class="section2"
+        style="width:49%; height:10000px; border:1px solid orange;margin-left: 50%; position:absolute;">
         <span id="ss2"></span>
     </div>
+    <div class="section3" style="width:49%; height:10000px; float:left; position:absolute;">
+        <span id="ss3">
+            <iframe id="if1" width="100%" height="10000px" frameborder="0"></iframe>
+        </span>
+    </div>
+    <div class="section4" style="width:49%; height:10000px; float:right; position:relative;">
+        <span id="ss4">
+            <iframe id="if2" width="100%" height="10000px" frameborder="0"></iframe>
+        </span>
+    </div>
+
 </body>
 
 </html>

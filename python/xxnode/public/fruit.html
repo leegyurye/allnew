@@ -78,6 +78,27 @@
                 }
             };
         }
+
+        function getdata_fruit(event) {
+            const xhr = new XMLHttpRequest();
+            event.preventDefault();
+            const fruit = document.getElementById("fruit").value;
+            const url = `http://192.168.1.101:8000/getdata_fruit/${fruit}`;
+
+            xhr.open('GET', url);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.response);
+                    console.log(res);
+                    const element = document.getElementById("ss1");
+                    element.innerHTML = jsonToTable(JSON.parse(xhr.responseText));
+                } else if (xhr.status !== 200) {
+                    console.log("HTTP error", xhr.status, xhr.statusText);
+                }
+            };
+        }
     </script>
 </head>
 
@@ -111,32 +132,8 @@
             <option value="사과">사과</option>
             <option value="복숭아">복숭아</option>
         </select>
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" onclick="getdata_fruit(event)" />
     </form>
-
-    <script>
-        const form = document.getElementById("fruitForm");
-        const resultElement = document.getElementById("ss1");
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-            const fruit = document.getElementById("fruit").value;
-            const url = `http://192.168.1.198:8000/getdata_fruit/${fruit}`;
-
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", url);
-            xhr.send();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    const element = document.getElementById("ss1");
-                    element.innerHTML = jsonToTable(JSON.parse(xhr.responseText));
-                } else if (xhr.status !== 200) {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
-        });
-    </script>
     <br />
     <hr />
     <div id="section">

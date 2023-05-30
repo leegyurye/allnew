@@ -6,41 +6,55 @@
     <title>change</title>
     <link type="text/css" rel="stylesheet" href="mystyle.css">
     <script>
-        function getdata_fruit_all() {
-            const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/getdata_fruit_all";
-            xhr.open(method, url);
-            xhr.send();
+        function jsonToTable(jsonData) {
+            if (!jsonData) {
+                return "";
+            }
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
+            var keys = Object.keys(jsonData[0]);
+            var table = document.createElement("table");
 
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText);
-                    const element = document.getElementById("ss1");
-                    element.innerHTML = xhr.responseText;
-                } else {
-                    console.log("HTTP error", xhr.status, xhr.statusText);
-                }
-            };
+            var thead = document.createElement("thead");
+            var tr = document.createElement("tr");
+            keys.forEach(function (key) {
+                var th = document.createElement("th");
+                th.textContent = key;
+                tr.appendChild(th);
+            });
+            thead.appendChild(tr);
+            table.appendChild(thead);
+
+            var tbody = document.createElement("tbody");
+            jsonData.forEach(function (obj) {
+                var tr = document.createElement("tr");
+                keys.forEach(function (key) {
+                    var td = document.createElement("td");
+                    td.textContent = obj[key];
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            return table.outerHTML;
         }
 
-        function dropdata_fruit_all() {
+        function dataframe_combined(event) {
             const xhr = new XMLHttpRequest();
-            const method = "GET";
-            const url = "/dropdata_fruit_all";
-            xhr.open(method, url);
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.send();
+            event.preventDefault();
+            const fruit = document.getElementById('combined').value;
+            const url = `http://192.168.1.101:8000/dataframe_combined/${fruit}`;
 
-            xhr.onload = () => {
+            xhr.open('GET', url);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
                 if (xhr.status === 200) {
                     const res = JSON.parse(xhr.response);
                     console.log(res);
                     const element = document.getElementById("ss1");
-                    element.innerHTML = JSON.stringify(res);
-                } else {
+                    element.innerHTML = jsonToTable(JSON.parse(xhr.responseText));
+                } else if (xhr.status !== 200) {
                     console.log("HTTP error", xhr.status, xhr.statusText);
                 }
             };
@@ -60,33 +74,57 @@
     </table>
     <hr>
     <br>
-    <div style='text-align: center;'>
-        <button type="button" class="img-button1" onclick="getdata_fruit_all()">
-            <img src="https://cdn-icons-png.flaticon.com/512/6122/6122286.png" height="90" width="90" />
-        </button>
-        <button type="button" class="img-button2" onclick="dropdata_fruit_all()">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU5sWDI3DaLDp3k9nHmVv--1kA_rb16A84oxfLp4bV0mLUEigp4NEun8Usj5n4AD_LRks&usqp=CAU"
-                height="90" width="90" />
-        </button>
+    <br>
+    <div style="width:400px; height:50px; float:left;">
+        <form id="dataframe_combined">
+            <label for="combined">'기온-과일' 지역별 선별 데이터 출력</label>
+            <select name="combined" id="combined">
+                <option value="감귤">감귤</option>
+                <option value="사과">사과</option>
+                <option value="복숭아">복숭아</option>
+            </select>
+            <input type="submit" value="Submit" onclick="dataframe_combined(event)" />
+        </form>
+    </div>
+    <div style="width:350px; height:50px; float:left; margin-left: 10%;">
+        <form id="graph_combined">
+            <label for="graph">'기온-과일' 종합 그래프 생성</label>
+            <select name="graph" id="graph">
+                <option value="감귤">감귤</option>
+                <option value="사과">사과</option>
+                <option value="복숭아">복숭아</option>
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
+        <form id="graph_print">
+            <label for="print">'기온-과일' 종합 그래프 출력</label>
+            <select name="print" id="print">
+                <option value="감귤">감귤</option>
+                <option value="사과">사과</option>
+                <option value="복숭아">복숭아</option>
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+    <div style="width:300px; height:50px; float:right;">
+        <form id="get_map_fruit">
+            <label for="map">연도별 과일 재배 지도</label>
+            <select name="map" id="map">
+                <option value="감귤">감귤</option>
+                <option value="사과">사과</option>
+                <option value="복숭아">복숭아</option>
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
     </div>
     <br>
-    <form style="text-align: center" id="fruitForm">
-        <label for="fruit">과일 재배지 변동 추이</label>
-        <select name="fruit" id="fruit">
-            <option value="감귤">감귤</option>
-            <option value="사과">사과</option>
-            <option value="복숭아">복숭아</option>
-        </select>
-        <input type="submit" value="Submit" />
-    </form>
 
     <script>
-        const form = document.getElementById('fruitForm');
-        const resultElement = document.getElementById('ss1');
-        form.addEventListener('submit', function (event) {
+        const form2 = document.getElementById('graph_combined');
+        form2.addEventListener('submit', function (event) {
             event.preventDefault();
-            const fruit = document.getElementById('fruit').value;
-            const url = `http://192.168.1.101:8000/getdata_fruit/${fruit}`;
+            const fruit = document.getElementById('graph').value;
+            const url = `http://192.168.1.101:8000/graph_combined/${fruit}`;
 
             const xhr = new XMLHttpRequest();
             xhr.open('GET', url);
@@ -95,17 +133,33 @@
                 if (xhr.readyState !== 4) return;
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
-                    const element = document.getElementById("ss1");
+                    const element = document.getElementById("ss2");
                     element.innerHTML = xhr.responseText;
                 } else if (xhr.status !== 200) {
                     console.log("HTTP error", xhr.status, xhr.statusText);
                 }
             };
         });
-    </script>
 
-    <div id="section1">
+        const form3 = document.getElementById('graph_print');
+        form3.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const fruit = document.getElementById('print').value;
+            const imagePath = `../../combined_${fruit}.png`;
+
+            const element = document.getElementById("ss2");
+            element.innerHTML = `<img src="../../${imagePath}" alt="Graph" style="width: 600px; height: 700px;" />`;
+        });
+
+
+    </script>
+    <br>
+    <br>
+    <div id="section1" style="width:49%; height:800px; border:1px solid orange;float:left;">
         <span id="ss1"></span>
+    </div>
+    <div id="section2" style="width:49%; height:800px; border:1px solid orange;float:right;">
+        <span id="ss2"></span>
     </div>
 </body>
 

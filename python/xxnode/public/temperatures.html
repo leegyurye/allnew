@@ -4,21 +4,22 @@
 <head>
     <meta charset="utf-8" />
     <title>temperatures</title>
-    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <link type="text/css" rel="stylesheet" href="mystyle.css" />
 </head>
 
 <body>
-    <div class="logo">
-    </div>
+    <div class="logo"></div>
     <table id="menubar">
         <tr>
             <td><a href="/fruit.html">과일 재배지 변동 추이</a></td>
             <td><a href="/change.html">과일 재배지 변동 지도</a></td>
-            <td><a href="/index.html" style="font-weight:bold; color:red;">시작페이지로</a></td>
+            <td>
+                <a href="/index.html" style="font-weight: bold; color: red">시작페이지로</a>
+            </td>
         </tr>
     </table>
-    <hr>
-    <br>
+    <hr />
+    <br />
     <form style="text-align: center" id="temperatureForm">
         <label for="temperatures">연평균 기온데이터</label>
         <select name="temperatures" id="temperatures">
@@ -28,13 +29,46 @@
         </select>
         <input type="submit" value="Submit" />
     </form>
-    <br>
-    <hr>
+    <br />
+    <hr />
     <div id="section">
         <span id="ss1"></span>
     </div>
 
     <script>
+        function jsonToTable(jsonData) {
+            if (!jsonData) {
+                return "";
+            }
+
+            var keys = Object.keys(jsonData[0]);
+            var table = document.createElement("table");
+
+            var thead = document.createElement("thead");
+            var tr = document.createElement("tr");
+            keys.forEach(function (key) {
+                var th = document.createElement("th");
+                th.textContent = key;
+                tr.appendChild(th);
+            });
+            thead.appendChild(tr);
+            table.appendChild(thead);
+
+            var tbody = document.createElement("tbody");
+            jsonData.forEach(function (obj) {
+                var tr = document.createElement("tr");
+                keys.forEach(function (key) {
+                    var td = document.createElement("td");
+                    td.textContent = obj[key];
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            return table.outerHTML;
+        }
+
         function getdata_temperature() {
             const xhr = new XMLHttpRequest();
             const method = "GET";
@@ -48,7 +82,7 @@
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
                     const element = document.getElementById("ss1");
-                    element.innerHTML = xhr.responseText;
+                    element.innerHTML = jsonToTable(JSON.parse(xhr.responseText));
                 } else {
                     console.log("HTTP error", xhr.status, xhr.statusText);
                 }
@@ -88,27 +122,29 @@
                     const res = JSON.parse(xhr.response);
                     console.log(res);
                     const element = document.getElementById("ss1");
-                    element.innerHTML = JSON.stringify(res);
+                    element.innerHTML = jsonToTable(res);
                 } else {
                     console.log("HTTP error", xhr.status, xhr.statusText);
                 }
             };
         }
 
-        document.getElementById("temperatureForm").addEventListener("submit", function (event) {
-            event.preventDefault();
+        document
+            .getElementById("temperatureForm")
+            .addEventListener("submit", function (event) {
+                event.preventDefault();
 
-            var selectElement = document.getElementById("temperatures");
-            var selectedValue = selectElement.value;
+                var selectElement = document.getElementById("temperatures");
+                var selectedValue = selectElement.value;
 
-            if (selectedValue === "insert") {
-                getdata_temperature();
-            } else if (selectedValue === "delete") {
-                dropdata_temperature();
-            } else if (selectedValue === "filter") {
-                getcleandata_temperature();
-            }
-        });
+                if (selectedValue === "insert") {
+                    getdata_temperature();
+                } else if (selectedValue === "delete") {
+                    dropdata_temperature();
+                } else if (selectedValue === "filter") {
+                    getcleandata_temperature();
+                }
+            });
     </script>
 </body>
 

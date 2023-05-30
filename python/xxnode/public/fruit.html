@@ -4,8 +4,41 @@
 <head>
     <meta charset="utf-8" />
     <title>fruit</title>
-    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <link type="text/css" rel="stylesheet" href="mystyle.css" />
     <script>
+        function jsonToTable(jsonData) {
+            if (!jsonData) {
+                return "";
+            }
+
+            var keys = Object.keys(jsonData[0]);
+            var table = document.createElement("table");
+
+            var thead = document.createElement("thead");
+            var tr = document.createElement("tr");
+            keys.forEach(function (key) {
+                var th = document.createElement("th");
+                th.textContent = key;
+                tr.appendChild(th);
+            });
+            thead.appendChild(tr);
+            table.appendChild(thead);
+
+            var tbody = document.createElement("tbody");
+            jsonData.forEach(function (obj) {
+                var tr = document.createElement("tr");
+                keys.forEach(function (key) {
+                    var td = document.createElement("td");
+                    td.textContent = obj[key];
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            return table.outerHTML;
+        }
+
         function getdata_fruit_all() {
             const xhr = new XMLHttpRequest();
             const method = "GET";
@@ -49,18 +82,19 @@
 </head>
 
 <body>
-    <div class="logo">
-    </div>
+    <div class="logo"></div>
     <table id="menubar">
         <tr>
             <td><a href="/temperatures.html">연평균 기온 변화</a></td>
             <td><a href="/change.html">과일 재배지 변동 지도</a></td>
-            <td><a href="/index.html" style="font-weight:bold; color:red;">시작페이지로</a></td>
+            <td>
+                <a href="/index.html" style="font-weight: bold; color: red">시작페이지로</a>
+            </td>
         </tr>
     </table>
-    <hr>
-    <br>
-    <div style='text-align: center;'>
+    <hr />
+    <br />
+    <div style="text-align: center">
         <button type="button" class="img-button1" onclick="getdata_fruit_all()">
             <img src="https://cdn-icons-png.flaticon.com/512/6122/6122286.png" height="90" width="90" />
         </button>
@@ -69,7 +103,7 @@
                 height="90" width="90" />
         </button>
     </div>
-    <br>
+    <br />
     <form style="text-align: center" id="fruitForm">
         <label for="fruit">과일 재배지 변동 추이</label>
         <select name="fruit" id="fruit">
@@ -81,30 +115,30 @@
     </form>
 
     <script>
-        const form = document.getElementById('fruitForm');
-        const resultElement = document.getElementById('ss1');
-        form.addEventListener('submit', function (event) {
+        const form = document.getElementById("fruitForm");
+        const resultElement = document.getElementById("ss1");
+        form.addEventListener("submit", function (event) {
             event.preventDefault();
-            const fruit = document.getElementById('fruit').value;
-            const url = `http://192.168.1.101:8000/getdata_fruit/${fruit}`;
+            const fruit = document.getElementById("fruit").value;
+            const url = `http://192.168.1.198:8000/getdata_fruit/${fruit}`;
 
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', url);
+            xhr.open("GET", url);
             xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
                 if (xhr.status === 200) {
                     console.log(xhr.responseText);
                     const element = document.getElementById("ss1");
-                    element.innerHTML = xhr.responseText;
+                    element.innerHTML = jsonToTable(JSON.parse(xhr.responseText));
                 } else if (xhr.status !== 200) {
                     console.log("HTTP error", xhr.status, xhr.statusText);
                 }
             };
         });
     </script>
-    <br>
-    <hr>
+    <br />
+    <hr />
     <div id="section">
         <span id="ss1"></span>
     </div>

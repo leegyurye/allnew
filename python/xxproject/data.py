@@ -74,7 +74,6 @@ def getdata_temperature():
     contents = response.text
     data_dict = json.loads(contents)
     collection.insert_many(data_dict)
-    # return {"get data..."}
     return json.loads(contents)
 
 def dropdata_temperature():
@@ -162,7 +161,7 @@ def getdata_fruit_all():
     collection2.insert_many(dataList)
 
     result = collection2.find_one({}, {'_id': 0})
-    return result if result else None
+    return result 
 
 
 def dropdata_fruit_all():

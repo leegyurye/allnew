@@ -31,8 +31,8 @@ client = mongo_client.MongoClient(f'mongodb+srv://{USERNAME}:{PASSWORD}@{HOSTNAM
 print('Connected to Mongodb....')
 
 db = client['project']
-collection = db['projectdb']
-collection2 = db['projectdb2']
+collection = db['temperature']
+collection2 = db['fruit']
 
 # MySQL연결
 HOSTNAME = get_secret("Mysql_Hostname")

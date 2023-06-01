@@ -133,6 +133,20 @@ app.get('/graph_combined/:fruit', (req, res) => {
         });
 });
 
+app.get('/getimage/:fruit', (req, res) => {
+    const fruit = req.params.fruit;
+    axios
+        .get(`http://192.168.1.101:3000/getimage/${fruit}`)
+        .then(response => {
+            console.log(`statusCode: ${response.status}`);
+            console.log(response.data);
+            res.send(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
+
 app.get('/get_map_fruit/:fruit', (req, res) => {
     const fruit = req.params.fruit;
     axios

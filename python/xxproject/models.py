@@ -1,4 +1,4 @@
-from sqlalchemy import Column, TEXT, INT, FLOAT
+from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -29,3 +29,10 @@ class get_combined_peach(Base):
     C1_NM = Column(TEXT, nullable=False)
     clt_area = Column(FLOAT, nullable=False)
     fs_gb = Column(TEXT, nullable=False)
+
+class images(Base):
+    __tablename__ = "images"
+
+    id = Column(INT, nullable=False, primary_key=True)
+    filename = Column(TEXT, nullable=False)
+    image_data = Column(BLOB, nullable=False)

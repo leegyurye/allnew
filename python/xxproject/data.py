@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import *
 from models import *
 import pydantic
+import base64
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.relpath("./")))
 secret_file = os.path.join(BASE_DIR, '../secret.json')
@@ -369,8 +370,42 @@ def graph_combined(fruit):
 
     # 이미지 파일 저장
     plt.savefig(filepath)
+    
+    os.chdir(IMAGE_DIR)
 
-    return filepath
+    with open(filename, "rb") as image_file:
+        binary_image = image_file.read()
+        binary_image = base64.b64encode(binary_image)
+        binary_image = binary_image.decode('UTF-8')
+        img_df = pd.DataFrame({'filename':filename,'image_data':[binary_image]})
+        img_df.to_sql('images', con=engine, if_exists='append', index=False)
+    return f'Image file : {filename} Inserted~!!'
+
+def getimage(fruit):
+    if fruit is None:
+        return "과일 이름을 입력하세요."
+    else:
+        if fruit == '감귤':
+            result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
+        elif fruit == '사과':
+            result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
+        elif fruit == '복숭아':
+            result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
+        else:
+            return "해당하는 과일 이미지를 찾을 수 없습니다."
+
+    IMAGE = [item.image_data for item in result]
+
+    os.chdir(IMAGE_DIR)
+    
+    for image_data in IMAGE:
+        binary_image = base64.b64decode(image_data)
+        filename = f'combined_{fruit}.png'
+        with open(filename, "wb") as image_file:
+            image_file.write(binary_image)
+    
+    return "이미지 파일 저장이 완료되었습니다."
+
 
 
 def get_map_fruit(fruit):

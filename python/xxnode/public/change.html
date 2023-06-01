@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>change</title>
-    <link type="text/css" rel="stylesheet" href="mystyle.css">
+    <link type="text/css" rel="stylesheet" href="mystyle.css" />
     <script>
         function jsonToTable(jsonData) {
             if (!jsonData) {
@@ -42,10 +42,10 @@
         function dataframe_combined(event) {
             const xhr = new XMLHttpRequest();
             event.preventDefault();
-            const fruit = document.getElementById('combined').value;
-            const url = `http://192.168.1.101:8000/dataframe_combined/${fruit}`;
+            const fruit = document.getElementById("combined").value;
+            const url = `http://192.168.1.198:8000/dataframe_combined/${fruit}`;
 
-            xhr.open('GET', url);
+            xhr.open("GET", url);
             xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
@@ -58,17 +58,16 @@
                     console.log("HTTP error", xhr.status, xhr.statusText);
                 }
             };
-
         }
 
         function graph_combined(event) {
             const xhr = new XMLHttpRequest();
             event.preventDefault();
-            const fruit = document.getElementById('graph').value;
-            const url = `http://192.168.1.101:8000/graph_combined/${fruit}`;
+            const fruit = document.getElementById("graph").value;
+            const url = `http://192.168.1.198:8000/graph_combined/${fruit}`;
             const imagePath = `combined_${fruit}.png`;
 
-            xhr.open('GET', url);
+            xhr.open("GET", url);
             xhr.send();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== 4) return;
@@ -85,38 +84,45 @@
 
         function get_map_fruit(event) {
             event.preventDefault();
-            const fruit = document.getElementById('map').value;
-            const if1 = document.getElementById('if1');
-            const if2 = document.getElementById('if2');
+            const fruit = document.getElementById("map").value;
+            const if1 = document.getElementById("if1");
+            const if2 = document.getElementById("if2");
 
-            if (fruit === '감귤') {
-                if1.src = 'http://localhost:52330/python/xxproject/map/%EA%B0%90%EA%B7%A4_map_2011.html';
-                if2.src = 'http://localhost:52330/python/xxproject/map/%EA%B0%90%EA%B7%A4_map_2020.html';
-            } else if (fruit === '복숭아') {
-                if1.src = 'http://localhost:52330/python/xxproject/map/%EB%B3%B5%EC%88%AD%EC%95%84_map_2011.html';
-                if2.src = 'http://localhost:52330/python/xxproject/map/%EB%B3%B5%EC%88%AD%EC%95%84_map_2020.html';
-            } else if (fruit === '사과') {
-                if1.src = 'http://localhost:52330/python/xxproject/map/%EC%82%AC%EA%B3%BC_map_2011.html';
-                if2.src = 'http://localhost:52330/python/xxproject/map/%EC%82%AC%EA%B3%BC_map_2020.html';
+            if (fruit === "감귤") {
+                if1.src =
+                    "http://localhost:52330/python/xxproject/map/%EA%B0%90%EA%B7%A4_map_2011.html";
+                if2.src =
+                    "http://localhost:52330/python/xxproject/map/%EA%B0%90%EA%B7%A4_map_2020.html";
+            } else if (fruit === "복숭아") {
+                if1.src =
+                    "http://localhost:52330/python/xxproject/map/%EB%B3%B5%EC%88%AD%EC%95%84_map_2011.html";
+                if2.src =
+                    "http://localhost:52330/python/xxproject/map/%EB%B3%B5%EC%88%AD%EC%95%84_map_2020.html";
+            } else if (fruit === "사과") {
+                if1.src =
+                    "http://localhost:52330/python/xxproject/map/%EC%82%AC%EA%B3%BC_map_2011.html";
+                if2.src =
+                    "http://localhost:52330/python/xxproject/map/%EC%82%AC%EA%B3%BC_map_2020.html";
             }
         }
     </script>
 </head>
 
 <body>
-    <div class="logo">
-    </div>
+    <div class="logo"></div>
     <table id="menubar">
         <tr>
             <td><a href="/temperatures.html">연평균 기온 변화</a></td>
             <td><a href="/fruit.html">과일 재배지 변동 추이</a></td>
-            <td><a href="/index.html" style="font-weight:bold; color:red;">시작페이지로</a></td>
+            <td>
+                <a href="/index.html" style="font-weight: bold; color: red">시작페이지로</a>
+            </td>
         </tr>
     </table>
-    <hr>
-    <br>
-    <br>
-    <div style="width:400px; height:50px; float:left;">
+    <hr />
+    <br />
+    <br />
+    <div style="width: 400px; height: 50px; float: left">
         <form id="dataframe_combined">
             <label for="combined">'기온-과일' 지역별 선별 데이터 출력</label>
             <select name="combined" id="combined">
@@ -127,7 +133,7 @@
             <input type="submit" value="Submit" onclick="dataframe_combined(event)" />
         </form>
     </div>
-    <div style="width:350px; height:50px; float:left; margin-left: 10%;">
+    <div style="width: 350px; height: 50px; float: left; margin-left: 10%">
         <form id="graph_combined">
             <label for="graph">'기온-과일' 종합 그래프 생성</label>
             <select name="graph" id="graph">
@@ -138,7 +144,7 @@
             <input type="submit" value="Submit" onclick="graph_combined(event)" />
         </form>
     </div>
-    <div style="width:300px; height:50px; float:right;">
+    <div style="width: 300px; height: 50px; float: right">
         <form id="get_map_fruit">
             <label for="map">연도별 과일 재배 지도</label>
             <select name="map" id="map">
@@ -149,27 +155,37 @@
             <input type="submit" value="Submit" onclick="get_map_fruit(event)" />
         </form>
     </div>
-    <br>
-    <br>
-    <br>
-    <div class="section1" style="width:49%; height:10000px; border:1px solid orange;float:left; position:relative;">
+    <br />
+    <br />
+    <br />
+    <div class="section1" style="
+        width: 49%;
+        height: 10000px;
+        border: 1px solid orange;
+        float: left;
+        position: relative;
+      ">
         <span id="ss1"></span>
     </div>
-    <div class="section2"
-        style="width:49%; height:10000px; border:1px solid orange;margin-left: 50%; position:absolute;">
+    <div class="section2" style="
+        width: 49%;
+        height: 10000px;
+        border: 1px solid orange;
+        margin-left: 50%;
+        position: absolute;
+      ">
         <span id="ss2"></span>
     </div>
-    <div class="section3" style="width:49%; height:10000px; float:left; position:absolute;">
+    <div class="section3" style="width: 49%; height: 10000px; float: left; position: absolute">
         <span id="ss3">
             <iframe id="if1" width="100%" height="10000px" frameborder="0"></iframe>
         </span>
     </div>
-    <div class="section4" style="width:49%; height:10000px; float:right; position:relative;">
+    <div class="section4" style="width: 49%; height: 10000px; float: right; position: relative">
         <span id="ss4">
             <iframe id="if2" width="100%" height="10000px" frameborder="0"></iframe>
         </span>
     </div>
-
 </body>
 
 </html>

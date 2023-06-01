@@ -49,11 +49,7 @@ async def get_graph_fruit(fruit: str, regions: str):
 @app.get('/graph_combined/{fruit}')
 async def graph_combined(fruit: str):
     return data.graph_combined(fruit)
-
-@app.get('/getimage/{fruit}')
-async def getimage(fruit: str):
-    return data.getimage(fruit)
-
+    
 @app.get('/get_map_fruit/{fruit}')
 async def get_map_fruit(fruit: str):
     return data.get_map_fruit(fruit)

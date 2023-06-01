@@ -300,7 +300,8 @@ def graph_fruit(fruit, regions):
 
     return {"filename": filename}
 
-IMAGE_DIR = '/allnew/python/xxnode/public/'
+IMAGE_DIR = '/allnew/python/xxproject/images/'
+IMAGE_DIR2 = '/allnew/python/xxnode/public/'
 
 def graph_combined(fruit):
     plt.rcParams['font.family'] = 'AppleGothic'
@@ -379,9 +380,7 @@ def graph_combined(fruit):
         binary_image = binary_image.decode('UTF-8')
         img_df = pd.DataFrame({'filename':filename,'image_data':[binary_image]})
         img_df.to_sql('images', con=engine, if_exists='append', index=False)
-    return f'Image file : {filename} Inserted~!!'
 
-def getimage(fruit):
     if fruit is None:
         return "과일 이름을 입력하세요."
     else:
@@ -396,7 +395,7 @@ def getimage(fruit):
 
     IMAGE = [item.image_data for item in result]
 
-    os.chdir(IMAGE_DIR)
+    os.chdir(IMAGE_DIR2)
     
     for image_data in IMAGE:
         binary_image = base64.b64decode(image_data)

@@ -300,8 +300,6 @@ def graph_fruit(fruit, regions):
 
     return {"filename": filename}
 
-IMAGE_DIR = '/allnew/python/xxproject/images/'
-IMAGE_DIR2 = '/allnew/python/xxnode/public/'
 
 def graph_combined(fruit):
     plt.rcParams['font.family'] = 'AppleGothic'
@@ -367,6 +365,7 @@ def graph_combined(fruit):
     ax2.legend(loc='upper right')
 
     filename = f'combined_{fruit}.png'
+    IMAGE_DIR = '/allnew/python/xxnode/public/'
     filepath = os.path.join(IMAGE_DIR, filename)
 
     # 이미지 파일 저장
@@ -381,30 +380,19 @@ def graph_combined(fruit):
         img_df = pd.DataFrame({'filename':filename,'image_data':[binary_image]})
         img_df.to_sql('images', con=engine, if_exists='append', index=False)
 
-    if fruit is None:
-        return "과일 이름을 입력하세요."
+    if fruit == '감귤' or fruit == '사과' or fruit == '복숭아':
+        result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
     else:
-        if fruit == '감귤':
-            result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
-        elif fruit == '사과':
-            result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
-        elif fruit == '복숭아':
-            result = session.query(images).filter(images.filename == f'combined_{fruit}.png').all()
-        else:
-            return "해당하는 과일 이미지를 찾을 수 없습니다."
+        raise ValueError("유효하지 않은 과일입니다.")
 
     IMAGE = [item.image_data for item in result]
-
-    os.chdir(IMAGE_DIR2)
     
     for image_data in IMAGE:
         binary_image = base64.b64decode(image_data)
         filename = f'combined_{fruit}.png'
         with open(filename, "wb") as image_file:
             image_file.write(binary_image)
-    
     return "이미지 파일 저장이 완료되었습니다."
-
 
 
 def get_map_fruit(fruit):

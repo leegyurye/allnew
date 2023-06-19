@@ -6,7 +6,7 @@ RUN apt -y update && apt -y upgrade && apt -y install nginx && apt -y install cu
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
 # Step 3
-COPY index.html /usr/share/nginx/html
+COPY index.html /var/www/html
 
 # Step 4
 HEALTHCHECK --interval=10s --timeout=3s CMD curl -f http://localhost/ || exit 1

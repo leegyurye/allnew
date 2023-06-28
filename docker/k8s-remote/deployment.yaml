@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gyurye-node
+  labels:
+    app: gyurye-node
+spec:
+  replicas: 3     # three pod
+  selector:
+    matchLabels:
+      app: gyurye-node
+  template:
+    metadata:
+      labels:
+        app: gyurye-node
+    spec:
+      containers:
+      - name: gyurye-node
+        image: leegyurye/gyurye-node
+        ports:
+        - containerPort: 8000 # Container Port(pod  container port (pod port) 

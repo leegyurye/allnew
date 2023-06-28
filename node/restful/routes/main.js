@@ -16,9 +16,8 @@ const users = [
 
 
 app.get('/hello', (req, res) => {
-    res.send("Hello World~!!\n");
+    res.send("Hello World~!!");
 })
-
 
 // request X , response O
 app.get("/api/users", (req, res) => {
@@ -27,15 +26,13 @@ app.get("/api/users", (req, res) => {
 
 // Query param, request O, response O
 app.get("/api/users/user", (req, res) => {
-    const user_id = req.query.user_id
-    const user = users.filter(data => data.id == user_id)
-    res.json({ok:false, users:user});
-})
-
-// Query param, request O, response O
-app.get("/api/users/useridname", (req, res) => {
-    const { user_id, name }= req.query
-    const user = users.filter(data => data.id == user_id && data.name == name)
+    let user = "";
+    const { user_id, name } = req.query
+    if (name == null) {
+        user = users.filter(data => data.id == user_id)
+    } else {
+        user = users.filter(data => data.id == user_id && data.name == name)
+    }
     res.json({ok:false, users:user});
 })
 
@@ -50,7 +47,14 @@ app.get("/api/users/:user_id", (req, res) => {
 app.post("/api/users/userBody", (req, res) => {
     const user_id = req.body.id
     const user = users.filter(data => data.id == user_id)
-    res.json({ok:false, users:user});
+    res.json({ ok:false, users:user });
+})
+
+// post, request body O, response O
+app.post("/api/users/add", (req, res) => {
+    const { id, name } = req.body
+    const user = users.concat({ id, name })
+    res.json({ ok:true, users:user });
 })
 
 // put, request body O, response O

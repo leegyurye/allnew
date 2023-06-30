@@ -1,0 +1,11 @@
+{
+    "type" : "mysql",
+    "host" : "13.124.53.50",
+    "port" : "3306",
+    "username" : "mysql",
+    "password" : "1234",
+    "database" : "testdb",
+    "entities" : ["src/emtities/*.entity{.ts, .js"],
+    "logging" : true,
+    "synchronize" : true
+}

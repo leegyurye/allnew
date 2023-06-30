@@ -14,3 +14,17 @@ rm:
 	docker rm -f $$(docker ps -aq)
 rmi:
 	docker rmi $$(docker images -q)
+appdep:
+	kubectl apply -f deployment.yaml
+appscv:
+	kubectl apply -f service.yaml
+getdep:
+	kubectl get delpoyment
+getsvc:
+	kubectl get svc -o wide
+getpod:
+	kubectl get pod -o wide
+deldep:
+	kubectl delete deployment weather-gr
+delsvc:
+	kubectl delete svc weather-gr	
